@@ -1,4 +1,87 @@
-These pages use the same header/footer and layout conventions. The `contact.html` includes a simple contact form (Name, Email, Message) that posts to `#` by default. Copy the pattern shown in `index.html` / `services.html` and replace page content. The project uses static HTML so you may wire the contact form to an email provider (Formspree, Netlify Forms, or server endpoint) later.
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>About — DigiNexLab</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body class="pt-24">
+<!-- Header -->
+<header class="fixed top-0 left-0 right-0 bg-white shadow-sm z-40">
+  <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+    <a href="index.html" class="font-playfair text-xl font-semibold">DigiNexLab</a>
+    <nav class="hidden md:flex gap-6 items-center text-sm">
+      <a href="index.html" class="hover:text-blue-600">Home</a>
+      <a href="services.html" class="hover:text-blue-600">Services</a>
+      <a href="about.html" class="hover:text-blue-600">About</a>
+      <a href="portfolio.html" class="hover:text-blue-600">Portfolio</a>
+      <a href="blog.html" class="hover:text-blue-600">Blog</a>
+      <a href="contact.html" class="hover:text-blue-600">Contact</a>
+    </nav>
+    <a href="contact.html" class="hidden md:inline-block bg-blue-600 text-white px-4 py-2 rounded-md text-sm">Get Quote</a>
+    <button id="mobile-menu-btn" class="md:hidden">☰</button>
+  </div>
+</header>
+<main class="max-w-7xl mx-auto px-6 py-16">
+<h1 class="text-4xl font-playfair mb-6">About Us</h1>
+<p class="text-gray-600 leading-relaxed mb-8 max-w-3xl">We are DigiNexLab — a modern digital agency delivering high-quality web design, branding, SEO, and digital marketing solutions. Our mission is simple: help businesses build a strong digital identity and grow faster.</p>
 
+<div class="grid md:grid-cols-2 gap-10">
+<div>
+<h2 class="text-2xl font-semibold mb-4">Who We Are</h2>
+<p class="text-gray-700 mb-4">Our team consists of experienced designers, developers, and strategists passionate about creating meaningful digital experiences.</p>
+<p class="text-gray-700">Whether you're a startup or an established brand, we shape your online presence with creativity and precision.</p>
+</div>
 
----
+<img src="https://images.unsplash.com/photo-1521791136064-7986c2920216?q=80&w=1200&auto=format&fit=crop" class="rounded-xl shadow-md" alt="About DigiNexLab">
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-white border-t py-8 mt-16">
+  <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
+    <div class="text-sm">© <span id="year"></span> DigiNexLab. All rights reserved.</div>
+    <nav class="flex gap-4 text-sm">
+      <a href="index.html">Home</a>
+      <a href="services.html">Services</a>
+      <a href="about.html">About Us</a>
+      <a href="portfolio.html">Portfolio</a>
+      <a href="blog.html">Blog</a>
+      <a href="contact.html">Contact Us</a>
+    </nav>
+    <div class="flex gap-3">
+      <a href="#" aria-label="Twitter">Twitter</a>
+      <a href="#" aria-label="LinkedIn">LinkedIn</a>
+      <a href="#" aria-label="Facebook">Facebook</a>
+    </div>
+  </div>
+</footer>
+<!-- WhatsApp Floating Button -->
+<a id="whatsapp-btn" href="https://wa.me/INSERT_NUMBER" target="_blank" class="fixed right-4 bottom-4 z-50 rounded-full bg-green-500 p-3 shadow-lg text-white hidden md:flex items-center gap-2">
+  <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M..."/></svg>
+  <span class="text-sm">WhatsApp</span>
+</a>
+
+<!-- Back to Top -->
+<button id="back-to-top" aria-label="Back to top" class="hidden fixed right-4 bottom-20 z-40 bg-blue-600 text-white rounded-full p-3 shadow-lg">↑</button>
+
+<script>
+// year
+document.addEventListener('DOMContentLoaded', function(){
+  const y = new Date().getFullYear(); document.getElementById('year').textContent = y;
+  // back to top
+  const b = document.getElementById('back-to-top');
+  window.addEventListener('scroll', ()=>{ if(window.scrollY>400) b.classList.remove('hidden'); else b.classList.add('hidden'); });
+  b.addEventListener('click', ()=> window.scrollTo({top:0,behavior:'smooth'}));
+  // mobile nav (basic)
+  const mb = document.getElementById('mobile-menu-btn');
+  if(mb){ mb.addEventListener('click', ()=> alert('Open mobile menu (implement as needed)')); }
+});
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/main.js"></script>
+</body>
+</html>

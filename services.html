@@ -1,4 +1,3 @@
-```html
 <!doctype html>
 <html lang="en">
 <head>
@@ -11,29 +10,87 @@
 <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body class="pt-24">
-<!-- include same header here (or copy from index.html) -->
-
-
+<!-- Header -->
+<header class="fixed top-0 left-0 right-0 bg-white shadow-sm z-40">
+  <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+    <a href="index.html" class="font-playfair text-xl font-semibold">DigiNexLab</a>
+    <nav class="hidden md:flex gap-6 items-center text-sm">
+      <a href="index.html" class="hover:text-blue-600">Home</a>
+      <a href="services.html" class="hover:text-blue-600">Services</a>
+      <a href="about.html" class="hover:text-blue-600">About</a>
+      <a href="portfolio.html" class="hover:text-blue-600">Portfolio</a>
+      <a href="blog.html" class="hover:text-blue-600">Blog</a>
+      <a href="contact.html" class="hover:text-blue-600">Contact</a>
+    </nav>
+    <a href="contact.html" class="hidden md:inline-block bg-blue-600 text-white px-4 py-2 rounded-md text-sm">Get Quote</a>
+    <button id="mobile-menu-btn" class="md:hidden">☰</button>
+  </div>
+</header>
 <main class="max-w-7xl mx-auto px-6 py-16">
-<h1 class="text-4xl font-playfair mb-8">Our Services</h1>
-<div class="grid md:grid-cols-3 gap-6">
-<!-- Repeat service card structure (image + text + learn more) -->
-<article class="bg-white rounded-xl p-6 shadow-sm hover:shadow-lg transition transform hover:-translate-y-1">
-<img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=placeholder" alt="Web Design" class="w-full h-40 object-cover rounded-md mb-4">
-<h3 class="font-semibold">Web Design</h3>
-<p class="mt-2 text-gray-600">Full design service from wireframes to final UI/UX.</p>
-<a href="#" class="mt-4 inline-block text-blue-600">Learn More →</a>
-</article>
-
-
-<!-- copy for other services... -->
-
-
-</div>
+  <h1 class="text-4xl font-playfair mb-8">Our Services</h1>
+  <div class="grid md:grid-cols-3 gap-6">
+    <article class="bg-white rounded-xl p-6 shadow-sm hover:shadow-lg transition transform hover:-translate-y-1">
+      <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=1200&auto=format&fit=crop" alt="Web Design" class="w-full h-40 object-cover rounded-md mb-4">
+      <h3 class="font-semibold">Web Design</h3>
+      <p class="mt-2 text-gray-600">Full design service from wireframes to final UI/UX.</p>
+      <a href="#" class="mt-4 inline-block text-blue-600">Learn More →</a>
+    </article>
+    <article class="bg-white rounded-xl p-6 shadow-sm hover:shadow-lg transition transform hover:-translate-y-1">
+      <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=1200&auto=format&fit=crop" alt="Development" class="w-full h-40 object-cover rounded-md mb-4">
+      <h3 class="font-semibold">Development</h3>
+      <p class="mt-2 text-gray-600">Modern, fast and accessible front and back ends.</p>
+      <a href="#" class="mt-4 inline-block text-blue-600">Learn More →</a>
+    </article>
+    <article class="bg-white rounded-xl p-6 shadow-sm hover:shadow-lg transition transform hover:-translate-y-1">
+      <img src="https://images.unsplash.com/photo-1492724441997-5dc865305da2?q=80&w=1200&auto=format&fit=crop" alt="Marketing" class="w-full h-40 object-cover rounded-md mb-4">
+      <h3 class="font-semibold">Marketing</h3>
+      <p class="mt-2 text-gray-600">SEO, ads and growth marketing strategies.</p>
+      <a href="#" class="mt-4 inline-block text-blue-600">Learn More →</a>
+    </article>
+  </div>
 </main>
+<!-- Footer -->
+<footer class="bg-white border-t py-8 mt-16">
+  <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
+    <div class="text-sm">© <span id="year"></span> DigiNexLab. All rights reserved.</div>
+    <nav class="flex gap-4 text-sm">
+      <a href="index.html">Home</a>
+      <a href="services.html">Services</a>
+      <a href="about.html">About Us</a>
+      <a href="portfolio.html">Portfolio</a>
+      <a href="blog.html">Blog</a>
+      <a href="contact.html">Contact Us</a>
+    </nav>
+    <div class="flex gap-3">
+      <a href="#" aria-label="Twitter">Twitter</a>
+      <a href="#" aria-label="LinkedIn">LinkedIn</a>
+      <a href="#" aria-label="Facebook">Facebook</a>
+    </div>
+  </div>
+</footer>
+<!-- WhatsApp Floating Button -->
+<a id="whatsapp-btn" href="https://wa.me/INSERT_NUMBER" target="_blank" class="fixed right-4 bottom-4 z-50 rounded-full bg-green-500 p-3 shadow-lg text-white hidden md:flex items-center gap-2">
+  <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M..."/></svg>
+  <span class="text-sm">WhatsApp</span>
+</a>
 
+<!-- Back to Top -->
+<button id="back-to-top" aria-label="Back to top" class="hidden fixed right-4 bottom-20 z-40 bg-blue-600 text-white rounded-full p-3 shadow-lg">↑</button>
 
-<!-- footer same as index -->
+<script>
+// year
+document.addEventListener('DOMContentLoaded', function(){
+  const y = new Date().getFullYear(); document.getElementById('year').textContent = y;
+  // back to top
+  const b = document.getElementById('back-to-top');
+  window.addEventListener('scroll', ()=>{ if(window.scrollY>400) b.classList.remove('hidden'); else b.classList.add('hidden'); });
+  b.addEventListener('click', ()=> window.scrollTo({top:0,behavior:'smooth'}));
+  // mobile nav (basic)
+  const mb = document.getElementById('mobile-menu-btn');
+  if(mb){ mb.addEventListener('click', ()=> alert('Open mobile menu (implement as needed)')); }
+});
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="assets/js/main.js"></script>
 </body>
 </html>

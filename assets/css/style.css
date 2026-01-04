@@ -1,0 +1,51 @@
+
+
+```css
+/* Fonts */
+:root{
+--blue: #1e6fff;
+--muted: #6b7280;
+}
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Roboto:wght@300;400;500&display=swap');
+
+
+.font-playfair{font-family:'Playfair Display', serif}
+.font-roboto{font-family:'Roboto', sans-serif}
+
+
+/* general */
+body{font-family: 'Roboto', sans-serif;}
+h1,h2,h3{font-family:'Playfair Display', serif}
+
+
+/* header shadow on scroll */
+.header-shadow{box-shadow: 0 6px 20px rgba(17,24,39,0.08);}
+
+
+/* preloader */
+#preloader{transition: opacity .3s ease}
+#preloader.hidden{opacity:0;pointer-events:none;}
+
+
+/* buttons simple hover */
+a.button{transition: all .18s ease}
+
+
+/* back to top */
+#back-to-top{display:none}
+
+
+/* footer */
+footer{font-size:14px}
+
+
+/* subtle section dividers */
+.section-divider{border-top:1px solid #f3f4f6}
+
+
+/* portfolio hover */
+figure:hover img{transform:scale(1.03);transition:all .25s ease}
+```
+
+
+---

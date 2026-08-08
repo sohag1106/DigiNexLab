@@ -1,0 +1,1231 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PixelPistol — Creative Agency</title>
+<style>
+  :root{
+    --ink:#33291E;
+    --cream:#F2EDD8;
+    --cream-2:#E7E0C4;
+    --grass:#A7C46B;
+    --grassLt:#B9D17D;
+    --grassDk:#88AB52;
+    --grassSh:#7B9C49;
+    --leafDk:#41702C;
+    --leafMd:#57923B;
+    --leafLt:#6FAC4C;
+    --trunk:#7A5533;
+    --dirt:#DCC89B;
+    --dirtDk:#C2AB79;
+    --water:#63AEDA;
+    --waterLt:#8FCDEC;
+    --stone:#CDB897;
+    --stoneLt:#E0D0B4;
+    --wood:#8A6A45;
+    --woodDk:#654A2E;
+    --accent:#E2455E;
+    --focus:#2F6BD8;
+    --display:'Trebuchet MS','Segoe UI',Verdana,sans-serif;
+    --body:'Segoe UI',system-ui,-apple-system,'Helvetica Neue',Arial,sans-serif;
+  }
+
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; padding:0; }
+  body{
+    background:var(--cream);
+    color:var(--ink);
+    font-family:var(--body);
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.display{ font-family:var(--display); font-weight:800; text-wrap:balance; }
+  ::selection{ background:var(--accent); color:#fff; }
+  a{ color:inherit; }
+  :focus-visible{ outline:3px solid var(--focus); outline-offset:3px; border-radius:4px; }
+
+  /* ---------------- top bar ---------------- */
+  .topbar{
+    position:relative; z-index:30;
+    display:flex; align-items:center; gap:24px;
+    padding:12px clamp(16px,3vw,40px);
+    background:var(--cream);
+    border-bottom:3px solid var(--ink);
+  }
+  .brand{ display:flex; flex-direction:column; line-height:1; margin-right:auto; }
+  .brand .name{
+    font-family:var(--display); font-weight:800; font-size:clamp(21px,2.4vw,28px);
+    letter-spacing:-.02em;
+  }
+  .brand .name em{ font-style:normal; color:var(--accent); }
+  .brand .sub{ font-size:11px; letter-spacing:.13em; text-transform:uppercase; color:#7A6C55; margin-top:4px; }
+  .nav{ display:flex; align-items:center; gap:clamp(12px,2vw,26px); }
+  .nav a{
+    text-decoration:none; font-size:14.5px; font-weight:600; color:#5C5140;
+    padding:6px 2px; border-bottom:3px solid transparent;
+  }
+  .nav a:hover{ color:var(--ink); }
+  .nav a[aria-current]{ color:var(--ink); border-bottom-color:var(--ink); }
+  .talk{
+    font-family:var(--body); font-size:14px; font-weight:700; cursor:pointer;
+    background:var(--ink); color:var(--cream); border:none;
+    padding:11px 22px; border-radius:999px; text-decoration:none; white-space:nowrap;
+  }
+  .talk:hover{ background:#4A3B2B; }
+  @media (max-width:840px){ .nav{ display:none; } }
+
+  /* ---------------- stage ---------------- */
+  .stage{
+    position:relative;
+    width:100%;
+    height:clamp(380px, 56.25vw, calc(100svh - 74px));
+    background:var(--grass);
+    overflow:hidden;
+  }
+  @media (max-width:700px){
+    .stage{ height:min(74svh, 620px); }
+  }
+  .stage.armed .map{ cursor:none; }
+  .map{ position:absolute; inset:0; width:100%; height:100%; display:block; touch-action:pan-y; }
+
+  .building{ outline:none; }
+  .bld-pop{
+    transform-box:fill-box; transform-origin:50% 100%;
+    animation:pop .5s cubic-bezier(.22,1.15,.36,1) both;
+  }
+  @keyframes pop{ from{ opacity:0; transform:translateY(-34px) scale(.86);} to{ opacity:1; transform:none;} }
+  .bld-inner{ transform-box:fill-box; transform-origin:50% 100%; transition:transform .22s ease; }
+  .building.active .bld-inner{ transform:translateY(-11px); }
+  .focus-ring{ opacity:0; }
+  .building:focus-visible .focus-ring{ opacity:1; }
+
+  /* door opening + walking in */
+  .door-leaf{ transition:transform .5s cubic-bezier(.3,.8,.3,1); }
+  .building.open .door-leaf{ transform:perspective(320px) rotateY(-104deg); }
+  .door-glow{ transition:opacity .45s ease .1s; }
+  .building.open .door-glow{ opacity:.92; }
+  #hero{ transition:opacity .35s ease; }
+  #hero.entering{ animation:walkIn .75s cubic-bezier(.5,0,.7,.4) forwards; }
+  @keyframes walkIn{
+    0%{ opacity:1; }
+    70%{ opacity:.85; }
+    100%{ opacity:0; transform:scale(.34); }
+  }
+
+  /* interior panel */
+  .interior{
+    position:absolute; inset:0; z-index:20;
+    display:flex; align-items:flex-end; justify-content:center;
+    background:rgba(30,22,15,0); backdrop-filter:blur(0px);
+    transition:background .4s ease, backdrop-filter .4s ease;
+    pointer-events:none;
+  }
+  .interior.show{ background:rgba(30,22,15,.52); backdrop-filter:blur(2px); pointer-events:auto; }
+  .interior-card{
+    width:min(560px, 92%); margin-bottom:clamp(16px,4vh,48px);
+    background:var(--cream); border:4px solid var(--ink); border-radius:18px;
+    box-shadow:0 10px 0 rgba(30,22,15,.3);
+    transform:translateY(115%); opacity:0;
+    transition:transform .48s cubic-bezier(.2,.9,.3,1.05), opacity .3s ease;
+    overflow:hidden; max-height:min(78%, 560px); display:flex; flex-direction:column;
+  }
+  .interior.show .interior-card{ transform:translateY(0); opacity:1; }
+  .interior-head{
+    display:flex; align-items:center; gap:14px;
+    padding:18px 20px; border-bottom:4px solid var(--ink);
+  }
+  .interior-head .chip{
+    flex:none; width:52px; height:52px; border-radius:12px;
+    border:3px solid var(--ink); display:grid; place-items:center; background:#fff;
+  }
+  .interior-head h3{ margin:0; font-size:clamp(19px,2.4vw,24px); flex:1; }
+  .interior-close{
+    flex:none; cursor:pointer; font:inherit; font-weight:700; font-size:13px;
+    background:var(--ink); color:var(--cream); border:none;
+    border-radius:999px; padding:9px 16px;
+  }
+  .interior-close:hover{ background:#4A3B2B; }
+  .interior-body{ padding:20px; overflow-y:auto; }
+  .interior-body > p{ margin:0 0 16px; font-size:15.5px; line-height:1.6; color:#5C5140; }
+  .interior-body ul{ margin:0 0 18px; padding-left:20px; display:flex; flex-direction:column; gap:7px; }
+  .interior-body li{ font-size:14.5px; line-height:1.5; color:#5C5140; }
+  .interior-cta{
+    display:inline-block; text-decoration:none; font-weight:700; font-size:14.5px;
+    background:var(--accent); color:#fff; border-radius:999px; padding:12px 26px;
+  }
+  .interior-cta:hover{ background:#C93850; }
+  .sign-text{
+    font-family:var(--display); font-weight:800; fill:#fff;
+    stroke:var(--ink); stroke-width:5.5; paint-order:stroke;
+    stroke-linejoin:round; letter-spacing:.01em;
+  }
+
+  .hero-shadow{ fill:rgba(51,41,30,.20); }
+  .leg,.arm{ transform-box:fill-box; transform-origin:50% 0; }
+  #hero.run .legA{ animation:swing .34s ease-in-out infinite; }
+  #hero.run .legB{ animation:swing .34s ease-in-out infinite reverse; }
+  #hero.run .armA{ animation:swing .34s ease-in-out infinite reverse; }
+  #hero.run .armB{ animation:swing .34s ease-in-out infinite; }
+  #hero.run .bob{ animation:bob .17s ease-in-out infinite alternate; }
+  #hero .panic{ animation:panic 1.4s ease-in-out infinite; transform-box:fill-box; transform-origin:50% 100%; }
+  @keyframes swing{ from{ transform:rotate(34deg);} to{ transform:rotate(-34deg);} }
+  @keyframes bob{ from{ transform:translateY(0);} to{ transform:translateY(-2.5px);} }
+  @keyframes panic{ 0%,100%{ transform:rotate(-2.5deg);} 50%{ transform:rotate(2.5deg);} }
+
+  #tether{ stroke:#fff; stroke-width:4; stroke-linecap:round; stroke-dasharray:2 13;
+    filter:drop-shadow(0 0 2px rgba(51,41,30,.55)); animation:crawl 1s linear infinite; }
+  @keyframes crawl{ to{ stroke-dashoffset:-30; } }
+  #gun,#tether{ transition:opacity .18s ease; }
+  .hidden-fx{ opacity:0 !important; }
+
+  .bubble-fo{ overflow:visible; opacity:0; transition:opacity .16s ease; pointer-events:none; }
+  .bubble-fo.show{ opacity:1; }
+  .bubble{
+    font-family:var(--body); background:#fff; border:4px solid var(--ink);
+    border-radius:18px; padding:12px 16px; text-align:center; line-height:1.3;
+    box-shadow:0 5px 0 rgba(51,41,30,.22);
+  }
+  .bubble .lead{ display:block; font-size:19px; color:#4A4032; }
+  .bubble .svc{ display:block; font-family:var(--display); font-weight:800; font-size:22px; color:var(--accent); margin-top:2px; }
+  .bubble-tail{ fill:#fff; stroke:var(--ink); stroke-width:4; stroke-linejoin:round; opacity:0; transition:opacity .16s ease; }
+  .bubble-tail.show{ opacity:1; }
+
+  /* ---------------- stage overlays ---------------- */
+  .welcome{
+    position:absolute; left:clamp(14px,2.4vw,34px); top:clamp(14px,2.4vw,30px); z-index:12;
+    width:min(228px,42vw); pointer-events:none;
+    background:linear-gradient(180deg,#FBF5E0,#EFE4C4);
+    border:4px solid var(--ink); border-radius:10px;
+    padding:14px 16px 16px; box-shadow:5px 6px 0 rgba(51,41,30,.22);
+  }
+  .welcome::before{
+    content:""; position:absolute; left:22px; top:-15px; width:13px; height:15px;
+    background:var(--woodDk); border:3px solid var(--ink); border-radius:3px; z-index:-1;
+  }
+  .welcome h2{ margin:0 0 7px; font-size:20px; }
+  .welcome p{ margin:0; font-size:13.5px; line-height:1.45; color:#5C5140; }
+
+  .side-nav{
+    position:absolute; left:0; bottom:clamp(14px,3vh,40px); z-index:12;
+    list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:9px;
+  }
+  .side-nav a{
+    display:block; text-decoration:none; font-family:var(--display); font-weight:700; font-size:14px;
+    background:linear-gradient(180deg,#A87C4E,#8A6440); color:#FFF6E2;
+    border:3px solid var(--ink); border-left:none; border-radius:0 9px 9px 0;
+    padding:9px 18px 9px 16px; box-shadow:3px 4px 0 rgba(51,41,30,.22);
+    transition:transform .16s ease;
+  }
+  .side-nav a:hover{ transform:translateX(6px); }
+
+  .hint{
+    position:absolute; left:50%; bottom:clamp(14px,3vh,30px); transform:translateX(-50%); z-index:12;
+    display:flex; align-items:center; gap:12px; max-width:min(94vw,470px);
+    background:var(--cream); border:3px solid var(--ink); border-radius:12px;
+    padding:11px 20px; box-shadow:0 4px 0 rgba(51,41,30,.2);
+    font-size:13.5px; line-height:1.35; color:#5C5140;
+    transition:opacity .5s ease, transform .5s ease;
+  }
+  .hint strong{ color:var(--ink); display:block; font-size:14px; }
+  .hint svg{ flex:none; }
+  .hint.gone{ opacity:0; transform:translateX(-50%) translateY(10px); pointer-events:none; }
+
+  .sound{
+    position:absolute; right:clamp(12px,2vw,26px); bottom:clamp(14px,3vh,30px); z-index:12;
+    display:flex; align-items:center; gap:9px; cursor:pointer;
+    background:var(--cream); border:3px solid var(--ink); border-radius:999px;
+    padding:9px 18px; font-family:var(--body); font-size:13px; font-weight:700; color:var(--ink);
+    box-shadow:0 4px 0 rgba(51,41,30,.2);
+  }
+  .sound:active{ transform:translateY(2px); box-shadow:0 2px 0 rgba(51,41,30,.2); }
+  @media (max-width:700px){
+    .welcome{ display:none; }
+    .side-nav{ display:none; }
+    .hint{ font-size:12.5px; padding:9px 14px; bottom:70px; }
+    .sound{ padding:8px 14px; font-size:12px; }
+  }
+
+  /* ---------------- below the fold ---------------- */
+  .services{ max-width:1120px; margin:0 auto; padding:clamp(56px,8vw,92px) clamp(18px,4vw,32px); }
+  .services header{ max-width:56ch; margin-bottom:clamp(28px,4vw,44px); }
+  .eyebrow{
+    margin:0 0 10px; font-size:12px; font-weight:700; letter-spacing:.16em;
+    text-transform:uppercase; color:var(--accent);
+  }
+  .services h2{ margin:0 0 12px; font-size:clamp(27px,4vw,40px); }
+  .services header p{ margin:0; font-size:16px; line-height:1.6; color:#5C5140; }
+  .grid{ list-style:none; margin:0; padding:0; display:grid; gap:18px;
+    grid-template-columns:repeat(auto-fit,minmax(268px,1fr)); }
+  .card{
+    background:#fff; border:3px solid var(--ink); border-radius:14px;
+    overflow:hidden; box-shadow:0 5px 0 rgba(51,41,30,.18);
+    display:flex; flex-direction:column;
+  }
+  .card .band{ height:11px; }
+  .card .body{ padding:20px 22px 24px; }
+  .card h3{ margin:0 0 8px; font-size:18.5px; }
+  .card p{ margin:0; font-size:14.5px; line-height:1.55; color:#5C5140; }
+  .card-more{
+    align-self:flex-start; margin-top:14px; cursor:pointer;
+    font:inherit; font-size:13.5px; font-weight:700; color:var(--ink);
+    background:transparent; border:2.5px solid var(--ink); border-radius:999px;
+    padding:8px 18px;
+  }
+  .card-more:hover{ background:var(--ink); color:var(--cream); }
+
+  .closing{ background:var(--ink); color:var(--cream); padding:clamp(56px,8vw,88px) 24px; text-align:center; }
+  .closing h2{ margin:0 0 14px; font-size:clamp(26px,4vw,38px); color:var(--cream); }
+  .closing p{ margin:0 auto 28px; max-width:48ch; font-size:16px; line-height:1.6; color:#CFC3A6; }
+  .closing .talk{ background:var(--accent); color:#fff; font-size:15px; padding:14px 32px; display:inline-block; }
+  .closing .talk:hover{ background:#C93850; }
+  .colophon{ margin-top:26px; font-size:12.5px; color:#8E8069; }
+
+  @media (prefers-reduced-motion: reduce){
+    .bld-pop, #hero.run .legA, #hero.run .legB, #hero.run .armA, #hero.run .armB,
+    #hero.run .bob, #hero .panic, #tether{ animation:none !important; }
+    .bld-inner, .side-nav a{ transition:none !important; }
+  }
+</style>
+
+<header class="topbar">
+  <div class="brand">
+    <span class="name">Pixel<em>Pistol</em></span>
+    <span class="sub">Creative Agency</span>
+  </div>
+  <nav class="nav">
+    <a href="#top" aria-current="page">Home</a>
+    <a href="#services">Services</a>
+    <a href="#services">About Us</a>
+    <a href="#services">Work</a>
+    <a href="#contact">Contact</a>
+  </nav>
+  <a class="talk" href="#contact">Let's Talk</a>
+</header>
+
+<div class="stage" id="stage">
+  <svg class="map" id="map" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet"
+       aria-label="Interactive cartoon village map. Six shops, each one of our services. Move the gun cursor to march the villager between them.">
+    <g id="terrain"></g>
+    <g id="scenery"></g>
+    <g id="buildings"></g>
+    <polygon class="bubble-tail" id="tail" points="0,0 0,0 0,0"></polygon>
+    <foreignObject class="bubble-fo" id="bubbleFO" x="0" y="0" width="330" height="130">
+      <div xmlns="http://www.w3.org/1999/xhtml" class="bubble">
+        <span class="lead">This stop is for</span>
+        <span class="svc" id="bubbleSvc"></span>
+      </div>
+    </foreignObject>
+    <polyline id="tether" points="0,0 0,0" fill="none"></polyline>
+    <g id="hero" class="idle" transform="translate(800,580)"></g>
+    <g id="gun" transform="translate(900,700)"></g>
+  </svg>
+
+  <div class="welcome">
+    <h2>Welcome!</h2>
+    <p>Explore our village of creativity. Find the right service for you!</p>
+  </div>
+
+  <ul class="side-nav">
+    <li><a href="#services">About Us</a></li>
+    <li><a href="#services">Our Work</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+
+  <div class="hint" id="hint">
+    <svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true">
+      <circle cx="13" cy="13" r="8" fill="none" stroke="#E2455E" stroke-width="2.6"/>
+      <circle cx="13" cy="13" r="2.4" fill="#63AEDA"/>
+      <g stroke="#63AEDA" stroke-width="2.6" stroke-linecap="round">
+        <path d="M13 1v6M13 19v6M1 13h6M19 13h6"/>
+      </g>
+    </svg>
+    <span><strong>Use your gun cursor to explore!</strong>Each shop represents a service we offer.</span>
+  </div>
+
+  <button class="sound" id="soundBtn" type="button" aria-pressed="false">
+    <svg width="17" height="17" viewBox="0 0 17 17" aria-hidden="true" id="soundIcon">
+      <path d="M2 6.2h3L9 2.6v11.8L5 10.8H2z" fill="#33291E"/>
+      <g id="waves" stroke="#33291E" stroke-width="1.7" fill="none" stroke-linecap="round" opacity="0">
+        <path d="M11.6 6.1a3.4 3.4 0 0 1 0 4.8"/>
+        <path d="M13.8 3.9a6.6 6.6 0 0 1 0 9.2"/>
+      </g>
+      <g id="mute" stroke="#33291E" stroke-width="1.8" stroke-linecap="round">
+        <path d="M12 6.4l4 4.2M16 6.4l-4 4.2"/>
+      </g>
+    </svg>
+    <span id="soundLabel">Sound: OFF</span>
+  </button>
+
+  <div class="interior" id="interior" role="dialog" aria-modal="true" aria-labelledby="intTitle" hidden>
+    <div class="interior-card">
+      <div class="interior-head">
+        <span class="chip" id="intChip"></span>
+        <h3 id="intTitle"></h3>
+        <button class="interior-close" id="intClose" type="button">Back outside</button>
+      </div>
+      <div class="interior-body">
+        <p id="intLede"></p>
+        <ul id="intList"></ul>
+        <a class="interior-cta" id="intCta" href="#contact">Start a project</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<main class="services" id="services">
+  <header>
+    <p class="eyebrow">Six shops, six specialities</p>
+    <h2>Every building in the village is something we actually do.</h2>
+    <p>Poke around the map above, or just read the list — same information, fewer hostages.</p>
+  </header>
+  <ul class="grid" id="cards"></ul>
+</main>
+
+<footer class="closing" id="contact">
+  <h2>Found the shop you need?</h2>
+  <p>Tell us which one and we'll take it from there. No hold-ups, no ransom notes — just a straight answer within one working day.</p>
+  <a class="talk" href="mailto:hello@pixelpistol.example">Let's Talk</a>
+  <p class="colophon">hello@pixelpistol.example &middot; placeholder details &mdash; swap in your real ones</p>
+</footer>
+
+<script>
+(function(){
+  var NS = 'http://www.w3.org/2000/svg';
+  function S(tag, attrs, parent){
+    var e = document.createElementNS(NS, tag);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+  function rng(seed){
+    return function(){
+      seed |= 0; seed = seed + 0x6D2B79F5 | 0;
+      var t = Math.imul(seed ^ seed >>> 15, 1 | seed);
+      t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+      return ((t ^ t >>> 14) >>> 0) / 4294967296;
+    };
+  }
+
+  var W = 1600, H = 900;
+  var PLAZA = { x:800, y:545, rx:235, ry:190 };
+  var FOUNTAIN = { x:800, y:395 };
+  var HOME = { x:800, y:580 };
+
+  var SHOPS = [
+    { id:'graphic', x:500,  y:330, roof:'#4E82C4', shade:'#3E6BA6', icon:'pencil',
+      label:['GRAPHIC DESIGN'], name:'Graphic Design',
+      copy:'Logos, print, packaging and brand collateral that stop the scroll.',
+      lede:'The drawing board. Everything that carries your name through the world in print or pixels gets made here.',
+      items:['Logo design and full mark systems','Print: brochures, posters, stationery','Packaging and label artwork','Social and ad creative sets','Pitch decks and one-pagers'] },
+    { id:'web', x:1120, y:330, roof:'#C4533B', shade:'#A44230', icon:'globe',
+      label:['WEB DESIGN'], name:'Web Design',
+      copy:'Fast, responsive sites and landing pages built to convert, not just to look nice.',
+      lede:'Where the sites get built. Design and front-end under one roof, so nothing gets lost in the handover.',
+      items:['Marketing sites and landing pages','E-commerce storefronts','Web app interfaces and design systems','Responsive rebuilds of ageing sites','Speed and Core Web Vitals work'] },
+    { id:'social', x:286,  y:600, roof:'#7FA05A', shade:'#688647', icon:'heart',
+      label:['SOCIAL MEDIA','MANAGEMENT'], name:'Social Media Management',
+      copy:'Daily content, community replies and a posting calendar you can actually keep.',
+      lede:'The shop that never shuts. We plan, make and post the day-to-day so your feed stops going quiet.',
+      items:['Monthly content calendars','Post design and short-form video','Community management and replies','Influencer and partner outreach','Monthly performance reporting'] },
+    { id:'brand', x:1330, y:600, roof:'#8A6BB0', shade:'#725794', icon:'flag',
+      label:['BRANDING'], name:'Branding',
+      copy:'Naming, identity systems and guidelines that keep every touchpoint on-model.',
+      lede:'Where the flag gets planted. The strategy and rules that make everything else recognisably yours.',
+      items:['Brand strategy and positioning','Naming and verbal identity','Visual identity systems','Brand guidelines documents','Rebrands and brand refreshes'] },
+    { id:'motion', x:470,  y:862, roof:'#DDA23F', shade:'#BC8730', icon:'play',
+      label:['MOTION GRAPHICS'], name:'Motion Graphics',
+      copy:'Explainers, logo stings and short-form animation cut for every channel.',
+      lede:'The picture house. Everything that moves, from a two-second logo sting to a full explainer.',
+      items:['Animated explainers','Logo stings and title cards','Social video edits and captions','UI and product motion','Storyboards and scripting'] },
+    { id:'seo', x:1140, y:862, roof:'#4C9E9B', shade:'#3C8280', icon:'search',
+      label:['SEO &','DIGITAL MARKETING'], name:'SEO & Digital Marketing',
+      copy:'Technical SEO, content and paid campaigns that compound month over month.',
+      lede:'The long game. Getting found, staying found, and paying sensibly for the traffic you cannot earn.',
+      items:['Technical SEO audits and fixes','Keyword research and content plans','Link building and digital PR','Google and Meta ad campaigns','Analytics setup and reporting'] }
+  ];
+
+  // where the villager stands to "visit" a shop: out in the open, on the plaza side
+  SHOPS.forEach(function(s){
+    var dx = PLAZA.x - s.x, dy = PLAZA.y - s.y;
+    var d = Math.hypot(dx, dy) || 1;
+    s.stand = { x: s.x + dx / d * 200, y: s.y + dy / d * 200 };
+  });
+
+  var terrain  = document.getElementById('terrain');
+  var scenery  = document.getElementById('scenery');
+  var bldLayer = document.getElementById('buildings');
+  var heroG    = document.getElementById('hero');
+  var gunG     = document.getElementById('gun');
+  var tether   = document.getElementById('tether');
+  var bubbleFO = document.getElementById('bubbleFO');
+  var bubbleSvc= document.getElementById('bubbleSvc');
+  var tail     = document.getElementById('tail');
+  var stage    = document.getElementById('stage');
+  var map      = document.getElementById('map');
+  var hint     = document.getElementById('hint');
+
+  /* ============ terrain ============ */
+  S('rect', { x:-300, y:-300, width:W+600, height:H+600, fill:'var(--grass)' }, terrain);
+
+  var r = rng(20260805);
+  for (var i = 0; i < 16; i++){
+    S('ellipse', {
+      cx: r()*W, cy: r()*H, rx: 110 + r()*190, ry: 70 + r()*110,
+      fill: r() > .5 ? 'var(--grassLt)' : 'var(--grassDk)', opacity: .38
+    }, terrain);
+  }
+
+  var RIVER = 'M 52 -60 C 128 90, 30 200, 92 322 C 152 442, 34 548, 96 668 C 152 780, 48 852, 100 960';
+  S('path', { d:RIVER, fill:'none', stroke:'var(--grassSh)', 'stroke-width':112, 'stroke-linecap':'round' }, terrain);
+  S('path', { d:RIVER, fill:'none', stroke:'var(--ink)',     'stroke-width':92,  'stroke-linecap':'round' }, terrain);
+  S('path', { d:RIVER, fill:'none', stroke:'var(--water)',   'stroke-width':82,  'stroke-linecap':'round' }, terrain);
+  S('path', { d:RIVER, fill:'none', stroke:'var(--waterLt)', 'stroke-width':26,  'stroke-linecap':'round', opacity:.45 }, terrain);
+
+  // paths: plaza -> each shop door, plus roads leaving the map
+  var doors = SHOPS.map(function(s){ return { x:s.x, y:s.y + 4 }; });
+  var routes = doors.map(function(d){
+    var mx = (PLAZA.x + d.x) / 2 + (d.x < PLAZA.x ? 26 : -26);
+    var my = (PLAZA.y + d.y) / 2;
+    return 'M ' + PLAZA.x + ' ' + PLAZA.y + ' Q ' + mx + ' ' + my + ' ' + d.x + ' ' + d.y;
+  });
+  routes.push('M ' + PLAZA.x + ' ' + PLAZA.y + ' Q 830 760 800 960');
+  routes.push('M ' + PLAZA.x + ' ' + PLAZA.y + ' Q 770 200 810 -60');
+
+  routes.forEach(function(d){
+    S('path', { d:d, fill:'none', stroke:'var(--dirtDk)', 'stroke-width':74, 'stroke-linecap':'round' }, terrain);
+  });
+  S('ellipse', { cx:PLAZA.x, cy:PLAZA.y, rx:PLAZA.rx + 9, ry:PLAZA.ry + 9, fill:'var(--dirtDk)' }, terrain);
+  routes.forEach(function(d){
+    S('path', { d:d, fill:'none', stroke:'var(--dirt)', 'stroke-width':62, 'stroke-linecap':'round' }, terrain);
+  });
+  S('ellipse', { cx:PLAZA.x, cy:PLAZA.y, rx:PLAZA.rx, ry:PLAZA.ry, fill:'var(--dirt)' }, terrain);
+
+  [72, 116, 158].forEach(function(rad){
+    S('circle', { cx:HOME.x, cy:HOME.y, r:rad, fill:'none', stroke:'var(--dirtDk)',
+      'stroke-width':3, 'stroke-dasharray':'9 12', opacity:.55 }, terrain);
+  });
+
+  // speckles on the dirt
+  for (var sp = 0; sp < 90; sp++){
+    var a = r() * Math.PI * 2, rad2 = Math.sqrt(r()) ;
+    S('circle', {
+      cx: PLAZA.x + Math.cos(a) * rad2 * PLAZA.rx * .94,
+      cy: PLAZA.y + Math.sin(a) * rad2 * PLAZA.ry * .94,
+      r: 1.6 + r() * 2.6, fill:'var(--dirtDk)', opacity:.5
+    }, terrain);
+  }
+
+  // bridge, seated on an actual point of the river curve
+  function bridgeOnRiver(){
+    var p = S('path', { d:RIVER }, terrain);
+    var len = p.getTotalLength();
+    var at = len * 0.30;
+    var a = p.getPointAtLength(Math.max(0, at - 6));
+    var b = p.getPointAtLength(Math.min(len, at + 6));
+    var mid = p.getPointAtLength(at);
+    terrain.removeChild(p);
+    // lay the deck across the flow, so rotate perpendicular to the tangent
+    var ang = Math.atan2(b.y - a.y, b.x - a.x) * 180 / Math.PI + 90;
+    var g = S('g', { transform:'translate(' + mid.x.toFixed(1) + ',' + mid.y.toFixed(1) + ') rotate(' + ang.toFixed(1) + ')' }, terrain);
+    S('rect', { x:-88, y:-32, width:176, height:64, rx:7, fill:'var(--wood)', stroke:'var(--ink)', 'stroke-width':5 }, g);
+    for (var pl = -72; pl <= 72; pl += 18){
+      S('line', { x1:pl, y1:-29, x2:pl, y2:29, stroke:'var(--woodDk)', 'stroke-width':4, 'stroke-linecap':'round' }, g);
+    }
+    [-32, 32].forEach(function(side){
+      S('rect', { x:-88, y:side - 6, width:176, height:12, rx:6, fill:'#A87C4E', stroke:'var(--ink)', 'stroke-width':4 }, g);
+    });
+    return mid;
+  }
+  var bridgePt = bridgeOnRiver();
+
+  // fountain
+  (function(){
+    var g = S('g', { transform:'translate(' + FOUNTAIN.x + ',' + FOUNTAIN.y + ')' }, terrain);
+    S('ellipse', { cx:4, cy:10, rx:52, ry:20, fill:'rgba(51,41,30,.18)' }, g);
+    S('ellipse', { cx:0, cy:0, rx:52, ry:32, fill:'var(--stoneLt)', stroke:'var(--ink)', 'stroke-width':5 }, g);
+    S('ellipse', { cx:0, cy:0, rx:38, ry:21, fill:'var(--water)', stroke:'var(--ink)', 'stroke-width':4 }, g);
+    S('ellipse', { cx:-8, cy:-4, rx:13, ry:6, fill:'var(--waterLt)', opacity:.75 }, g);
+    S('rect', { x:-8, y:-42, width:16, height:42, rx:6, fill:'var(--stoneLt)', stroke:'var(--ink)', 'stroke-width':4 }, g);
+    S('ellipse', { cx:0, cy:-44, rx:20, ry:9, fill:'var(--stoneLt)', stroke:'var(--ink)', 'stroke-width':4 }, g);
+  })();
+
+  /* ============ buildings ============ */
+  var ICONS = {
+    pencil: function(g, c){
+      var p = S('g', { transform:'rotate(-16)' }, g);
+      S('rect', { x:-9, y:-40, width:18, height:52, rx:3, fill:'#F2C14E', stroke:'var(--ink)', 'stroke-width':4 }, p);
+      S('polygon', { points:'-9,12 9,12 0,30', fill:'#F0DCC0', stroke:'var(--ink)', 'stroke-width':4, 'stroke-linejoin':'round' }, p);
+      S('polygon', { points:'-3.4,23 3.4,23 0,30', fill:'var(--ink)' }, p);
+      S('rect', { x:-9, y:-40, width:18, height:9, rx:2, fill:'#E2455E', stroke:'var(--ink)', 'stroke-width':4 }, p);
+    },
+    globe: function(g, c){
+      S('circle', { cx:0, cy:-4, r:26, fill:'#5FC0E8', stroke:'var(--ink)', 'stroke-width':4.5 }, g);
+      S('path', { d:'M-26,-4 h52 M0,-30 v52 M0,-30 a17,26 0 0 1 0,52 a17,26 0 0 1 0,-52',
+        fill:'none', stroke:'var(--ink)', 'stroke-width':3.4 }, g);
+      S('path', { d:'M-19,-17 q9,7 0,14 q-9,7 0,14', fill:'#4A9B3E', stroke:'none', opacity:.65 }, g);
+    },
+    heart: function(g, c){
+      S('rect', { x:-30, y:-34, width:60, height:48, rx:12, fill:'#F2EDD8', stroke:'var(--ink)', 'stroke-width':4.5 }, g);
+      S('path', { d:'M0,4 C-16,-6 -21,-15 -14,-21 C-8,-26 -1,-21 0,-16 C1,-21 8,-26 14,-21 C21,-15 16,-6 0,4 Z',
+        fill:'#E2455E', stroke:'var(--ink)', 'stroke-width':3.6, 'stroke-linejoin':'round' }, g);
+    },
+    flag: function(g, c){
+      S('rect', { x:-4, y:-52, width:8, height:66, rx:4, fill:'var(--woodDk)', stroke:'var(--ink)', 'stroke-width':3.6 }, g);
+      S('path', { d:'M4,-50 L44,-40 L4,-24 Z', fill:'#E2455E', stroke:'var(--ink)', 'stroke-width':4, 'stroke-linejoin':'round' }, g);
+    },
+    play: function(g, c){
+      S('rect', { x:-27, y:-31, width:54, height:54, rx:15, fill:'#F2EDD8', stroke:'var(--ink)', 'stroke-width':4.5 }, g);
+      S('polygon', { points:'-8,-15 17,-4 -8,7', fill:'#DDA23F', stroke:'var(--ink)', 'stroke-width':4, 'stroke-linejoin':'round' }, g);
+    },
+    search: function(g, c){
+      S('line', { x1:9, y1:9, x2:26, y2:26, stroke:'var(--ink)', 'stroke-width':11, 'stroke-linecap':'round' }, g);
+      S('circle', { cx:-3, cy:-3, r:21, fill:'#BFE7E4', stroke:'var(--ink)', 'stroke-width':5 }, g);
+      S('path', { d:'M-13,-9 a12,12 0 0 1 9,-8', fill:'none', stroke:'#fff', 'stroke-width':4, 'stroke-linecap':'round' }, g);
+    }
+  };
+
+  var SIGN_W = 210, WALL_H = 100, ROOF_H = 112, OVER = 18;
+
+  function cottage(shop, index){
+    var g = S('g', {
+      class:'building', 'data-id':shop.id, tabindex:'0', role:'button',
+      'aria-label': shop.name + ' — ' + shop.copy
+    }, bldLayer);
+    var pos = S('g', { transform:'translate(' + shop.x + ',' + shop.y + ')' }, g);
+    var pop = S('g', { class:'bld-pop', style:'animation-delay:' + (0.16 + index * 0.09) + 's' }, pos);
+    var inner = S('g', { class:'bld-inner' }, pop);
+
+    var bx = -SIGN_W / 2, by = -WALL_H;
+
+    S('ellipse', { cx:0, cy:12, rx:SIGN_W * .62, ry:38, fill:'var(--grassLt)', stroke:'var(--grassDk)', 'stroke-width':3 }, inner);
+    S('ellipse', { cx:8, cy:10, rx:SIGN_W * .50, ry:24, fill:'rgba(51,41,30,.20)' }, inner);
+
+    // wall
+    S('rect', { x:bx, y:by, width:SIGN_W, height:WALL_H + 8, rx:9,
+      fill:'var(--stone)', stroke:'var(--ink)', 'stroke-width':5 }, inner);
+    for (var b = 0; b < 7; b++){
+      S('rect', { x: bx + 12 + (b % 4) * 54 + (b > 3 ? 26 : 0), y: by + 58 + Math.floor(b / 4) * 26,
+        width: 30, height: 15, rx: 4, fill:'var(--stoneLt)', opacity:.75 }, inner);
+    }
+
+    // windows
+    [-1, 1].forEach(function(side){
+      var wx = side * 74;
+      S('rect', { x:wx - 20, y:by + 52, width:40, height:36, rx:6, fill:'#F7D98C', stroke:'var(--ink)', 'stroke-width':4.5 }, inner);
+      S('line', { x1:wx, y1:by + 52, x2:wx, y2:by + 88, stroke:'var(--ink)', 'stroke-width':3.4 }, inner);
+      S('line', { x1:wx - 20, y1:by + 70, x2:wx + 20, y2:by + 70, stroke:'var(--ink)', 'stroke-width':3.4 }, inner);
+    });
+
+    // doorway: dark interior, then a door leaf hinged on its left edge
+    var dTop = by + 46, dW = 52, dH = 72;
+    S('rect', { x:-dW / 2, y:dTop, width:dW, height:dH, rx:8,
+      fill:'#2A211A', stroke:'var(--ink)', 'stroke-width':5 }, inner);
+    S('rect', { x:-dW / 2 + 7, y:dTop + 10, width:dW - 14, height:dH - 10, rx:5,
+      fill:'#15100C' }, inner);
+    // warm spill of light from inside, revealed as the door swings
+    S('rect', { class:'door-glow', x:-dW / 2 + 5, y:dTop + 8, width:dW - 10, height:dH - 8, rx:5,
+      fill:'#F7C86B', opacity:0 }, inner);
+
+    var leaf = S('g', { class:'door-leaf', 'data-door':shop.id,
+      style:'transform-origin:' + (-dW / 2) + 'px ' + (dTop + dH / 2) + 'px' }, inner);
+    S('rect', { x:-dW / 2, y:dTop, width:dW, height:dH, rx:8,
+      fill:'var(--woodDk)', stroke:'var(--ink)', 'stroke-width':5 }, leaf);
+    S('rect', { x:-dW / 2 + 7, y:dTop + 8, width:dW - 14, height:26, rx:5, fill:'#A87C4E', opacity:.85 }, leaf);
+    S('rect', { x:-dW / 2 + 7, y:dTop + 42, width:dW - 14, height:22, rx:5, fill:'#A87C4E', opacity:.55 }, leaf);
+    S('circle', { cx:14, cy:dTop + 44, r:4.4, fill:'#F2C14E', stroke:'var(--ink)', 'stroke-width':2.6 }, leaf);
+
+    // awning with scalloped hem
+    var ax = bx + 8, aw = SIGN_W - 16, ay = by + 4, ah = 34, n = 8, sw = aw / n;
+    var d = 'M ' + ax + ' ' + ay + ' L ' + (ax + aw) + ' ' + ay + ' L ' + (ax + aw) + ' ' + (ay + ah);
+    for (var k = n - 1; k >= 0; k--){
+      d += ' A ' + (sw / 2) + ' ' + (sw / 2) + ' 0 0 1 ' + (ax + k * sw) + ' ' + (ay + ah);
+    }
+    d += ' Z';
+    var clipId = 'awn-' + shop.id;
+    var cp = S('clipPath', { id:clipId }, inner);
+    S('path', { d:d }, cp);
+    S('path', { d:d, fill:'#fff' }, inner);
+    var stripes = S('g', { 'clip-path':'url(#' + clipId + ')' }, inner);
+    for (var s2 = 0; s2 < n; s2 += 2){
+      S('rect', { x:ax + s2 * sw, y:ay, width:sw, height:ah + sw, fill:shop.roof }, stripes);
+    }
+    S('path', { d:d, fill:'none', stroke:'var(--ink)', 'stroke-width':4.5, 'stroke-linejoin':'round' }, inner);
+
+    // roof
+    S('polygon', {
+      points:(bx - OVER) + ',' + (by + 8) + ' ' + (bx + SIGN_W + OVER) + ',' + (by + 8) + ' ' +
+             (bx + SIGN_W - 18) + ',' + (by - ROOF_H) + ' ' + (bx + 18) + ',' + (by - ROOF_H),
+      fill:shop.roof, stroke:'var(--ink)', 'stroke-width':5, 'stroke-linejoin':'round'
+    }, inner);
+    S('polygon', {
+      points:(bx - OVER) + ',' + (by + 8) + ' ' + (bx + SIGN_W + OVER) + ',' + (by + 8) + ' ' +
+             (bx + SIGN_W + OVER - 8) + ',' + (by - 6) + ' ' + (bx - OVER + 8) + ',' + (by - 6),
+      fill:shop.shade, opacity:.85
+    }, inner);
+    S('rect', { x:bx + 12, y:by - ROOF_H - 13, width:SIGN_W - 24, height:19, rx:9,
+      fill:shop.shade, stroke:'var(--ink)', 'stroke-width':5 }, inner);
+
+    // chimney (tucked to the left end of the ridge)
+    S('rect', { x:bx + 26, y:by - ROOF_H - 40, width:24, height:42, rx:5,
+      fill:'var(--stoneLt)', stroke:'var(--ink)', 'stroke-width':4.5 }, inner);
+
+    // roof sign
+    var lines = shop.label, fs = lines.length > 1 ? 25 : 29;
+    var maxW = SIGN_W - 54;
+    var txtG = S('g', { transform:'translate(0,' + (by - ROOF_H * 0.52) + ') rotate(-2) skewX(-7)' }, inner);
+    lines.forEach(function(line, li){
+      var t = S('text', {
+        class:'sign-text', x:0, y: (li - (lines.length - 1) / 2) * (fs + 5) + fs * 0.34,
+        'text-anchor':'middle', 'font-size':fs
+      }, txtG);
+      t.textContent = line;
+      var len = t.getComputedTextLength ? t.getComputedTextLength() : 0;
+      if (len > maxW) t.setAttribute('font-size', (fs * maxW / len).toFixed(1));
+    });
+
+    // rooftop icon badge, seated on the ridge just right of the sign
+    var ig = S('g', { transform:'translate(' + (SIGN_W * 0.34) + ',' + (by - ROOF_H - 26) + ')' }, inner);
+    S('ellipse', { cx:0, cy:30, rx:26, ry:8, fill:'rgba(51,41,30,.22)' }, ig);
+    ICONS[shop.icon](ig, shop);
+
+    // chalkboard by the door
+    var cg = S('g', { transform:'translate(' + (SIGN_W * 0.40) + ',' + (by + WALL_H - 6) + ') rotate(4)' }, inner);
+    S('rect', { x:-19, y:-46, width:38, height:46, rx:5, fill:'var(--woodDk)', stroke:'var(--ink)', 'stroke-width':4 }, cg);
+    S('rect', { x:-13, y:-40, width:26, height:34, rx:3, fill:'#4A4438' }, cg);
+    for (var ln = 0; ln < 4; ln++){
+      S('line', { x1:-9, y1:-34 + ln * 8, x2:9 - (ln % 2) * 7, y2:-34 + ln * 8,
+        stroke:'#D9D2BE', 'stroke-width':2, 'stroke-linecap':'round', opacity:.8 }, cg);
+    }
+
+    // planter
+    var pg = S('g', { transform:'translate(' + (-SIGN_W * 0.40) + ',' + (by + WALL_H - 2) + ')' }, inner);
+    S('rect', { x:-22, y:-14, width:44, height:18, rx:4, fill:'#A87C4E', stroke:'var(--ink)', 'stroke-width':4 }, pg);
+    [-12, 0, 12].forEach(function(fx, fi){
+      S('circle', { cx:fx, cy:-20, r:7, fill:['#E2455E', '#F2C14E', '#E27FB0'][fi], stroke:'var(--ink)', 'stroke-width':3 }, pg);
+    });
+
+    S('ellipse', { class:'focus-ring', cx:0, cy:-118, rx:SIGN_W * .70, ry:158, fill:'none',
+      stroke:'var(--focus)', 'stroke-width':6, 'stroke-dasharray':'13 10' }, pos);
+
+    return g;
+  }
+  SHOPS.forEach(cottage);
+
+  /* ============ scenery ============ */
+  var keepOut = [];
+  SHOPS.forEach(function(s){
+    keepOut.push({ x:s.x, y:s.y - 120, rx:SIGN_W * 0.62 + 18, ry:172 });
+  });
+  keepOut.push({ x:PLAZA.x, y:PLAZA.y, rx:PLAZA.rx + 26, ry:PLAZA.ry + 26 });
+  keepOut.push({ x:FOUNTAIN.x, y:FOUNTAIN.y, rx:80, ry:60 });
+
+  function samplePath(d, count){
+    var p = S('path', { d:d }, terrain);
+    var total = p.getTotalLength ? p.getTotalLength() : 0;
+    var pts = [];
+    for (var i2 = 0; i2 <= count; i2++){
+      var pt = p.getPointAtLength(total * i2 / count);
+      pts.push({ x:pt.x, y:pt.y });
+    }
+    terrain.removeChild(p);
+    return pts;
+  }
+  var blockPts = [];
+  routes.forEach(function(d){
+    samplePath(d, 26).forEach(function(pt){ blockPts.push({ x:pt.x, y:pt.y, r:52 }); });
+  });
+  samplePath(RIVER, 40).forEach(function(pt){ blockPts.push({ x:pt.x, y:pt.y, r:76 }); });
+
+  function isFree(x, y, pad){
+    for (var a2 = 0; a2 < keepOut.length; a2++){
+      var k = keepOut[a2];
+      var dx = (x - k.x) / (k.rx + pad), dy = (y - k.y) / (k.ry + pad);
+      if (dx * dx + dy * dy < 1) return false;
+    }
+    for (var b2 = 0; b2 < blockPts.length; b2++){
+      var q = blockPts[b2];
+      var ex = x - q.x, ey = y - q.y, lim = q.r + pad;
+      if (ex * ex + ey * ey < lim * lim) return false;
+    }
+    return true;
+  }
+
+  function tree(x, y, s){
+    var g = S('g', { transform:'translate(' + x + ',' + y + ') scale(' + s.toFixed(2) + ')' }, scenery);
+    S('ellipse', { cx:5, cy:6, rx:34, ry:13, fill:'rgba(51,41,30,.18)' }, g);
+    S('rect', { x:-7, y:-18, width:14, height:24, rx:5, fill:'var(--trunk)', stroke:'var(--ink)', 'stroke-width':4 }, g);
+    S('circle', { cx:0, cy:-44, r:34, fill:'var(--leafDk)', stroke:'var(--ink)', 'stroke-width':4.5 }, g);
+    S('circle', { cx:-13, cy:-54, r:22, fill:'var(--leafMd)' }, g);
+    S('circle', { cx:12, cy:-58, r:18, fill:'var(--leafMd)' }, g);
+    S('circle', { cx:-4, cy:-64, r:13, fill:'var(--leafLt)' }, g);
+  }
+  function bush(x, y, s){
+    var g = S('g', { transform:'translate(' + x + ',' + y + ') scale(' + s.toFixed(2) + ')' }, scenery);
+    S('circle', { cx:-12, cy:0, r:15, fill:'var(--leafDk)', stroke:'var(--ink)', 'stroke-width':4 }, g);
+    S('circle', { cx:12, cy:2, r:13, fill:'var(--leafDk)', stroke:'var(--ink)', 'stroke-width':4 }, g);
+    S('circle', { cx:0, cy:-9, r:17, fill:'var(--leafMd)', stroke:'var(--ink)', 'stroke-width':4 }, g);
+    S('circle', { cx:-4, cy:-14, r:7, fill:'var(--leafLt)' }, g);
+  }
+  function rock(x, y, s){
+    var g = S('g', { transform:'translate(' + x + ',' + y + ') scale(' + s.toFixed(2) + ')' }, scenery);
+    S('path', { d:'M-19,6 q-5,-15 7,-19 q13,-6 20,4 q9,11 -2,16 Z',
+      fill:'#B9B2A0', stroke:'var(--ink)', 'stroke-width':4, 'stroke-linejoin':'round' }, g);
+    S('path', { d:'M-10,-6 q6,-6 13,-2', fill:'none', stroke:'#DAD4C4', 'stroke-width':3, 'stroke-linecap':'round' }, g);
+  }
+  function flower(x, y){
+    var g = S('g', { transform:'translate(' + x + ',' + y + ')' }, scenery);
+    var col = ['#E2455E', '#F2C14E', '#E27FB0', '#fff'][Math.floor(r() * 4)];
+    S('line', { x1:0, y1:0, x2:0, y2:-9, stroke:'var(--leafDk)', 'stroke-width':2.6 }, g);
+    S('circle', { cx:0, cy:-12, r:4.6, fill:col, stroke:'var(--ink)', 'stroke-width':2.2 }, g);
+  }
+
+  var placed = [];
+  function far(x, y, min){
+    for (var i3 = 0; i3 < placed.length; i3++){
+      var dx = placed[i3].x - x, dy = placed[i3].y - y;
+      if (dx * dx + dy * dy < min * min) return false;
+    }
+    return true;
+  }
+  for (var gy = -20; gy < H + 40; gy += 74){
+    for (var gx = -20; gx < W + 40; gx += 74){
+      var tx = gx + (r() - .5) * 52, ty = gy + (r() - .5) * 52;
+      if (!isFree(tx, ty, 44) || !far(tx, ty, 76)) continue;
+      if (r() < .30) continue;
+      placed.push({ x:tx, y:ty });
+      tree(tx, ty, 0.72 + r() * 0.5);
+    }
+  }
+  for (var i4 = 0; i4 < 190; i4++){
+    var bxp = r() * W, byp = r() * H;
+    if (!isFree(bxp, byp, 22) || !far(bxp, byp, 46)) continue;
+    placed.push({ x:bxp, y:byp });
+    bush(bxp, byp, 0.6 + r() * 0.55);
+  }
+  for (var i5 = 0; i5 < 90; i5++){
+    var rxp = r() * W, ryp = r() * H;
+    if (!isFree(rxp, ryp, 14) || !far(rxp, ryp, 34)) continue;
+    placed.push({ x:rxp, y:ryp });
+    if (r() < .42) rock(rxp, ryp, 0.6 + r() * 0.5); else flower(rxp, ryp);
+  }
+
+  // fences
+  function fence(pts){
+    var g = S('g', {}, scenery);
+    for (var i6 = 0; i6 < pts.length - 1; i6++){
+      var p1 = pts[i6], p2 = pts[i6 + 1];
+      [0.34, 0.66].forEach(function(t2){
+        var off = -26 + t2 * 22;
+        S('line', {
+          x1:p1[0], y1:p1[1] + off,
+          x2:p2[0], y2:p2[1] + off,
+          stroke:'#A87C4E', 'stroke-width':7, 'stroke-linecap':'round'
+        }, g);
+      });
+    }
+    pts.forEach(function(p){
+      S('rect', { x:p[0] - 6, y:p[1] - 40, width:12, height:44, rx:4,
+        fill:'var(--wood)', stroke:'var(--ink)', 'stroke-width':4 }, g);
+    });
+  }
+  fence([[1420, 250], [1490, 258], [1560, 250]]);
+  fence([[120, 830], [196, 838], [272, 830]]);
+  fence([[1330, 760], [1404, 768], [1478, 760]]);
+
+  /* ============ character + gun ============ */
+  (function buildHero(){
+    S('ellipse', { class:'hero-shadow', cx:0, cy:6, rx:27, ry:10 }, heroG);
+    var bob = S('g', { class:'bob' }, heroG);
+    S('g', { transform:'translate(-9,-18)' }, bob).appendChild(legOrArm('leg legA', '#3C4A63', 13, 26));
+    S('g', { transform:'translate(9,-18)' }, bob).appendChild(legOrArm('leg legB', '#3C4A63', 13, 26));
+    var panic = S('g', { class:'panic' }, bob);
+    S('rect', { x:-17, y:-58, width:34, height:42, rx:13, fill:'#2E7D74', stroke:'var(--ink)', 'stroke-width':4 }, panic);
+    S('path', { d:'M-17,-46 h34', stroke:'var(--ink)', 'stroke-width':3, fill:'none', opacity:.35 }, panic);
+    S('g', { transform:'translate(-17,-52)' }, panic).appendChild(legOrArm('arm armA', '#2E7D74', 11, 25));
+    S('g', { transform:'translate(17,-52)' }, panic).appendChild(legOrArm('arm armB', '#2E7D74', 11, 25));
+    S('circle', { cx:0, cy:-76, r:19, fill:'#F0C08A', stroke:'var(--ink)', 'stroke-width':4 }, panic);
+    S('path', { d:'M-20,-82 q3,-16 11,-14 q2,-9 11,-5 q9,-4 12,6 q7,1 5,13 q-8,-9 -19,-7 q-12,2 -20,7 Z',
+      fill:'#22201C', stroke:'var(--ink)', 'stroke-width':3.4, 'stroke-linejoin':'round' }, panic);
+    S('circle', { cx:-7, cy:-77, r:3.6, fill:'#fff', stroke:'var(--ink)', 'stroke-width':2 }, panic);
+    S('circle', { cx:7, cy:-77, r:3.6, fill:'#fff', stroke:'var(--ink)', 'stroke-width':2 }, panic);
+    S('circle', { cx:-6.4, cy:-76.4, r:1.7, fill:'var(--ink)' }, panic);
+    S('circle', { cx:7.6, cy:-76.4, r:1.7, fill:'var(--ink)' }, panic);
+    S('ellipse', { cx:0, cy:-66, rx:5.4, ry:4.4, fill:'#7A3B34', stroke:'var(--ink)', 'stroke-width':2.4 }, panic);
+
+    function legOrArm(cls, fill, w, h){
+      var g = document.createElementNS(NS, 'g');
+      g.setAttribute('class', cls);
+      S('rect', { x:-w / 2, y:0, width:w, height:h, rx:w / 2, fill:fill, stroke:'var(--ink)', 'stroke-width':3.4 }, g);
+      return g;
+    }
+  })();
+
+  (function buildGun(){
+    // drawn pointing right along +X, pivoting near the grip so it reads as "held"
+    var g = S('g', { transform:'scale(1.05) translate(-16,-6)' }, gunG);
+
+    var slide = 'M -16 -16 L 52 -16 L 52 -2 L 30 -2 L 30 2 L -16 2 Z';
+    var grip  = 'M -16 2 L 2 2 L -8 44 L -30 44 Z';
+    var guard = 'M 2 4 q 16 3 15 18 q -1 6 -7 6 l -6 0 q 6 -2 5 -10 q -1 -9 -12 -10 Z';
+    var trig  = 'M -1 8 q 8 3 7 12 l -6 0 q 1 -6 -5 -8 Z';
+
+    // white sticker outline so it stays legible on grass, dirt or roof
+    [slide, grip, guard].forEach(function(d){
+      S('path', { d:d, fill:'none', stroke:'#fff', 'stroke-width':13,
+        'stroke-linejoin':'round', 'stroke-linecap':'round' }, g);
+    });
+
+    S('path', { d:grip,  fill:'#3A3A42', stroke:'var(--ink)', 'stroke-width':4.5, 'stroke-linejoin':'round' }, g);
+    S('path', { d:guard, fill:'#4E4E58', stroke:'var(--ink)', 'stroke-width':4.5, 'stroke-linejoin':'round' }, g);
+    S('path', { d:trig,  fill:'#2A2A31', stroke:'var(--ink)', 'stroke-width':3 }, g);
+    S('path', { d:slide, fill:'#4E4E58', stroke:'var(--ink)', 'stroke-width':4.5, 'stroke-linejoin':'round' }, g);
+
+    // slide serrations + highlight so the barrel doesn't read as a flat blob
+    S('rect', { x:-12, y:-12.5, width:60, height:4, rx:2, fill:'#767682' }, g);
+    [-10, -4, 2].forEach(function(sx){
+      S('line', { x1:sx, y1:-13, x2:sx, y2:-3, stroke:'var(--ink)', 'stroke-width':2.4, opacity:.55 }, g);
+    });
+    // grip checkering
+    [8, 16, 24, 32].forEach(function(gyy){
+      S('line', { x1:-14 + gyy * 0.22, y1:gyy - 4, x2:-2 + gyy * 0.22, y2:gyy - 4,
+        stroke:'#22222A', 'stroke-width':2.6, 'stroke-linecap':'round' }, g);
+    });
+    S('circle', { cx:48, cy:-11, r:2.4, fill:'var(--ink)' }, g);   // front sight
+    S('rect', { x:-13, y:-19, width:8, height:4, rx:2, fill:'var(--ink)' }, g); // rear sight
+  })();
+
+  /* ============ interaction ============ */
+  var fine = window.matchMedia && window.matchMedia('(hover:hover) and (pointer:fine)').matches;
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+  if (fine) stage.classList.add('armed');
+
+  var HOLD = 152;
+  var gunX = HOME.x + 150, gunY = HOME.y + 150;
+  var chX = HOME.x, chY = HOME.y;
+  var facing = 1, active = null, engaged = fine, hintGone = false;
+  var walkTarget = null, lastMoveAt = 0;
+  var tourIdx = -1, tourNextAt = 0;
+  // enter sequence: null | 'approach' | 'opening' | 'inside'
+  var phase = null, phaseShop = null, phaseAt = 0;
+
+  var bldEls = {};
+  SHOPS.forEach(function(s){
+    bldEls[s.id] = bldLayer.querySelector('[data-id="' + s.id + '"]');
+  });
+
+  function toSvg(cx, cy){
+    var pt = map.createSVGPoint();
+    pt.x = cx; pt.y = cy;
+    var m = map.getScreenCTM();
+    if (!m) return null;
+    var p = pt.matrixTransform(m.inverse());
+    return { x:p.x, y:p.y };
+  }
+  function dropHint(){
+    if (!hintGone){ hintGone = true; hint.classList.add('gone'); }
+  }
+
+  stage.addEventListener('mousemove', function(e){
+    var p = toSvg(e.clientX, e.clientY);
+    if (!p) return;
+    gunX = p.x; gunY = p.y;
+    lastMoveAt = Date.now();
+    dropHint();
+    if (phase) return;          // don't fight the enter sequence
+    engaged = true; walkTarget = null;
+  });
+  stage.addEventListener('mouseleave', function(){ if (fine) engaged = false; });
+  stage.addEventListener('mouseenter', function(){ engaged = true; });
+
+  function sendTo(shop){
+    if (phase) return;
+    walkTarget = { x:shop.stand.x, y:shop.stand.y };
+    engaged = true;
+    tourNextAt = Date.now() + 9000;
+    dropHint();
+  }
+
+  // walk to the door, open it, step inside, then show the details
+  function enterShop(shop){
+    if (phase){
+      if (phaseShop && phaseShop.id === shop.id) return;  // already here
+      leaveShop();                                        // switch shops
+    }
+    phase = 'approach'; phaseShop = shop; phaseAt = Date.now();
+    walkTarget = { x:shop.x, y:shop.y + 34 };  // right at the doorstep
+    engaged = true;
+    dropHint();
+    blip(520);
+  }
+  SHOPS.forEach(function(s){
+    var el = bldEls[s.id];
+    el.addEventListener('click', function(){ enterShop(s); });
+    el.addEventListener('keydown', function(e){
+      if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); enterShop(s); }
+    });
+  });
+  stage.addEventListener('touchstart', function(e){
+    if (phase) return;
+    if (!e.touches || !e.touches[0]) return;
+    var p = toSvg(e.touches[0].clientX, e.touches[0].clientY);
+    if (!p) return;
+    var near = null, best = 1e9;
+    SHOPS.forEach(function(s){
+      var dx = s.x - p.x, dy = (s.y - 60) - p.y, d = dx * dx + dy * dy;
+      if (d < best){ best = d; near = s; }
+    });
+    if (near && best < 260 * 260) enterShop(near);
+    dropHint();
+  }, { passive:true });
+
+  // sound
+  var soundOn = false, actx = null;
+  var soundBtn = document.getElementById('soundBtn');
+  soundBtn.addEventListener('click', function(){
+    soundOn = !soundOn;
+    soundBtn.setAttribute('aria-pressed', soundOn ? 'true' : 'false');
+    document.getElementById('soundLabel').textContent = 'Sound: ' + (soundOn ? 'ON' : 'OFF');
+    document.getElementById('waves').setAttribute('opacity', soundOn ? '1' : '0');
+    document.getElementById('mute').setAttribute('opacity', soundOn ? '0' : '1');
+    if (soundOn) blip(720);
+  });
+  function blip(freq){
+    if (!soundOn) return;
+    try{
+      actx = actx || new (window.AudioContext || window.webkitAudioContext)();
+      var o = actx.createOscillator(), g = actx.createGain(), t = actx.currentTime;
+      o.type = 'triangle';
+      o.frequency.setValueAtTime(freq, t);
+      o.frequency.exponentialRampToValueAtTime(freq * 0.55, t + 0.13);
+      g.gain.setValueAtTime(0.05, t);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + 0.2);
+      o.connect(g); g.connect(actx.destination);
+      o.start(t); o.stop(t + 0.22);
+    } catch(err){ /* audio unavailable */ }
+  }
+
+  /* ---- interior panel ---- */
+  var interior = document.getElementById('interior');
+  var intChip = document.getElementById('intChip');
+  var intTitle = document.getElementById('intTitle');
+  var intLede = document.getElementById('intLede');
+  var intList = document.getElementById('intList');
+  var intClose = document.getElementById('intClose');
+  var lastFocus = null;
+
+  function showInterior(shop){
+    intTitle.textContent = shop.name;
+    intLede.textContent = shop.lede;
+    intList.textContent = '';
+    shop.items.forEach(function(it){
+      var li = document.createElement('li');
+      li.textContent = it;
+      intList.appendChild(li);
+    });
+    intChip.style.background = shop.roof;
+    intChip.textContent = '';
+    var mini = document.createElementNS(NS, 'svg');
+    mini.setAttribute('viewBox', '-46 -60 92 92');
+    mini.setAttribute('width', '38');
+    mini.setAttribute('height', '38');
+    mini.setAttribute('aria-hidden', 'true');
+    ICONS[shop.icon](mini, shop);
+    intChip.appendChild(mini);
+
+    interior.hidden = false;
+    // force a reflow so the transition runs from the hidden state
+    void interior.offsetWidth;
+    interior.classList.add('show');
+    lastFocus = document.activeElement;
+    try { intClose.focus({ preventScroll:true }); } catch(e){ intClose.focus(); }
+  }
+
+  // leave the shop from ANY point in the sequence, so a click is never a trap
+  function leaveShop(){
+    if (!phase) return;
+    var shop = phaseShop;
+    interior.classList.remove('show');
+    setTimeout(function(){ if (!phase) interior.hidden = true; }, 420);
+    if (shop) bldEls[shop.id].classList.remove('open');
+    heroG.classList.remove('entering');
+    heroG.style.opacity = '';
+    if (shop){ chX = shop.stand.x; chY = shop.stand.y; }
+    walkTarget = null;
+    phase = null; phaseShop = null;
+    tourNextAt = Date.now() + 9000;
+    if (lastFocus && lastFocus.focus){
+      try { lastFocus.focus({ preventScroll:true }); } catch(e){ lastFocus.focus(); }
+    }
+    blip(430);
+  }
+  intClose.addEventListener('click', leaveShop);
+  interior.addEventListener('click', function(e){ if (e.target === interior) leaveShop(); });
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape' && phase) leaveShop();
+  });
+
+  function setActive(shop){
+    if (shop === active) return;
+    active = shop;
+    SHOPS.forEach(function(s){
+      bldEls[s.id].classList.toggle('active', !!shop && s.id === shop.id);
+    });
+    if (shop){
+      bubbleSvc.textContent = 'YOUR ' + shop.name.toUpperCase() + '!';
+      bubbleFO.classList.add('show');
+      tail.classList.add('show');
+      blip(560);
+    } else {
+      bubbleFO.classList.remove('show');
+      tail.classList.remove('show');
+    }
+  }
+
+  function tick(){
+    // ---- enter-the-shop sequence ----
+    if (phase === 'approach' && !walkTarget){
+      // arrived at the doorstep: swing the door open
+      phase = 'opening'; phaseAt = Date.now();
+      bldEls[phaseShop.id].classList.add('open');
+      setActive(null);
+      blip(660);
+    } else if (phase === 'opening' && Date.now() - phaseAt > (reduce ? 120 : 460)){
+      // door is open: walk him into the dark
+      phase = 'walkin'; phaseAt = Date.now();
+      heroG.classList.add('entering');
+    } else if (phase === 'walkin' && Date.now() - phaseAt > (reduce ? 100 : 700)){
+      phase = 'inside';
+      heroG.style.opacity = '0';
+      showInterior(phaseShop);
+    }
+    var busy = phase && phase !== 'inside';
+
+    // idle tour: with no pointer input, visit each shop in turn and dwell there
+    var idle = !phase && !walkTarget && (!fine || Date.now() - lastMoveAt > 6000);
+    if (idle && Date.now() >= tourNextAt){
+      tourIdx = (tourIdx + 1) % SHOPS.length;
+      var t = SHOPS[tourIdx];
+      walkTarget = { x:t.stand.x, y:t.stand.y };
+      tourNextAt = Date.now() + 5200;
+    }
+
+    if (walkTarget){
+      var wdx = walkTarget.x - chX, wdy = walkTarget.y - chY;
+      var wd = Math.hypot(wdx, wdy);
+      if (wd < 12){ walkTarget = null; }
+      else {
+        chX += wdx / wd * Math.min(7.5, wd * 0.09);
+        chY += wdy / wd * Math.min(7.5, wd * 0.09);
+        // keep the gun trailing behind the walker
+        var bdx = chX - gunX, bdy = chY - gunY, bd = Math.hypot(bdx, bdy) || 1;
+        gunX += (chX - bdx / bd * HOLD - gunX) * 0.12;
+        gunY += (chY - bdy / bd * HOLD - gunY) * 0.12;
+      }
+    } else if (engaged && !phase){
+      var dx = chX - gunX, dy = chY - gunY;
+      var d = Math.hypot(dx, dy) || 1;
+      var nx = dx / d, ny = dy / d;
+      var tx = gunX + nx * HOLD, ty = gunY + ny * HOLD;
+      var ease = reduce ? 0.4 : (d < HOLD ? 0.26 : 0.09);
+      chX += (tx - chX) * ease;
+      chY += (ty - chY) * ease;
+    }
+
+    // stay out of the buildings and the fountain (but let him reach the door)
+    if (!phase){
+      keepOut.forEach(function(k){
+        var ex = (chX - k.x) / (k.rx * 0.72), ey = (chY - k.y) / (k.ry * 0.72);
+        var m = Math.hypot(ex, ey);
+        if (m < 1 && m > 0.001 && k.rx < 200){
+          chX = k.x + ex / m * k.rx * 0.72;
+          chY = k.y + ey / m * k.ry * 0.72;
+        }
+      });
+      chX = Math.max(60, Math.min(W - 60, chX));
+      chY = Math.max(190, Math.min(H - 70, chY));
+    }
+
+    var vx = chX - (tick.px || chX), vy = chY - (tick.py || chY);
+    var speed = Math.hypot(vx, vy);
+    tick.px = chX; tick.py = chY;
+
+    heroG.classList.toggle('run', speed > 0.5);
+    if (speed > 0.5) facing = vx < 0 ? -1 : 1;
+    else facing = (chX - gunX) < 0 ? -1 : 1;
+    heroG.setAttribute('transform', 'translate(' + chX.toFixed(1) + ',' + chY.toFixed(1) + ') scale(' + facing + ',1)');
+
+    // gun aims at the villager
+    var ang = Math.atan2(chY - gunY, chX - gunX);
+    gunG.setAttribute('transform', 'translate(' + gunX.toFixed(1) + ',' + gunY.toFixed(1) + ') rotate(' + (ang * 180 / Math.PI).toFixed(1) + ')');
+    var showFx = (engaged || !!walkTarget) && phase !== 'walkin' && phase !== 'inside';
+    gunG.classList.toggle('hidden-fx', !showFx);
+    tether.classList.toggle('hidden-fx', !showFx);
+
+    var mzx = gunX + Math.cos(ang) * 62, mzy = gunY + Math.sin(ang) * 62;
+    tether.setAttribute('points', mzx.toFixed(1) + ',' + mzy.toFixed(1) + ' ' + (chX - facing * 8).toFixed(1) + ',' + (chY - 40).toFixed(1));
+
+    // bubble tracks the head, clamped inside the map
+    var bw = 300, bh = 92;
+    var bx2 = Math.max(14, Math.min(W - bw - 14, chX - bw / 2));
+    var by2 = Math.max(10, chY - 108 - bh);
+    bubbleFO.setAttribute('x', bx2.toFixed(0));
+    bubbleFO.setAttribute('y', by2.toFixed(0));
+    bubbleFO.setAttribute('width', bw);
+    bubbleFO.setAttribute('height', bh);
+    var tipX = Math.max(bx2 + 24, Math.min(bx2 + bw - 24, chX));
+    tail.setAttribute('points',
+      (tipX - 15) + ',' + (by2 + bh - 4) + ' ' + (tipX + 15) + ',' + (by2 + bh - 4) + ' ' + (chX - 2) + ',' + (chY - 92));
+
+    // which shop are we standing at? (suppressed once we start going inside)
+    if (phase){
+      if (phase !== 'approach') setActive(null);
+    } else {
+      var near2 = null, best2 = 1e9;
+      SHOPS.forEach(function(s){
+        var ddx = s.stand.x - chX, ddy = s.stand.y - chY, dd = ddx * ddx + ddy * ddy;
+        if (dd < best2){ best2 = dd; near2 = s; }
+      });
+      setActive(best2 < 205 * 205 ? near2 : null);
+    }
+
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+  if (!fine) setTimeout(dropHint, 4200);
+
+  /* ============ service cards ============ */
+  var cards = document.getElementById('cards');
+  SHOPS.forEach(function(s){
+    var li = document.createElement('li');
+    li.className = 'card';
+    var band = document.createElement('div');
+    band.className = 'band';
+    band.style.background = s.roof;
+    var body = document.createElement('div');
+    body.className = 'body';
+    var h3 = document.createElement('h3');
+    h3.textContent = s.name;
+    var p = document.createElement('p');
+    p.textContent = s.copy;
+    var more = document.createElement('button');
+    more.type = 'button';
+    more.className = 'card-more';
+    more.textContent = 'Step inside';
+    more.addEventListener('click', function(){
+      // open the shop straight away, without the walk
+      if (phase) leaveShop();
+      phase = 'inside'; phaseShop = s;
+      bldEls[s.id].classList.add('open');
+      chX = s.x; chY = s.y + 34;
+      heroG.style.opacity = '0';
+      document.getElementById('stage').scrollIntoView({ behavior:'smooth', block:'start' });
+      showInterior(s);
+    });
+    body.appendChild(h3); body.appendChild(p); body.appendChild(more);
+    li.appendChild(band); li.appendChild(body);
+    cards.appendChild(li);
+  });
+})();
+</script>
+
+</html>

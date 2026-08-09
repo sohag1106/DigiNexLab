@@ -155,8 +155,26 @@
   .interior-cta{
     display:inline-block; text-decoration:none; font-weight:700; font-size:14.5px;
     background:var(--accent); color:#fff; border-radius:999px; padding:12px 26px;
+    border:none; cursor:pointer; font-family:var(--body);
   }
   .interior-cta:hover{ background:#C93850; }
+  .interior-cta:disabled{ opacity:.6; cursor:default; }
+  .interior-form{ border-top:2px dashed var(--rule,rgba(51,41,30,.18)); padding-top:16px; }
+  .form-kicker{ margin:0 0 12px; font-size:14px; line-height:1.5; color:#5C5140; }
+  .field-row{ display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px; }
+  @media (max-width:480px){ .field-row{ grid-template-columns:1fr; } }
+  .interior-form label{ display:flex; flex-direction:column; gap:5px; font-size:12.5px;
+    font-weight:700; letter-spacing:.02em; color:#5C5140; margin-bottom:12px; }
+  .field-row label{ margin-bottom:0; }
+  .interior-form input, .interior-form textarea{
+    font-family:var(--body); font-size:14.5px; color:var(--ink);
+    border:2px solid var(--ink); border-radius:9px; padding:9px 11px; background:#fff;
+    resize:vertical;
+  }
+  .interior-form input:focus-visible, .interior-form textarea:focus-visible{
+    outline:3px solid var(--focus); outline-offset:1px;
+  }
+  .form-note{ margin:10px 0 0; font-size:13.5px; min-height:1.4em; color:var(--accent); font-weight:600; }
   .sign-text{
     font-family:var(--display); font-weight:800; fill:#fff;
     stroke:var(--ink); stroke-width:5.5; paint-order:stroke;
@@ -371,7 +389,22 @@
       <div class="interior-body">
         <p id="intLede"></p>
         <ul id="intList"></ul>
-        <a class="interior-cta" id="intCta" href="#contact">Start a project</a>
+        <form class="interior-form" id="intForm" novalidate>
+          <p class="form-kicker" id="formKicker"></p>
+          <div class="field-row">
+            <label>Name
+              <input type="text" id="fName" name="name" autocomplete="name" required>
+            </label>
+            <label>Email
+              <input type="email" id="fEmail" name="email" autocomplete="email" required>
+            </label>
+          </div>
+          <label>What are you looking to do?
+            <textarea id="fMsg" name="message" rows="2" placeholder="A couple of lines is plenty."></textarea>
+          </label>
+          <button class="interior-cta" id="intCta" type="submit"></button>
+          <p class="form-note" id="formNote" aria-live="polite"></p>
+        </form>
       </div>
     </div>
   </div>
@@ -1021,9 +1054,21 @@
   var intLede = document.getElementById('intLede');
   var intList = document.getElementById('intList');
   var intClose = document.getElementById('intClose');
+  var intForm = document.getElementById('intForm');
+  var formKicker = document.getElementById('formKicker');
+  var intCta = document.getElementById('intCta');
+  var formNote = document.getElementById('formNote');
+  var fName = document.getElementById('fName');
+  var fEmail = document.getElementById('fEmail');
+  var fMsg = document.getElementById('fMsg');
   var lastFocus = null;
+  var currentShop = null;
+
+  var interiorBody = document.querySelector('.interior-body');
 
   function showInterior(shop){
+    currentShop = shop;
+    interiorBody.scrollTop = 0;
     intTitle.textContent = shop.name;
     intLede.textContent = shop.lede;
     intList.textContent = '';
@@ -1041,6 +1086,13 @@
     mini.setAttribute('aria-hidden', 'true');
     ICONS[shop.icon](mini, shop);
     intChip.appendChild(mini);
+
+    formKicker.textContent = 'Like the sound of ' + shop.name + '? Leave your details and we’ll set up a time to talk it through.';
+    intCta.textContent = 'Book a meeting about ' + shop.name;
+    intCta.disabled = false;
+    intForm.hidden = false;
+    intForm.reset();
+    formNote.textContent = '';
 
     interior.hidden = false;
     // force a reflow so the transition runs from the hidden state
@@ -1068,6 +1120,27 @@
     }
     blip(430);
   }
+  intForm.addEventListener('submit', function(e){
+    e.preventDefault();
+    if (!currentShop) return;
+    if (!intForm.checkValidity()){ intForm.reportValidity(); return; }
+
+    var subject = 'Meeting request — ' + currentShop.name;
+    var body =
+      'Name: ' + fName.value + '\n' +
+      'Email: ' + fEmail.value + '\n' +
+      'Service: ' + currentShop.name + '\n\n' +
+      (fMsg.value.trim() || '(no extra details given)');
+    var href = 'mailto:hello@brightskyit.com'
+      + '?subject=' + encodeURIComponent(subject)
+      + '&body=' + encodeURIComponent(body);
+
+    window.location.href = href;
+    blip(560);
+    intCta.disabled = true;
+    formNote.textContent = 'Opening your email app to send this our way — talk soon!';
+  });
+
   intClose.addEventListener('click', leaveShop);
   interior.addEventListener('click', function(e){ if (e.target === interior) leaveShop(); });
   document.addEventListener('keydown', function(e){

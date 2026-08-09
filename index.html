@@ -176,6 +176,7 @@
     outline:3px solid var(--focus); outline-offset:1px;
   }
   .form-note{ margin:10px 0 0; font-size:13.5px; min-height:1.4em; color:var(--accent); font-weight:600; }
+  .form-note a{ color:var(--accent); text-decoration:underline; font-weight:700; }
   .sign-text{
     font-family:var(--display); font-weight:800; fill:#fff;
     stroke:var(--ink); stroke-width:5.5; paint-order:stroke;
@@ -1127,7 +1128,10 @@
     }
     blip(430);
   }
-  function mailtoFallback(){
+  // Never force-open the visitor's mail app — that's an unwanted OS popup
+  // ambushing someone who just clicked a button. If the silent POST to
+  // Netlify Forms fails, offer a link they can choose to click instead.
+  function showManualFallback(){
     var subject = 'Meeting request — ' + currentShop.name;
     var body =
       'Name: ' + fName.value + '\n' +
@@ -1137,8 +1141,15 @@
     var href = 'mailto:sohagvhi1106@gmail.com'
       + '?subject=' + encodeURIComponent(subject)
       + '&body=' + encodeURIComponent(body);
-    window.location.href = href;
-    formNote.textContent = 'Opening your email app to send this our way — talk soon!';
+    formNote.textContent = '';
+    var span = document.createElement('span');
+    span.textContent = 'Couldn’t send that automatically. ';
+    var link = document.createElement('a');
+    link.href = href;
+    link.textContent = 'Tap here to email us instead.';
+    formNote.appendChild(span);
+    formNote.appendChild(link);
+    intCta.disabled = false;
   }
 
   intForm.addEventListener('submit', function(e){
@@ -1163,8 +1174,8 @@
       blip(560);
       formNote.textContent = 'Sent! We’ll be in touch about ' + currentShop.name + ' within one business day.';
     }).catch(function(){
-      blip(560);
-      mailtoFallback();
+      blip(430);
+      showManualFallback();
     });
   });
 

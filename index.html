@@ -160,6 +160,7 @@
   .interior-cta:hover{ background:#C93850; }
   .interior-cta:disabled{ opacity:.6; cursor:default; }
   .interior-form{ border-top:2px dashed var(--rule,rgba(51,41,30,.18)); padding-top:16px; }
+  .hp-field{ position:absolute; left:-9999px; width:1px; height:1px; overflow:hidden; }
   .form-kicker{ margin:0 0 12px; font-size:14px; line-height:1.5; color:#5C5140; }
   .field-row{ display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px; }
   @media (max-width:480px){ .field-row{ grid-template-columns:1fr; } }
@@ -389,7 +390,11 @@
       <div class="interior-body">
         <p id="intLede"></p>
         <ul id="intList"></ul>
-        <form class="interior-form" id="intForm" novalidate>
+        <form class="interior-form" id="intForm" name="meeting-request" method="POST"
+              data-netlify="true" netlify-honeypot="bot-field" novalidate>
+          <input type="hidden" name="form-name" value="meeting-request">
+          <input type="hidden" name="topic" id="fTopic">
+          <p class="hp-field"><label>Leave this field blank: <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
           <p class="form-kicker" id="formKicker"></p>
           <div class="field-row">
             <label>Name
@@ -422,8 +427,8 @@
 <footer class="closing" id="contact">
   <h2>Found the shop you need?</h2>
   <p>Tell us which one and we'll take it from there. No hold-ups, no ransom notes — just a straight answer within one working day.</p>
-  <a class="talk" href="mailto:hello@brightskyit.com">Let's Talk</a>
-  <p class="colophon">hello@brightskyit.com &middot; placeholder details &mdash; swap in your real ones</p>
+  <a class="talk" href="mailto:sohagvhi1106@gmail.com">Let's Talk</a>
+  <p class="colophon">sohagvhi1106@gmail.com</p>
 </footer>
 
 <script>
@@ -1061,6 +1066,7 @@
   var fName = document.getElementById('fName');
   var fEmail = document.getElementById('fEmail');
   var fMsg = document.getElementById('fMsg');
+  var fTopic = document.getElementById('fTopic');
   var lastFocus = null;
   var currentShop = null;
 
@@ -1092,6 +1098,7 @@
     intCta.disabled = false;
     intForm.hidden = false;
     intForm.reset();
+    fTopic.value = shop.name;
     formNote.textContent = '';
 
     interior.hidden = false;
@@ -1120,25 +1127,45 @@
     }
     blip(430);
   }
-  intForm.addEventListener('submit', function(e){
-    e.preventDefault();
-    if (!currentShop) return;
-    if (!intForm.checkValidity()){ intForm.reportValidity(); return; }
-
+  function mailtoFallback(){
     var subject = 'Meeting request — ' + currentShop.name;
     var body =
       'Name: ' + fName.value + '\n' +
       'Email: ' + fEmail.value + '\n' +
       'Service: ' + currentShop.name + '\n\n' +
       (fMsg.value.trim() || '(no extra details given)');
-    var href = 'mailto:hello@brightskyit.com'
+    var href = 'mailto:sohagvhi1106@gmail.com'
       + '?subject=' + encodeURIComponent(subject)
       + '&body=' + encodeURIComponent(body);
-
     window.location.href = href;
-    blip(560);
-    intCta.disabled = true;
     formNote.textContent = 'Opening your email app to send this our way — talk soon!';
+  }
+
+  intForm.addEventListener('submit', function(e){
+    e.preventDefault();
+    if (!currentShop) return;
+    if (!intForm.checkValidity()){ intForm.reportValidity(); return; }
+
+    intCta.disabled = true;
+    formNote.textContent = 'Sending…';
+
+    // Netlify Forms: a real POST here lands the submission (and, once
+    // notifications are turned on in the Netlify dashboard, an email)
+    // without any backend of our own. Off Netlify — e.g. testing this
+    // file straight from disk — that POST has nowhere to go, so we
+    // fall back to a plain mailto instead of leaving the form dead.
+    fetch('/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams(new FormData(intForm)).toString()
+    }).then(function(res){
+      if (!res.ok) throw new Error('status ' + res.status);
+      blip(560);
+      formNote.textContent = 'Sent! We’ll be in touch about ' + currentShop.name + ' within one business day.';
+    }).catch(function(){
+      blip(560);
+      mailtoFallback();
+    });
   });
 
   intClose.addEventListener('click', leaveShop);

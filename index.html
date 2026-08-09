@@ -96,6 +96,9 @@
   @keyframes pop{ from{ opacity:0; transform:translateY(-34px) scale(.86);} to{ opacity:1; transform:none;} }
   .bld-inner{ transform-box:fill-box; transform-origin:50% 100%; transition:transform .22s ease; }
   .building.active .bld-inner{ transform:translateY(-11px); }
+  .building:hover .bld-inner{ transform:translateY(-11px); }
+  /* aiming at a shop tints its sign, so it reads as "you can go in here" */
+  .building:hover .sign-plate, .building.active .sign-plate{ filter:brightness(1.12); }
   .focus-ring{ opacity:0; }
   .building:focus-visible .focus-ring{ opacity:1; }
 
@@ -176,6 +179,8 @@
     filter:drop-shadow(0 0 2px rgba(51,41,30,.55)); animation:crawl 1s linear infinite; }
   @keyframes crawl{ to{ stroke-dashoffset:-30; } }
   #gun,#tether{ transition:opacity .18s ease; }
+  /* the gun sits directly under the pointer — it must never eat a click */
+  #gun,#hero,#tether,.bubble-tail{ pointer-events:none; }
   .hidden-fx{ opacity:0 !important; }
 
   .bubble-fo{ overflow:visible; opacity:0; transition:opacity .16s ease; pointer-events:none; }
@@ -706,6 +711,11 @@
 
     S('ellipse', { class:'focus-ring', cx:0, cy:-118, rx:SIGN_W * .70, ry:158, fill:'none',
       stroke:'var(--focus)', 'stroke-width':6, 'stroke-dasharray':'13 10' }, pos);
+
+    // generous invisible hit area so aiming at the shop is enough to click it
+    S('rect', { class:'hit', x:-SIGN_W * 0.70, y:-(WALL_H + ROOF_H + 60),
+      width:SIGN_W * 1.40, height:WALL_H + ROOF_H + 96,
+      fill:'transparent' }, pos);
 
     return g;
   }

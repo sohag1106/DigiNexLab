@@ -21,22 +21,27 @@ export const handler = async (event) => {
   const body = readBody(event)
   const path = (event.path || '').split('/').pop()
 
-  if (method === 'POST' && path === 'login') {
-    return login(body)
+  try {
+    if (method === 'POST' && path === 'login') {
+      return login(body)
+    }
+    if (method === 'GET' && path === 'me') {
+      return me(event)
+    }
+    if (method === 'POST' && path === 'change-password') {
+      return changePassword(event, body)
+    }
+    if (method === 'POST' && path === 'forgot') {
+      return forgot(body)
+    }
+    if (method === 'POST' && path === 'reset') {
+      return reset(body)
+    }
+    return fail('Not found', 404)
+  } catch (e) {
+    console.error('[auth] error:', e)
+    return fail('Server error: ' + e.message, 500)
   }
-  if (method === 'GET' && path === 'me') {
-    return me(event)
-  }
-  if (method === 'POST' && path === 'change-password') {
-    return changePassword(event, body)
-  }
-  if (method === 'POST' && path === 'forgot') {
-    return forgot(body)
-  }
-  if (method === 'POST' && path === 'reset') {
-    return reset(body)
-  }
-  return fail('Not found', 404)
 }
 
 export { me, publicUser }
@@ -108,13 +113,18 @@ async function forgot(body) {
     [token, user.id, new Date(Date.now() + 60 * 60 * 1000).toISOString()]
   )
   const link = `${APP_URL}/portal/reset?token=${token}`
-  await sendEmail({
+  const sent = await sendEmail({
     to: user.email,
     subject: 'BrightSkyIT — Reset your password',
     html: textHtml(
       `Hi ${user.name},\n\nWe received a request to reset your password.\n\nOpen this link within 1 hour to set a new password:\n${link}\n\nIf you didn't request this, you can ignore this email.\n\n— BrightSkyIT`
     ),
   })
+  if (!sent.ok) {
+    // Don't leak account existence to the caller, but surface the real cause in logs
+    // so the owner can see why reset emails aren't arriving (e.g. unverified Resend sender).
+    console.error('[mail] forgot: reset email failed to send:', sent.reason)
+  }
   return ok({ message: 'If that email exists, a reset link has been sent.' })
 }
 

@@ -68,13 +68,6 @@ const WORK = [
     contain: true,
   },
   {
-    img: '/work/ramisha.png',
-    title: 'Ramisha',
-    tag: 'Mobile App',
-    desc: 'A personal baby companion app built with Flutter — a private, loving place to track the little everyday moments.',
-    contain: true,
-  },
-  {
     img: '/work/quote.jpg',
     title: 'Quote → Invoice',
     tag: 'Desktop App',

@@ -189,16 +189,18 @@ export default function Landing() {
           <h2>Work that speaks for itself</h2>
           <p>Real client work — websites, portals, e-commerce, mobile and desktop apps we’ve shipped.</p>
         </div>
-        <div className="work-mosaic">
+        <div className="work-grid">
           {WORK.map((w) => (
             <a
-              className={'work-item' + (w.contain ? ' contain' : '')}
+              className="work-card"
               key={w.title}
               href={w.url || '#contact'}
               {...(w.url ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
             >
-              <img src={w.img} alt={w.title} loading="lazy" />
-              <div className="work-over">
+              <div className={'work-media' + (w.contain ? ' contain' : '')}>
+                <img src={w.img} alt={w.title} loading="lazy" />
+              </div>
+              <div className="work-body">
                 <span className="work-tag">{w.tag}</span>
                 <h3>{w.title}</h3>
                 <p className="work-desc">{w.desc}</p>

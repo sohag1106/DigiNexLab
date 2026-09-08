@@ -55,18 +55,29 @@ export async function sendEmail({ to, subject, html, attachments = [], from }) {
     console.warn('[mail] no mail transport configured (need MAIL_USER/MAIL_PASS or RESEND_API_KEY)')
     return { ok: false, reason: 'no-mail-config' }
   }
+  // Race the Resend call against a hard timeout so a slow/hanging email API can't
+  // hold the Netlify function past its execution limit (which surfaces as 502/504).
+  const withTimeout = (p, ms, what) =>
+    Promise.race([
+      p,
+      new Promise((_, rej) => setTimeout(() => rej(new Error(what)), ms)),
+    ])
   try {
-    const res = await resend.emails.send({
-      from: from || FROM_ADDR,
-      to,
-      subject,
-      html,
-      attachments: (attachments || []).map((a) => ({
-        filename: a.filename,
-        content: a.content, // Buffer
-      })),
-      reply_to: (from || FROM_ADDR).replace(/^.*<|>$/g, ''),
-    })
+    const res = await withTimeout(
+      resend.emails.send({
+        from: from || FROM_ADDR,
+        to,
+        subject,
+        html,
+        attachments: (attachments || []).map((a) => ({
+          filename: a.filename,
+          content: a.content, // Buffer
+        })),
+        reply_to: (from || FROM_ADDR).replace(/^.*<|>$/g, ''),
+      }),
+      8000,
+      'Resend request timed out'
+    )
     if (res.error) return { ok: false, reason: res.error.message }
     return { ok: true, id: res.data && res.data.id }
   } catch (e) {

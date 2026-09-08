@@ -1,0 +1,25 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+  functions = "netlify/functions"
+
+# Run functions unbundled so pdfkit can resolve its .afm font files from
+# node_modules. Netlify's esbuild bundler collapses each function into a single
+# file and drops extra folders (like pdfkit's js/data/*.afm), which broke PDF
+# generation with "ENOENT Helvetica.afm". node_bundler = "none" keeps
+# node_modules intact on deploy.
+[functions]
+  node_bundler = "none"
+
+# SPA fallback: serve the React app for all non-asset routes so react-router
+# paths (/portal/*, /portal/login, etc.) deep-link correctly.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Don't rewrite static assets to the SPA
+[[redirects]]
+  from = "/assets/*"
+  to = "/assets/:splat"
+  status = 200

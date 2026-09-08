@@ -4,3 +4,13 @@ Thumbs.db
 
 # Local Netlify folder
 .netlify
+
+# Build output
+dist/
+
+# Environment / secrets — never commit
+.env
+.env.local
+
+# Logs
+*.log

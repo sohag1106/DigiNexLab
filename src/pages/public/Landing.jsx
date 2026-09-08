@@ -17,10 +17,70 @@ const SERVICES = [
 ]
 
 const WORK = [
-  { img: '/sample-0.png', title: 'Fintech Dashboard', tag: 'Product Design' },
-  { img: '/sample-2.png', title: 'Brand Identity System', tag: 'Branding' },
-  { img: '/sample-2.png', title: 'E-commerce Platform', tag: 'Development' },
-  { img: '/sample-0.png', title: 'Marketing Campaign', tag: 'Growth' },
+  {
+    img: '/work/qs-oman.png',
+    title: 'Quick Solution Oman',
+    tag: 'Web + Mobile App',
+    desc: 'Facility-management platform for Quick Solution Oman — public site, five-role client portal (complaints, approvals, technician dispatch, billing) and a React Native app. Next.js 16, Prisma, Postgres.',
+    url: 'https://www.quicksolutionoman.com/',
+    contain: true,
+  },
+  {
+    img: '/work/octopus.png',
+    title: 'Octopus Traders',
+    tag: 'E-commerce · 3D',
+    desc: 'Smart LED mirror configurator — customers pick size, shape, lighting and frame with a live 3D preview and real-time pricing, plus POS and admin tools.',
+    url: 'https://octopus-trader.sohagvhi1106.workers.dev/',
+  },
+  {
+    img: '/work/niyaz.jpg',
+    title: 'Niyaz International',
+    tag: 'Corporate Website',
+    desc: 'Company website for an integrated facility-management group — services, project portfolio and team, built on Next.js with Tailwind.',
+    url: 'https://www.niyazinternational.com/',
+  },
+  {
+    img: '/work/gym.jpg',
+    title: 'How to Gym',
+    tag: 'Web App',
+    desc: 'Gym exercise tool — guided workouts and an exercise library with multi-role access for members, trainers and gym owners.',
+    url: 'https://how-to-gym.sohagvhi1106.workers.dev/',
+  },
+  {
+    img: '/work/cyber.png',
+    title: 'Cyber Expert',
+    tag: 'Personal Site',
+    desc: 'Personal brand website for a cybersecurity expert — services, credentials and contact, hand-built in HTML, CSS and JavaScript.',
+    contain: true,
+  },
+  {
+    img: '/work/diginex.png',
+    title: 'DigiNex Billing',
+    tag: 'Desktop App',
+    desc: 'Computer-shop billing suite — products, stock, invoicing, warranties and customer accounts in a native Electron desktop app.',
+    contain: true,
+  },
+  {
+    img: '/work/paint.png',
+    title: 'National Paint',
+    tag: 'Desktop App',
+    desc: 'Paint-shop management PC application — product catalog, pricing, quotes and day-to-day sales in a clean retail workflow.',
+    contain: true,
+  },
+  {
+    img: '/work/ramisha.png',
+    title: 'Ramisha',
+    tag: 'Mobile App',
+    desc: 'A personal baby companion app built with Flutter — a private, loving place to track the little everyday moments.',
+    contain: true,
+  },
+  {
+    img: '/work/quote.jpg',
+    title: 'Quote → Invoice',
+    tag: 'Desktop App',
+    desc: 'Quotation-to-invoice system for Quick Solution — branded PDF quotes with one-click conversion to final invoices.',
+    contain: true,
+  },
 ]
 
 export default function Landing() {
@@ -134,15 +194,22 @@ export default function Landing() {
         <div className="sec-head">
           <span className="kicker">Featured projects</span>
           <h2>Work that speaks for itself</h2>
-          <p>A mosaic of recent engagements across product, brand, and growth.</p>
+          <p>Real client work — websites, portals, e-commerce, mobile and desktop apps we’ve shipped.</p>
         </div>
         <div className="work-mosaic">
           {WORK.map((w) => (
-            <a className="work-item" key={w.title} href="#contact">
+            <a
+              className={'work-item' + (w.contain ? ' contain' : '')}
+              key={w.title}
+              href={w.url || '#contact'}
+              {...(w.url ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+            >
               <img src={w.img} alt={w.title} loading="lazy" />
               <div className="work-over">
                 <span className="work-tag">{w.tag}</span>
                 <h3>{w.title}</h3>
+                <p className="work-desc">{w.desc}</p>
+                {w.url && <span className="work-link">Visit live site ↗</span>}
               </div>
             </a>
           ))}

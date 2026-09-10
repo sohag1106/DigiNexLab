@@ -1,6 +1,6 @@
 // Portal shell: guarded layout with sidebar nav + topbar.
-import { useEffect } from 'react'
-import { NavLink, Outlet, useNavigate } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import logo from '../../assets/logo.png'
 import { useAuth } from '../../lib/auth'
 import { Avatar } from '../../components/ui'
@@ -8,6 +8,25 @@ import { Avatar } from '../../components/ui'
 export default function PortalLayout() {
   const { user, loading, logout, isAdmin, refresh } = useAuth()
   const nav = useNavigate()
+  const loc = useLocation()
+  const [title, setTitle] = useState('Portal')
+
+  useEffect(() => {
+    const map = [
+      [/^\/portal\/app/, 'Dashboard'],
+      [/^\/portal\/services/, 'Our Services'],
+      [/^\/portal\/profile/, 'My Profile'],
+      [/^\/portal\/quotes/, 'Quotations'],
+      [/^\/portal\/invoices/, 'Invoices'],
+      [/^\/portal\/messages/, 'Messages'],
+      [/^\/portal\/mail/, 'Email'],
+      [/^\/portal\/admin\/people/, 'Team & People'],
+      [/^\/portal\/admin\/work/, 'All Work'],
+      [/^\/portal\/admin/, 'Admin Dashboard'],
+    ]
+    const hit = map.find(([re]) => re.test(loc.pathname))
+    if (hit) setTitle(hit[1])
+  }, [loc.pathname])
 
   useEffect(() => {
     if (!loading && !user) nav('/login', { replace: true })
@@ -34,6 +53,9 @@ export default function PortalLayout() {
         <nav>
           <NavLink to="/portal/app" end className={({ isActive }) => (isActive ? 'active' : '')}>
             <span className="ic">▦</span><span>Dashboard</span>
+          </NavLink>
+          <NavLink to="/portal/services" className={({ isActive }) => (isActive ? 'active' : '')}>
+            <span className="ic">✦</span><span>Our Services</span>
           </NavLink>
           <NavLink to="/portal/profile" className={({ isActive }) => (isActive ? 'active' : '')}>
             <span className="ic">◉</span><span>My Profile</span>
@@ -82,7 +104,7 @@ export default function PortalLayout() {
       <main className="p-main">
         <header className="p-top">
           <div>
-            <h1 id="page-title">Portal</h1>
+            <h1 id="page-title">{title}</h1>
           </div>
           <div className="flex">
             <span className="muted" style={{ fontSize: 13 }}>{user.email}</span>

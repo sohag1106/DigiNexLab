@@ -91,6 +91,19 @@ CREATE TABLE IF NOT EXISTS messages (
   created_at timestamptz NOT NULL DEFAULT now()
 );
 
+CREATE TABLE IF NOT EXISTS products (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  name text NOT NULL,
+  description text,
+  category text,
+  price numeric NOT NULL DEFAULT 0,
+  currency text NOT NULL DEFAULT 'USD',
+  image text,
+  created_by uuid REFERENCES users(id) ON DELETE SET NULL,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now()
+);
+
 CREATE TABLE IF NOT EXISTS password_resets (
   token text PRIMARY KEY,
   user_id uuid REFERENCES users(id) ON DELETE CASCADE,

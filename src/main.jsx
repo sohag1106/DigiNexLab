@@ -21,6 +21,7 @@ import Mail from './pages/portal/Mail'
 import AdminDashboard from './pages/portal/admin/AdminDashboard'
 import AdminPeople from './pages/portal/admin/AdminPeople'
 import AdminWork from './pages/portal/admin/AdminWork'
+import Products from './pages/portal/Products'
 
 function App() {
   return (
@@ -44,6 +45,7 @@ function App() {
               <Route path="invoices/new" element={<InvoiceEditor />} />
               <Route path="invoices/:id" element={<InvoiceEditor />} />
               <Route path="messages" element={<Messages />} />
+              <Route path="services" element={<Products />} />
               <Route path="mail" element={<Mail />} />
               <Route path="admin" element={<AdminDashboard />} />
               <Route path="admin/people" element={<AdminPeople />} />

@@ -1,6 +1,15 @@
-# SPA fallback: serve index.html for all non-asset, non-API routes so
-# react-router paths (/login, /portal/*, etc.) deep-link correctly.
-/* /index.html 200
+# Cloudflare Pages redirects.
+# Order matters: more specific rules first so the SPA catch-all never
+# shadows the API. Pages Functions under /api/* are matched before redirects,
+# but the explicit /api/* pass-through guarantees POST /api/auth/login (and
+# friends) are never rewritten to the SPA index.html.
 
-# Ensure static assets are never rewritten to the SPA.
-/assets/* /assets/:splat 200
+# Never rewrite the API — let Pages Functions handle these.
+/api/*  /api/:splat  200
+
+# Static assets are always served as-is.
+/assets/*  /assets/:splat  200
+
+# SPA fallback: serve index.html for every other route so react-router
+# paths (/login, /portal/*, etc.) deep-link correctly.
+/*  /index.html  200

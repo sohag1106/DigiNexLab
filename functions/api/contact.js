@@ -1,6 +1,6 @@
 // POST /api/contact — public contact form -> email (via Resend)
-import { ok, fail, readBody } from '../../_shared/db.js'
-import { sendEmail } from '../../_shared/email.js'
+import { ok, fail, readBody } from '../_shared/db.js'
+import { sendEmail } from '../_shared/email.js'
 
 export const onRequestPost = async ({ request, env }) => {
   const body = await readBody(request)

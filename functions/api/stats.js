@@ -1,6 +1,6 @@
 // GET /api/stats — owner/admin only
-import { query, ok, fail } from '../../_shared/db.js'
-import { authUser } from '../../_shared/auth.js'
+import { query, ok, fail } from '../_shared/db.js'
+import { authUser } from '../_shared/auth.js'
 
 export const onRequestGet = async ({ env, request }) => {
   const user = await authUser(env, request, query)

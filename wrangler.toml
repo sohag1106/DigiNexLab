@@ -1,0 +1,10 @@
+# Cloudflare Pages configuration.
+# Deploy:  npx wrangler pages deploy dist --project-name diginexlab
+# Local:   npx wrangler pages dev
+# NOTE: secrets are NOT stored here — set them in Cloudflare Dashboard
+# (Workers & Pages > diginexlab > Settings > Variables and Secrets):
+#   DATABASE_URL, SESSION_SECRET, RESEND_API_KEY, FROM_EMAIL, APP_URL
+name = "diginexlab"
+pages_build_output_dir = "./dist"
+compatibility_date = "2026-09-10"
+compatibility_flags = ["nodejs_compat"]

@@ -1,7 +1,9 @@
-// Lightweight fetch wrapper around Netlify Functions.
-// Sends JSON, attaches Bearer token from storage, and normalizes errors.
+// Lightweight fetch wrapper around the API functions.
+// Cloudflare Pages serves the backend under /api (GitHub-only deploys can
+// override via VITE_API_BASE, e.g. in .env). Sends JSON, attaches Bearer
+// token from storage, and normalizes errors.
 
-const BASE = '/.netlify/functions'
+const BASE = import.meta.env.VITE_API_BASE || '/api'
 
 export function getToken() {
   try {

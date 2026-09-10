@@ -1,0 +1,6 @@
+# SPA fallback: serve index.html for all non-asset, non-API routes so
+# react-router paths (/login, /portal/*, etc.) deep-link correctly.
+/* /index.html 200
+
+# Ensure static assets are never rewritten to the SPA.
+/assets/* /assets/:splat 200

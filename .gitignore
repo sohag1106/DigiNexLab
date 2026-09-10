@@ -12,5 +12,10 @@ dist/
 .env
 .env.local
 
+# Cloudflare/Wrangler local state
+.wrangler/
+.wrangler.tmp/
+.dev.vars
+
 # Logs
 *.log

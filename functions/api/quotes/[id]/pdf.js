@@ -37,7 +37,7 @@ export const onRequestGet = async ({ env, request, params }) => {
   })
 }
 
-// Convert a Node Buffer (from pdfkit) to a Uint8Array for the Worker Response.
+// Convert a Node Buffer (from the PDF builder) to a Uint8Array for the Worker Response.
 function npToUint8(buf) {
   return new Uint8Array(buf.buffer, buf.byteOffset, buf.byteLength)
 }

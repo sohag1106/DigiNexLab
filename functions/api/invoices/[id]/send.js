@@ -29,7 +29,12 @@ export const onRequestPost = async ({ env, request, params }) => {
     html: `<p>Dear ${row.client_name},</p>
       <p>Please find attached invoice <strong>${row.number}</strong> from BrightSkyIT.</p>
       <p>Thank you for your business.</p>
-      <p>— BrightSkyIT</p>`,
+      <hr style="border:none;border-top:1px solid #e5e7eb;margin:20px 0" />
+      <p style="margin:2px 0"><strong>BrightSkyIT</strong> · Creative Digital Agency</p>
+      <p style="margin:2px 0">hello@brightskyit.com · brightskyit.com</p>
+      <p style="margin:2px 0">${me[0] && me[0].name ? me[0].name + ' · ' : ''}${me[0] && me[0].designation ? me[0].designation + ' · ' : ''}Phone/WhatsApp: +880 1410-217430</p>
+      <p style="margin:2px 0;color:#6b7280">Mohanogor Project, Rampura, Dhaka, Bangladesh · Oman Branch — Muscat, Sultanate of Oman</p>
+      <p style="margin:2px 0;color:#6b7280">We reply within one business day</p>`,
     attachments: [{ filename: `${row.number}.pdf`, content: buf }],
   })
   if (!res.ok) return fail('Email could not be sent: ' + (res.reason || ''), 500)

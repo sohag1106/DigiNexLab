@@ -10,6 +10,9 @@ const CURRENCIES = ['USD', 'EUR', 'GBP', 'BDT', 'INR', 'AED', 'AUD']
 
 export default function DocEditor({ kind, basePath, id, listPath }) {
   const docName = kind === 'invoice' ? 'Invoice' : 'Quotation'
+  // The API wraps the record as { quote } / { invoice } — note it's `quote`, not
+  // `quotation`, so it can't be derived from `kind` directly.
+  const docKey = kind === 'invoice' ? 'invoice' : 'quote'
   const nav = useNavigate()
   const toast = useToast()
 
@@ -34,7 +37,7 @@ export default function DocEditor({ kind, basePath, id, listPath }) {
   async function load() {
     try {
       const d = await api(`/${basePath}/${id}`)
-      const doc = d[kind] || d
+      const doc = d[docKey] || d
       setClientName(doc.client_name || '')
       setClientEmail(doc.client_email || '')
       setCurrency(doc.currency || 'USD')
@@ -84,9 +87,11 @@ export default function DocEditor({ kind, basePath, id, listPath }) {
       const method = isEdit ? 'PATCH' : 'POST'
       const path = isEdit ? `/${basePath}/${id}` : `/${basePath}`
       const d = await api(path, { method, body: { ...payload(), items: clean } })
+      const saved = d[docKey] || d
       toast(isEdit ? `${docName} saved.` : `${docName} created.`, 'success')
-      if (!isEdit) nav(`${listPath}/${d[kind].id}`)
-      else load()
+      if (isEdit) load()
+      else if (saved?.id) nav(`${listPath}/${saved.id}`)
+      else nav(listPath)
     } catch (e) {
       toast(e.message, 'error')
     } finally { setBusy('') }

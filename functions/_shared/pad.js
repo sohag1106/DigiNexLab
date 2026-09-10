@@ -23,6 +23,18 @@ const PAGE_W = 595.28 // A4 width  (pt)
 const PAGE_H = 841.89 // A4 height (pt)
 const M = 40          // margin
 
+// Seller / business contact info shown on every document. Keep these in sync
+// with the contact details on the public site (Landing.jsx).
+const COMPANY = {
+  name: 'BrightSkyIT',
+  tagline: 'CREATIVE DIGITAL AGENCY',
+  website: 'brightskyit.com',
+  email: 'hello@brightskyit.com',
+  phone: '+880 1410-217430',
+  address: ['Mohanogor Project, Rampura, Dhaka, Bangladesh', 'Oman Branch · Muscat, Sultanate of Oman'],
+  hours: 'We reply within one business day',
+}
+
 export async function buildPadPDF(doc) {
   // ---------- resolve document fields ----------
   const isInvoice = doc.kind === 'invoice'
@@ -44,13 +56,16 @@ export async function buildPadPDF(doc) {
 
   // header band
   p.fillRect(0, 0, PAGE_W, 110, NAVY)
-  p.text('BrightSkyIT', 40, 34, 26, 'Helvetica-Bold', WHITE)
-  p.text('CREATIVE DIGITAL AGENCY', 40, 66, 10.5, 'Helvetica', '0.80 0.82 1.00')
+  p.text(COMPANY.name, 40, 34, 26, 'Helvetica-Bold', WHITE)
+  p.text(COMPANY.tagline, 40, 66, 10.5, 'Helvetica', '0.80 0.82 1.00')
   p.strokeLine(40, 84, 300, 84, 3, accent)
 
   const rightX = PAGE_W - 40
   p.text(docTitle, rightX - 94, 34, 18, 'Helvetica-Bold', accent, { width: 110, align: 'right' })
   p.text(`# ${doc.number}`, rightX - 110, 60, 10, 'Helvetica', WHITE, { width: 130, align: 'right' })
+
+  // contact line in the header band (below the accent rule)
+  p.text(`${COMPANY.email} · ${COMPANY.phone}`, 40, 94, 8.5, 'Helvetica', '0.80 0.82 1.00', { width: 320 })
 
   // billed-to / meta
   let y = 135
@@ -127,9 +142,17 @@ export async function buildPadPDF(doc) {
     40, y, 9.5, 'Helvetica', MUTED
   )
 
-  // footer
+  // footer — seller contact block. Multiple lines packed below the divider so
+  // they never collide with the totals / prepared-by area on long documents.
   p.strokeLine(40, PAGE_H - 60, PAGE_W - 40, PAGE_H - 60, 1, [0.898, 0.906, 0.941])
-  p.text('BrightSkyIT · Creative Digital Agency · brightskyit.com', 40, PAGE_H - 46, 8.5, 'Helvetica', MUTED, { width: PAGE_W - 80, align: 'center' })
+  p.text(
+    `Email: ${COMPANY.email}  ·  Phone/WhatsApp: ${COMPANY.phone}  ·  ${COMPANY.website}`,
+    40, PAGE_H - 46, 8.5, 'Helvetica', MUTED, { width: PAGE_W - 80, align: 'center' }
+  )
+  p.text(
+    `${COMPANY.address[0]}  ·  ${COMPANY.address[1]}  ·  ${COMPANY.hours}`,
+    40, PAGE_H - 32, 8.5, 'Helvetica', MUTED, { width: PAGE_W - 80, align: 'center' }
+  )
 
   return makePDF({ title: `${docTitle} ${doc.number} — BrightSkyIT`, content: p.data() })
 }

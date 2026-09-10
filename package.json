@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "deploy": "wrangler pages deploy dist --project-name diginexlab",
+    "deploy": "wrangler pages deploy dist --project-name brightskyit",
     "preview": "vite preview",
     "functions:setup": "node netlify/functions/_private/migrate.js",
     "seed:owner": "node netlify/functions/_private/seed-owner.js"

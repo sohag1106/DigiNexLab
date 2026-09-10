@@ -12,7 +12,7 @@ deploys were paused by credit exhaustion) onto **Cloudflare Pages + Functions**.
 
 ## Env variables (set in Cloudflare dashboard, NOT committed)
 
-Cloudflare Dashboard → **Workers & Pages → diginexlab → Settings → Variables and Secrets**:
+Cloudflare Dashboard → **Workers & Pages → brightskyit → Settings → Variables and Secrets**:
 
 | Key             | Example                                    |
 |-----------------|--------------------------------------------|
@@ -20,7 +20,7 @@ Cloudflare Dashboard → **Workers & Pages → diginexlab → Settings → Varia
 | `SESSION_SECRET`| your long random string                    |
 | `RESEND_API_KEY`| `re_...`                                   |
 | `FROM_EMAIL`    | `no-reply@brightskyit.com` (verified Resend sender) |
-| `APP_URL`       | e.g. `https://diginexlab.pages.dev`        |
+| `APP_URL`       | e.g. `https://brightskyit.pages.dev`        |
 | `CONTACT_TO`    | optional; where contact form mail is sent  |
 
 Set the same values you have in your local `.env`. They are read at runtime from
@@ -42,7 +42,7 @@ the function `env` binding.
 ```bash
 npm install
 npm run build
-npx wrangler pages deploy dist --project-name diginexlab
+npx wrangler pages deploy dist --project-name brightskyit
 ```
 
 Or connect the GitHub repo in the Cloudflare dashboard (**Workers & Pages →

@@ -62,7 +62,7 @@ export async function authUser(env, request, db) {
   if (!token) return null
   const payload = verifyToken(env, token)
   if (!payload) return null
-  const rows = await db.query(env, 'SELECT * FROM users WHERE id = $1', [payload.sub])
+  const rows = await db(env, 'SELECT * FROM users WHERE id = $1', [payload.sub])
   if (!rows.length || rows[0].status === 'disabled') return null
   return rows[0]
 }

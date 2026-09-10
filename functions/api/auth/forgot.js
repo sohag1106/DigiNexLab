@@ -15,6 +15,7 @@ export const onRequestPost = async ({ request, env }) => {
   const user = rows[0]
   const token = randomToken(32)
   await query(
+    env,
     'INSERT INTO password_resets (token, user_id, expires_at) VALUES ($1, $2, $3)',
     [token, user.id, new Date(Date.now() + 60 * 60 * 1000).toISOString()]
   )

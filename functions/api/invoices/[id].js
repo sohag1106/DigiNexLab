@@ -37,12 +37,12 @@ export const onRequestPatch = async ({ env, request, params }) => {
   const { total } = computeTotals(items, discount, tax)
 
   const upd = ['total = $1', 'items = $2', 'currency = $3', 'discount = $4', 'tax = $5']
-  const params = [total, JSON.stringify(items), currency, discount, tax]
+  const values = [total, JSON.stringify(items), currency, discount, tax]
   let c = 6
   const add = (col, val) => {
     if (val === undefined) return
     upd.push(`${col} = $${c++}`)
-    params.push(val)
+    values.push(val)
   }
   add('client_name', body.client_name)
   add('client_email', body.client_email === null ? null : body.client_email)
@@ -50,8 +50,8 @@ export const onRequestPatch = async ({ env, request, params }) => {
   add('status', body.status !== undefined && STATUSES.includes(body.status) ? body.status : undefined)
   add('updated_at', new Date().toISOString())
 
-  params.push(id)
-  await query(env, `UPDATE invoices SET ${upd.join(', ')} WHERE id = $${c}`, params)
+  values.push(id)
+  await query(env, `UPDATE invoices SET ${upd.join(', ')} WHERE id = $${c}`, values)
   const rows = await query(env, 'SELECT * FROM invoices WHERE id = $1', [id])
   return ok({ invoice: rows[0], message: 'Invoice updated.' })
 }

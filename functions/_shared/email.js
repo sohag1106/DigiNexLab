@@ -11,7 +11,7 @@ export function fromAddr(env) {
   return 'BrightSkyIT <onboarding@resend.dev>'
 }
 
-export async function sendEmail(env, { to, subject, html, attachments = [], from }) {
+export async function sendEmail(env, { to, subject, html, attachments = [], from, reply_to }) {
   const apiKey = env?.RESEND_API_KEY || process.env.RESEND_API_KEY
   const fromEmail = from || fromAddr(env)
 
@@ -39,7 +39,7 @@ export async function sendEmail(env, { to, subject, html, attachments = [], from
           filename: a.filename,
           content: a.content, // Buffer
         })),
-        reply_to: fromEmail.replace(/^.*<|>$/g, ''),
+        reply_to: reply_to || fromEmail.replace(/^.*<|>$/g, ''),
       }),
       8000,
       'Resend request timed out'

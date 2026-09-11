@@ -12,8 +12,14 @@ export function verifyPassword(plain, hash) {
   return bcrypt.compare(plain, hash)
 }
 
+// Production portal base URL. Cloudflare Pages binding APP_URL provides the
+// deployed value; local dev sets APP_URL in .dev.vars to http://localhost:5173.
+// The bare fallback is the real site so a missing/mis-set binding can never
+// silently ship localhost links in customer emails.
+const PROD_URL = 'https://www.brightskyit.com'
+
 export function appUrl(env) {
-  return env?.APP_URL || process.env.APP_URL || 'http://localhost:5173'
+  return env?.APP_URL || process.env.APP_URL || PROD_URL
 }
 
 export function signToken(env, user) {

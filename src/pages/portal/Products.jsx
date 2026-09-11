@@ -72,6 +72,7 @@ export default function Products() {
   const [form, setForm] = useState(empty)
   const [saving, setSaving] = useState(false)
   const [filter, setFilter] = useState('')
+  const [query, setQuery] = useState('')
 
   async function load() {
     try {
@@ -87,7 +88,11 @@ export default function Products() {
   const canEdit = (p) => isAdmin || p.created_by === user.id
 
   const cats = useMemo(() => [...new Set(items.map((p) => p.category).filter(Boolean))], [items])
-  const filtered = items.filter((p) => !filter || p.category === filter)
+  const q = query.trim().toLowerCase()
+  const filtered = items.filter((p) =>
+    (!filter || p.category === filter) &&
+    (!q || [p.name, p.description, p.category].join(' ').toLowerCase().includes(q))
+  )
 
   function openCreate() { setEditing(null); setForm(empty); setOpen(true) }
   function openEdit(p) {
@@ -158,13 +163,22 @@ export default function Products() {
         <button className="btn btn-primary" onClick={openCreate}>+ Add your service</button>
       </div>
 
-      {/* Toolbar: categories + ownership counts */}
+      {/* Toolbar: search + categories + ownership counts */}
       <div className="prod-toolbar">
-        <div className="prod-filters">
-          <button className={`phip ${filter === '' ? 'on' : ''}`} onClick={() => setFilter('')}>All</button>
-          {cats.map((c) => (
-            <button key={c} className={`phip ${filter === c ? 'on' : ''}`} onClick={() => setFilter(c)}>{c}</button>
-          ))}
+        <div className="prod-search">
+          <input
+            className="search-input"
+            type="search"
+            placeholder="Search services (name, description, category)…"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+          />
+          <div className="prod-filters">
+            <button className={`phip ${filter === '' ? 'on' : ''}`} onClick={() => setFilter('')}>All</button>
+            {cats.map((c) => (
+              <button key={c} className={`phip ${filter === c ? 'on' : ''}`} onClick={() => setFilter(c)}>{c}</button>
+            ))}
+          </div>
         </div>
         <div className="prod-stats">
           <span className="pstat"><b>{items.length}</b> services</span>
@@ -177,7 +191,9 @@ export default function Products() {
         <div className="card empty">
           {items.length === 0
             ? 'No services yet — click “Add your service” to list the first one.'
-            : 'Nothing in this category yet.'}
+            : query.trim()
+              ? `No services match “${query.trim()}”.`
+              : 'Nothing in this category yet.'}
         </div>
       ) : (
         <div className="prod-grid">

@@ -22,6 +22,8 @@
   --radius: 14px;
   --shadow: 0 10px 30px rgba(10, 12, 30, 0.12);
 
+  --logo-h: 40px;       /* unified logo height everywhere */
+
   --font: 'Segoe UI', system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif;
   --display: 'Segoe UI', 'Trebuchet MS', system-ui, sans-serif;
 }
@@ -108,7 +110,7 @@ button { font-family: inherit; cursor: pointer; }
   display: flex; flex-direction: column; position: sticky; top: 0; height: 100vh;
 }
 .p-side .brand { padding: 22px 20px; display: flex; align-items: center; gap: 10px; }
-.p-side .brand img { height: 34px; width: auto; object-fit: contain; }
+.p-side .brand img { height: var(--logo-h); width: auto; object-fit: contain; }
 .p-side .brand .name { font-weight: 800; font-size: 19px; color: #fff; }
 .p-side nav { flex: 1; padding: 8px 12px; }
 .p-side nav a {
@@ -197,7 +199,7 @@ table.tbl { width: 100%; border-collapse: collapse; font-size: 14px; }
   padding: 34px 32px; box-shadow: 0 30px 80px rgba(0,0,0,.5);
 }
 .auth-card .brand { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 22px; }
-.auth-card .brand img { height: 52px; width: auto; max-width: 100%; object-fit: contain; }
+.auth-card .brand img { height: var(--logo-h); width: auto; max-width: 100%; object-fit: contain; }
 .auth-card h2 { text-align: center; margin: 0 0 4px; font-size: 22px; }
 .auth-card .lead { text-align: center; color: var(--muted); font-size: 14px; margin: 0 0 22px; }
 
@@ -217,6 +219,14 @@ table.tbl { width: 100%; border-collapse: collapse; font-size: 14px; }
 .prod-stats { display: flex; gap: 18px; }
 .pstat { color: var(--muted); font-size: 13px; }
 .pstat b { color: var(--ink); font-size: 16px; font-weight: 800; margin-right: 3px; }
+.prod-search { display: flex; flex-direction: column; gap: 12px; max-width: 640px; width: 100%; }
+.search-input {
+  width: 100%; max-width: 480px; padding: 11px 15px; font-size: 14px; color: var(--ink);
+  border: 1px solid var(--line); border-radius: 12px; background: #fff; outline: none;
+  transition: border-color .15s ease, box-shadow .15s ease;
+}
+.search-input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(47,107,255,.15); }
+.search-input::placeholder { color: var(--muted); }
 
 .prod-grid {
   display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px;
@@ -290,3 +300,31 @@ table.tbl { width: 100%; border-collapse: collapse; font-size: 14px; }
   .p-content { padding: 18px; }
   .p-top { padding: 14px 18px; }
 }
+
+/* ---------- forum ---------- */
+.forum-grid { grid-template-columns: 1fr 1fr; }
+.frow {
+  display: flex; align-items: flex-start; gap: 12px; padding: 12px 10px; cursor: pointer;
+  border-radius: 12px; border-bottom: 1px solid var(--line); transition: background .15s ease;
+}
+.frow:hover { background: rgba(47,107,255,.05); }
+.frow.on { background: rgba(47,107,255,.08); }
+.ftitle { display: block; font-weight: 600; font-size: 14.5px; color: var(--ink); line-height: 1.35; }
+.fmeta { display: block; font-size: 12px; margin-top: 3px; }
+.fvotes { display: flex; flex-direction: column; align-items: center; gap: 2px; flex-shrink: 0; padding-top: 2px; }
+.fvot {
+  width: 26px; height: 26px; border-radius: 8px; border: 1px solid var(--line); cursor: pointer;
+  background: #fff; color: var(--muted); font-size: 12px; line-height: 1; padding: 0;
+  display: inline-flex; align-items: center; justify-content: center; transition: all .12s ease;
+}
+.fvot.up:hover, .fvot.up.on { border-color: var(--ok); color: var(--ok); background: rgba(16,185,129,.08); }
+.fvot.down:hover, .fvot.down.on { border-color: var(--bad); color: var(--bad); background: rgba(239,68,68,.08); }
+.fvot.big { width: 32px; height: 32px; font-size: 14px; }
+.fscore { font-size: 13px; font-weight: 800; color: var(--ink); min-width: 20px; text-align: center; }
+.fscore.big { font-size: 16px; }
+.ftopic-votes { display: inline-flex; align-items: center; gap: 8px; }
+.fcomments { margin-top: 18px; border-top: 1px solid var(--line); padding-top: 16px; }
+.fcomment { display: flex; gap: 10px; margin-bottom: 14px; }
+.fcom-head { display: flex; align-items: center; gap: 8px; margin-bottom: 2px; }
+.fcom-body { font-size: 13.5px; color: #4b5168; line-height: 1.5; white-space: pre-wrap; }
+@media (max-width: 900px) { .forum-grid { grid-template-columns: 1fr; } }

@@ -19,3 +19,6 @@ dist/
 
 # Logs
 *.log
+
+# Claude session tooling (worktrees)
+.claude/

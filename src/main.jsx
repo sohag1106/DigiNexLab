@@ -17,7 +17,7 @@ import QuoteEditor from './pages/portal/QuoteEditor'
 import Invoices from './pages/portal/Invoices'
 import InvoiceEditor from './pages/portal/InvoiceEditor'
 import Messages from './pages/portal/Messages'
-import Mail from './pages/portal/Mail'
+import Forum from './pages/portal/Forum'
 import AdminDashboard from './pages/portal/admin/AdminDashboard'
 import AdminPeople from './pages/portal/admin/AdminPeople'
 import AdminWork from './pages/portal/admin/AdminWork'
@@ -46,7 +46,7 @@ function App() {
               <Route path="invoices/:id" element={<InvoiceEditor />} />
               <Route path="messages" element={<Messages />} />
               <Route path="services" element={<Products />} />
-              <Route path="mail" element={<Mail />} />
+              <Route path="forum" element={<Forum />} />
               <Route path="admin" element={<AdminDashboard />} />
               <Route path="admin/people" element={<AdminPeople />} />
               <Route path="admin/work" element={<AdminWork />} />

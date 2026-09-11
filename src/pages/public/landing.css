@@ -19,7 +19,7 @@
   display: flex; align-items: center; justify-content: space-between; gap: 20px;
 }
 .lnav-brand { display: flex; align-items: center; gap: 11px; font-weight: 800; font-size: 20px; letter-spacing: -.01em; }
-.lnav-brand img { height: 36px; width: auto; object-fit: contain; }
+.lnav-brand img { height: var(--logo-h); width: auto; object-fit: contain; }
 .lnav-brand em { font-style: normal; color: var(--magenta); }
 .lnav nav { display: flex; align-items: center; gap: 26px; }
 .lnav nav a { font-size: 14.5px; font-weight: 500; color: #cdd2f2; opacity: .9; transition: opacity .15s, color .15s; }
@@ -160,7 +160,7 @@
 .foot { border-top: 1px solid rgba(255,255,255,.07); background: #0b0c13; }
 .foot-in { max-width: 1200px; margin: 0 auto; padding: 52px 28px 30px; display: grid; grid-template-columns: 1.4fr 2fr; gap: 40px; }
 .foot-brand { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
-.foot-brand img { height: 48px; width: auto; object-fit: contain; }
+.foot-brand img { height: var(--logo-h); width: auto; object-fit: contain; }
 .foot-brand span { font-weight: 800; font-size: 22px; }
 .foot-brand em { font-style: normal; color: var(--magenta); }
 .foot-brand p { margin: 0; max-width: 32ch; line-height: 1.6; }

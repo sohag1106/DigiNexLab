@@ -19,7 +19,7 @@ export default function PortalLayout() {
       [/^\/portal\/quotes/, 'Quotations'],
       [/^\/portal\/invoices/, 'Invoices'],
       [/^\/portal\/messages/, 'Messages'],
-      [/^\/portal\/mail/, 'Email'],
+      [/^\/portal\/forum/, 'Forum'],
       [/^\/portal\/admin\/people/, 'Team & People'],
       [/^\/portal\/admin\/work/, 'All Work'],
       [/^\/portal\/admin/, 'Admin Dashboard'],
@@ -69,8 +69,8 @@ export default function PortalLayout() {
           <NavLink to="/portal/messages" className={({ isActive }) => (isActive ? 'active' : '')}>
             <span className="ic">✉</span><span>Messages</span>
           </NavLink>
-          <NavLink to="/portal/mail" className={({ isActive }) => (isActive ? 'active' : '')}>
-            <span className="ic">@</span><span>Email</span>
+          <NavLink to="/portal/forum" className={({ isActive }) => (isActive ? 'active' : '')}>
+            <span className="ic">▤</span><span>Forum</span>
           </NavLink>
           {isAdmin && (
             <>

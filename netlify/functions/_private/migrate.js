@@ -109,6 +109,30 @@ CREATE TABLE IF NOT EXISTS password_resets (
   user_id uuid REFERENCES users(id) ON DELETE CASCADE,
   expires_at timestamptz NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS forum_posts (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  title text NOT NULL,
+  body text NOT NULL,
+  author_id uuid REFERENCES users(id) ON DELETE SET NULL,
+  created_at timestamptz NOT NULL DEFAULT now()
+);
+
+CREATE TABLE IF NOT EXISTS forum_comments (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  post_id uuid REFERENCES forum_posts(id) ON DELETE CASCADE,
+  author_id uuid REFERENCES users(id) ON DELETE SET NULL,
+  body text NOT NULL,
+  created_at timestamptz NOT NULL DEFAULT now()
+);
+
+CREATE TABLE IF NOT EXISTS forum_votes (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  post_id uuid REFERENCES forum_posts(id) ON DELETE CASCADE,
+  user_id uuid REFERENCES users(id) ON DELETE CASCADE,
+  value int NOT NULL CHECK (value IN (-1,1)),
+  UNIQUE (post_id, user_id)
+);
 `
 
 const statements = DDL

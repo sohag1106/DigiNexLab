@@ -1,5 +1,6 @@
 // /api/messages — internal messaging
-// GET  ?with=<id> (thread), /inbox, POST (send), POST :id/read
+// GET  /inbox (conversations + unread counts), ?with=<id> (thread),
+// POST (send), POST :id/read (mark one read), POST read-all?with=<id> (mark conv read)
 import { query, ok, fail, readBody } from '../../_shared/db.js'
 import { authUser } from '../../_shared/auth.js'
 
@@ -29,6 +30,11 @@ export const onRequestPost = async ({ env, request }) => {
   const seg = url.pathname.replace(/^\/api\/messages\/?/, '').split('/').filter(Boolean)
   const id = seg[0]
   try {
+    if (seg[0] === 'read-all') {
+      const peerId = url.searchParams.get('with')
+      if (!peerId) return fail('Missing peer id.')
+      return readAll(env, user, peerId)
+    }
     if (seg[1] === 'read') return markRead(env, id, user)
     if (!seg.length) {
       const body = await readBody(request)
@@ -41,20 +47,39 @@ export const onRequestPost = async ({ env, request }) => {
   }
 }
 
+// Conversations view: one row per peer with last message + unread count.
 async function inbox(env, user) {
   const rows = await query(
     env,
-    `SELECT m.*,
-            s.name AS sender_name, s.designation AS sender_designation,
-            r.name AS recipient_name
+    `SELECT m.id, m.body, m.read_at, m.created_at, m.sender_id, m.recipient_id,
+            u.name AS peer_name, u.designation AS peer_designation, u.status AS peer_status,
+            (CASE WHEN m.sender_id = $1 THEN m.recipient_id ELSE m.sender_id END) AS peer_id,
+            (m.sender_id = $1) AS mine
      FROM messages m
-     LEFT JOIN users s ON s.id = m.sender_id
-     LEFT JOIN users r ON r.id = m.recipient_id
-     WHERE m.recipient_id = $1
-     ORDER BY m.created_at DESC LIMIT 200`,
+     JOIN users u ON u.id = CASE WHEN m.sender_id = $1 THEN m.recipient_id ELSE m.sender_id END
+     WHERE m.sender_id = $1 OR m.recipient_id = $1
+     ORDER BY m.created_at DESC`,
     [user.id]
   )
-  return ok({ messages: rows })
+
+  const conversations = []
+  const seen = new Set()
+  for (const r of rows) {
+    if (seen.has(r.peer_id)) continue
+    seen.add(r.peer_id)
+    const peers = rows.filter((x) => x.peer_id === r.peer_id)
+    const unread = peers.filter((x) => !x.mine && !x.read_at).length
+    conversations.push({
+      peer_id: r.peer_id,
+      peer_name: r.peer_name,
+      peer_designation: r.peer_designation,
+      peer_status: r.peer_status,
+      last_body: r.body,
+      last_at: r.created_at,
+      unread,
+    })
+  }
+  return ok({ conversations })
 }
 
 async function thread(env, user, withId) {
@@ -92,4 +117,15 @@ async function markRead(env, id, user) {
     [id, user.id]
   )
   return ok({ message: rows[0] || null })
+}
+
+async function readAll(env, user, peerId) {
+  const rows = await query(
+    env,
+    `UPDATE messages SET read_at = now()
+     WHERE recipient_id = $1 AND sender_id = $2 AND read_at IS NULL
+     RETURNING id`,
+    [user.id, peerId]
+  )
+  return ok({ updated: rows.length })
 }

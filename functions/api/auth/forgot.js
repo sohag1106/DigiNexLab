@@ -19,7 +19,7 @@ export const onRequestPost = async ({ request, env }) => {
     'INSERT INTO password_resets (token, user_id, expires_at) VALUES ($1, $2, $3)',
     [token, user.id, new Date(Date.now() + 60 * 60 * 1000).toISOString()]
   )
-  const link = `${appUrl(env)}/portal/reset?token=${token}`
+  const link = `${appUrl(env)}/reset?token=${token}`
   const sent = await sendEmail(env, {
     to: user.email,
     subject: 'BrightSkyIT — Reset your password',

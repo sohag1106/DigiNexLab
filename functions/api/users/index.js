@@ -2,6 +2,7 @@
 import { query, ok, fail, readBody } from '../../_shared/db.js'
 import { authUser, publicUser, hashPassword, randomPassword, appUrl } from '../../_shared/auth.js'
 import { sendEmail } from '../../_shared/email.js'
+import { invitationTemplate } from '../../_shared/email-templates.js'
 
 async function list(env) {
   const rows = await query(
@@ -34,16 +35,12 @@ async function create(env, user, body) {
   const rows = await query(env, 'SELECT * FROM users WHERE lower(email)=lower($1)', [email])
   const created = rows[0]
 
-  const link = `${appUrl(env)}/portal/login`
+  const link = `${appUrl(env)}/login`
+  const designationLabel = designation && designation.trim() ? designation.trim() : roleVal === 'admin' ? 'Administrator' : 'Team Member'
   await sendEmail(env, {
     to: email,
-    subject: 'You’ve been added to BrightSkyIT',
-    html: `<h2>Welcome to BrightSkyIT, ${name}!</h2>
-      <p>Your account has been created on the BrightSkyIT portal.</p>
-      <p><strong>Login email:</strong> ${email}<br/>
-         <strong>One-time password:</strong> <code>${otp}</code></p>
-      <p>You’ll be asked to set your own password the first time you log in.</p>
-      <p><a href="${link}">Open the portal</a></p>`,
+    subject: `You’ve been added to BrightSkyIT — Welcome, ${name}!`,
+    html: invitationTemplate({ name, email, otp, designation: designationLabel, link }),
   })
 
   return ok(

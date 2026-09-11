@@ -215,6 +215,19 @@ export default function Landing() {
       <section className="sec about" id="about">
         <div className="about-in">
           <div className="about-visual">
+            <video
+              className="about-video"
+              src="/about.mp4"
+              poster="/about-poster.jpg"
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="metadata"
+              aria-label="BrightSkyIT showreel"
+            >
+              Your browser does not support the video tag.
+            </video>
             <div className="aurora" aria-hidden="true" />
           </div>
           <div className="about-copy">

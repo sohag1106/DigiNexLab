@@ -4,12 +4,31 @@ import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import logo from '../../assets/logo.png'
 import { useAuth } from '../../lib/auth'
 import { Avatar } from '../../components/ui'
+import FounderGreeting from '../../components/FounderGreeting'
 
 export default function PortalLayout() {
   const { user, loading, logout, isAdmin, refresh } = useAuth()
   const nav = useNavigate()
   const loc = useLocation()
   const [title, setTitle] = useState('Portal')
+  const [greeting, setGreeting] = useState(false)
+
+  // "Message from the founder" surprise — shown once per user on their first
+  // portal login. Triggered by the founderGreeting flag passed on login; stored
+  // per-user in localStorage so later logins (and refreshes) don't re-show it.
+  useEffect(() => {
+    if (!user || !loc.state?.founderGreeting) return
+    const key = `founderGreetingSeen:${user.id ?? user.email}`
+    let seen = false
+    try { seen = localStorage.getItem(key) === '1' } catch {}
+    if (seen) {
+      if (loc.state?.founderGreeting !== undefined) nav(loc.pathname, { replace: true, state: null })
+      return
+    }
+    try { localStorage.setItem(key, '1') } catch {}
+    setGreeting(true)
+    nav(loc.pathname, { replace: true, state: null })
+  }, [user, loc, nav])
 
   useEffect(() => {
     const map = [
@@ -123,6 +142,7 @@ export default function PortalLayout() {
           <Outlet />
         </div>
       </main>
+      <FounderGreeting open={greeting} onClose={() => setGreeting(false)} />
     </div>
   )
 }

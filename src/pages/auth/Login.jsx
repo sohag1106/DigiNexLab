@@ -35,7 +35,7 @@ export default function Login() {
         setPassword('')
         setForce(user)
       } else {
-        nav('/portal/app')
+        nav('/portal/app', { state: { founderGreeting: true } })
       }
     } catch (err2) {
       setErr(err2.message || 'Login failed.')
@@ -59,7 +59,7 @@ export default function Login() {
       // update session user via login again is not needed; navigate
       setForce(null)
       toast('Password set. Welcome aboard!', 'success')
-      nav('/portal/app')
+      nav('/portal/app', { state: { founderGreeting: true } })
     } catch (err2) {
       setErr(err2.message || 'Could not update password.')
     } finally {

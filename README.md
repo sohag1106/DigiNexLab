@@ -30,7 +30,7 @@ See `.env.example`. Keys: `DATABASE_URL`, `RESEND_API_KEY`, `FROM_EMAIL`,
 `SESSION_SECRET`, `APP_URL`. Set the same keys on Netlify.
 
 > **Owners:** `FROM_EMAIL` must be a sender verified in your Resend account
-> (e.g. `no-reply@yourdomain.com` after verifying the domain in Resend).
+> (e.g. `info@yourdomain.com` after verifying the domain in Resend).
 > All invitation / notification / invoice emails are sent from it.
 
 ## Seeding the first Owner

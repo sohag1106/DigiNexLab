@@ -119,6 +119,13 @@
 /* ---- about ---- */
 .about-in { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
 .about-visual { position: relative; min-height: 320px; padding: 26px; }
+.about-video {
+  position: relative; z-index: 1;
+  width: 100%; aspect-ratio: 16 / 10; object-fit: cover;
+  border-radius: 22px; display: block;
+  border: 1px solid rgba(255,255,255,.1);
+  box-shadow: 0 18px 50px rgba(0,0,0,.35);
+}
 .aurora {
   position: absolute; inset: 0;
   background: linear-gradient(135deg, rgba(47,107,255,.5), rgba(214,58,255,.45), rgba(124,92,255,.4));

@@ -19,7 +19,7 @@ Cloudflare Dashboard → **Workers & Pages → brightskyit → Settings → Vari
 | `DATABASE_URL`  | `postgresql://...neon.tech/...` (same as `.env`) |
 | `SESSION_SECRET`| your long random string                    |
 | `RESEND_API_KEY`| `re_...`                                   |
-| `FROM_EMAIL`    | `no-reply@brightskyit.com` (verified Resend sender) |
+| `FROM_EMAIL`    | `info@brightskyit.com` (verified Resend sender) |
 | `APP_URL`       | e.g. `https://brightskyit.pages.dev`        |
 | `CONTACT_TO`    | optional; where contact form mail is sent  |
 

@@ -215,6 +215,22 @@ table.tbl { width: 100%; border-collapse: collapse; font-size: 14px; }
 .modal h3 { margin: 0 0 16px; }
 .modal .close-x { float: right; background: none; border: none; font-size: 20px; color: var(--muted); }
 
+/* founder greeting popup */
+.greeting-ov { z-index: 300; }
+.greeting-modal { max-width: 720px; animation: pop-in .35s cubic-bezier(.2,.9,.3,1.2); }
+.greeting-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.greeting-head h3 { margin: 0; }
+.greeting-lead { color: var(--muted); font-size: 14px; margin: 8px 0 14px; }
+.greeting-video {
+  display: block; width: 100%; max-width: 100%; border-radius: 12px; background: #000;
+  aspect-ratio: 16 / 9; object-fit: contain; outline: none;
+}
+.greeting-foot { display: flex; justify-content: flex-end; margin-top: 16px; }
+@keyframes pop-in {
+  from { opacity: 0; transform: scale(.86) translateY(10px); }
+  to { opacity: 1; transform: none; }
+}
+
 /* auth screens */
 .auth-wrap {
   min-height: 100vh; display: flex; align-items: center; justify-content: center;

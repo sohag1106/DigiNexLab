@@ -18,6 +18,8 @@ import Invoices from './pages/portal/Invoices'
 import InvoiceEditor from './pages/portal/InvoiceEditor'
 import Messages from './pages/portal/Messages'
 import Forum from './pages/portal/Forum'
+import Projects from './pages/portal/Projects'
+import Notices from './pages/portal/Notices'
 import AdminDashboard from './pages/portal/admin/AdminDashboard'
 import AdminPeople from './pages/portal/admin/AdminPeople'
 import AdminWork from './pages/portal/admin/AdminWork'
@@ -47,6 +49,8 @@ function App() {
               <Route path="messages" element={<Messages />} />
               <Route path="services" element={<Products />} />
               <Route path="forum" element={<Forum />} />
+              <Route path="projects" element={<Projects />} />
+              <Route path="notices" element={<Notices />} />
               <Route path="admin" element={<AdminDashboard />} />
               <Route path="admin/people" element={<AdminPeople />} />
               <Route path="admin/work" element={<AdminWork />} />

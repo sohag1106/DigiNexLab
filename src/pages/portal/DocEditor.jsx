@@ -124,7 +124,7 @@ export default function DocEditor({ kind, basePath, id, listPath }) {
         <h2 style={{ margin: 0 }}>
           {isEdit ? `Edit ${docName} ${number || ''}` : `New ${docName}`}
         </h2>
-        <div className="flex">
+        <div className="flex" style={{ flexWrap: 'wrap', justifyContent: 'flex-end' }}>
           {isEdit && (
             <select className="btn btn-sm btn-outline" style={{ width: 'auto' }} value={status} onChange={async (e) => {
               try { await api(`/${basePath}/${id}`, { method: 'PATCH', body: { status: e.target.value } }); setStatus(e.target.value); toast('Status updated.', 'success') }

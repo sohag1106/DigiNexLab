@@ -199,7 +199,7 @@ table.tbl { width: 100%; border-collapse: collapse; font-size: 14px; }
 /* misc */
 .muted { color: var(--muted); }
 .flex { display: flex; align-items: center; gap: 10px; }
-.spread { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.spread { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
 .mt { margin-top: 16px; }
 .mb { margin-bottom: 16px; }
 .section-title { font-size: 15px; font-weight: 700; margin: 0 0 12px; display: flex; align-items: center; gap: 8px; }
@@ -335,6 +335,13 @@ table.tbl { width: 100%; border-collapse: collapse; font-size: 14px; }
 .toast.error { border-left-color: var(--bad); }
 @keyframes toast-in { from { opacity: 0; transform: translateY(10px);} to { opacity: 1; transform: none; } }
 
+/* messages two-panel: fixed 300px column, stacks on small screens */
+.msg-grid { grid-template-columns: 300px 1fr; }
+
+/* mobile sidebar drawer + hamburger (phones only) */
+.p-burger { display: none; background: none; border: 1px solid var(--line); color: var(--ink); border-radius: 9px; padding: 8px; line-height: 0; }
+.p-navback { display: none; }
+
 @media (max-width: 860px) {
   .p-side { width: 64px; }
   .p-side .brand .name, .p-side nav a span:nth-child(2), .p-side .foot .who { display: none; }
@@ -342,6 +349,32 @@ table.tbl { width: 100%; border-collapse: collapse; font-size: 14px; }
   .grid-2, .grid-3 { grid-template-columns: 1fr; }
   .p-content { padding: 18px; }
   .p-top { padding: 14px 18px; }
+  /* wide tables scroll inside their card instead of breaking the page */
+  .card { overflow-x: auto; }
+  .msg-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 767px) {
+  /* hamburger shows; sidebar becomes an off-canvas drawer with labels */
+  .p-burger { display: inline-flex; flex-shrink: 0; }
+  .p-side {
+    width: 260px; position: fixed; left: 0; top: 0; bottom: 0; z-index: 120;
+    transform: translateX(-100%); transition: transform .25s ease;
+    box-shadow: 0 0 50px rgba(0,0,0,.35);
+  }
+  .p-side.open { transform: none; }
+  .p-side .brand .name, .p-side nav a span:nth-child(2), .p-side .foot .who { display: inline; }
+  .p-side nav a { justify-content: flex-start; }
+  .p-navback { display: block; position: fixed; inset: 0; background: rgba(6,7,16,.5); z-index: 110; opacity: 0; pointer-events: none; transition: opacity .25s ease; }
+  .p-navback.show { opacity: 1; pointer-events: auto; }
+  .p-top { gap: 10px; }
+  .p-top h1 { font-size: 18px; }
+}
+
+@media (max-width: 560px) {
+  .p-content { padding: 14px; }
+  .p-top { padding: 12px 14px; }
+  .p-top > .flex > .muted { display: none; } /* hide the email on phones */
 }
 
 /* ---------- forum ---------- */

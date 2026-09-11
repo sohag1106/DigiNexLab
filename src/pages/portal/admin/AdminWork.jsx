@@ -36,7 +36,7 @@ export default function AdminWork() {
     <div>
       <div className="spread mb">
         <h2 style={{ margin: 0 }}>All work</h2>
-        <div className="flex">
+        <div className="flex" style={{ flexWrap: 'wrap' }}>
           {tabBtn('quotes', 'Quotations', quotes.length)}
           {tabBtn('invoices', 'Invoices', invoices.length)}
           {tabBtn('jobs', 'Jobs', jobs.length)}

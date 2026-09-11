@@ -12,6 +12,7 @@ export default function PortalLayout() {
   const loc = useLocation()
   const [title, setTitle] = useState('Portal')
   const [greeting, setGreeting] = useState(false)
+  const [mNav, setMNav] = useState(false) // mobile sidebar drawer
 
   // "Message from the founder" surprise — shown once per user on their first
   // portal login. Triggered by the founderGreeting flag passed on login; stored
@@ -47,6 +48,7 @@ export default function PortalLayout() {
     ]
     const hit = map.find(([re]) => re.test(loc.pathname))
     if (hit) setTitle(hit[1])
+    setMNav(false) // close the mobile drawer after navigating
   }, [loc.pathname])
 
   useEffect(() => {
@@ -66,7 +68,8 @@ export default function PortalLayout() {
 
   return (
     <div className="p-shell">
-      <aside className="p-side">
+      <div className={'p-navback' + (mNav ? ' show' : '')} onClick={() => setMNav(false)} />
+      <aside className={'p-side' + (mNav ? ' open' : '')}>
         <div className="brand">
           <img src={logo} alt="BrightSkyIT" />
           <span className="name">BrightSky<em style={{ fontStyle: 'normal', color: 'var(--magenta)' }}>IT</em></span>
@@ -130,10 +133,22 @@ export default function PortalLayout() {
 
       <main className="p-main">
         <header className="p-top">
-          <div>
-            <h1 id="page-title">{title}</h1>
+          <div className="flex" style={{ minWidth: 0 }}>
+            <button
+              className="p-burger"
+              onClick={() => setMNav((v) => !v)}
+              aria-label="Toggle menu"
+              aria-expanded={mNav}
+            >
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <line x1="3" y1="6" x2="21" y2="6" />
+                <line x1="3" y1="12" x2="21" y2="12" />
+                <line x1="3" y1="18" x2="21" y2="18" />
+              </svg>
+            </button>
+            <h1 id="page-title" style={{ margin: 0, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{title}</h1>
           </div>
-          <div className="flex">
+          <div className="flex" style={{ flexShrink: 0 }}>
             <span className="muted" style={{ fontSize: 13 }}>{user.email}</span>
             <Avatar name={user.name} />
           </div>

@@ -122,7 +122,7 @@ export default function Messages() {
         <button className="btn btn-primary" onClick={openNew}>+ New message</button>
       </div>
 
-      <div className="grid" style={{ gridTemplateColumns: '300px 1fr', alignItems: 'start' }}>
+      <div className="grid msg-grid">
         {/* conversations */}
         <div className="card" style={{ padding: 8 }}>
           <div className="section-title" style={{ padding: '8px 8px 4px' }}><span className="accent" />Conversations</div>

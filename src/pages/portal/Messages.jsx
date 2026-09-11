@@ -26,7 +26,7 @@ export default function Messages() {
   async function loadInbox() {
     try {
       const d = await api('/messages/inbox')
-      setConversations(d.conversations || [])
+      setConversations((d && d.conversations) || [])
     } catch (e) {
       if (!/unauthorized/i.test(e.message)) toast(e.message || 'Could not load messages.', 'error')
     }
@@ -36,7 +36,7 @@ export default function Messages() {
     if (!withUser) return
     try {
       const d = await api(`/messages?with=${withUser.id}`)
-      setThread(d.messages || [])
+      setThread((d && d.messages) || [])
     } catch {}
   }
 

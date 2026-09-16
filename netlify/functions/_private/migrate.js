@@ -149,6 +149,16 @@ CREATE TABLE IF NOT EXISTS project_handlers (
   PRIMARY KEY (project_id, user_id)
 );
 
+CREATE TABLE IF NOT EXISTS contact_submissions (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  name text NOT NULL,
+  email text NOT NULL,
+  subject text,
+  message text NOT NULL,
+  status text NOT NULL DEFAULT 'new' CHECK (status IN ('new','read','archived')),
+  created_at timestamptz NOT NULL DEFAULT now()
+);
+
 CREATE TABLE IF NOT EXISTS notices (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   title text NOT NULL,

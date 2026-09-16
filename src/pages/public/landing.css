@@ -3,7 +3,7 @@
   background: var(--charcoal);
   color: #eef0ff;
   font-family: var(--font);
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 .site a { color: inherit; }
 

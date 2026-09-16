@@ -81,6 +81,7 @@ export default function Landing() {
   const [menu, setMenu] = useState(false)
   const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' })
   const [sending, setSending] = useState(false)
+  const [quoteFor, setQuoteFor] = useState(null) // service title shown in the quote popup, or null
 
   async function submit(e) {
     e.preventDefault()
@@ -93,12 +94,30 @@ export default function Landing() {
       await api('/contact', { method: 'POST', body: form })
       toast('Thanks — your message has been sent.', 'success')
       setForm({ name: '', email: '', subject: '', message: '' })
+      setQuoteFor(null)
     } catch (err) {
       toast(err.message || 'Could not send your message.', 'error')
     } finally {
       setSending(false)
     }
   }
+
+  function openQuote(serviceTitle) {
+    setForm((f) => ({ ...f, subject: serviceTitle ? `${serviceTitle} project` : '' }))
+    setQuoteFor(serviceTitle || ' ')
+  }
+
+  const quoteForm = (
+    <form className="contact-form quote-pop-form" onSubmit={submit}>
+      <div className="cf-row">
+        <div className="field"><label>Your name</label><input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="Jane Doe" /></div>
+        <div className="field"><label>Email</label><input type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} placeholder="jane@company.com" /></div>
+      </div>
+      <div className="field"><label>Subject</label><input value={form.subject} onChange={(e) => setForm({ ...form, subject: e.target.value })} placeholder="Project / Website / Brand" /></div>
+      <div className="field"><label>Message</label><textarea rows="4" value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} placeholder="Tell us about your goals…" /></div>
+      <button className="btn btn-magenta btn-block" disabled={sending}>{sending ? 'Sending…' : 'Send message'}</button>
+    </form>
+  )
 
   return (
     <div className="site">
@@ -122,7 +141,6 @@ export default function Landing() {
             <a href="#about">About</a>
             <a href="#blog">Blog</a>
             <a href="#contact">Contact</a>
-            <Link className="btn-magenta-sm" to="/login">Login</Link>
             <a className="btn lnv" href="#contact">Get a Quote</a>
           </nav>
         </div>
@@ -172,12 +190,12 @@ export default function Landing() {
         </div>
         <div className="svc-grid">
           {SERVICES.map((s, i) => (
-            <div className="svc-card" key={s.title} style={{ '--i': i }}>
+            <button className="svc-card" key={s.title} style={{ '--i': i }} onClick={() => openQuote(s.title)}>
               <div className="svc-ic">{s.icon}</div>
               <h3>{s.title}</h3>
               <p>{s.copy}</p>
               <span className="svc-num">0{i + 1}</span>
-            </div>
+            </button>
           ))}
         </div>
       </section>
@@ -215,19 +233,12 @@ export default function Landing() {
       <section className="sec about" id="about">
         <div className="about-in">
           <div className="about-visual">
-            <video
-              className="about-video"
-              src="/about.mp4"
-              poster="/about-poster.jpg"
-              autoPlay
-              muted
-              loop
-              playsInline
-              preload="metadata"
-              aria-label="BrightSkyIT showreel"
-            >
-              Your browser does not support the video tag.
-            </video>
+            <img
+              className="about-photo"
+              src="/about-team.jpg"
+              alt="The BrightSkyIT team"
+              loading="lazy"
+            />
             <div className="aurora" aria-hidden="true" />
           </div>
           <div className="about-copy">
@@ -293,6 +304,19 @@ export default function Landing() {
         </div>
       </section>
 
+      {/* ---------- quote popup ---------- */}
+      {quoteFor && (
+        <div className="quote-pop" onClick={() => setQuoteFor(null)}>
+          <div className="quote-pop-card" onClick={(e) => e.stopPropagation()}>
+            <button className="quote-pop-x" onClick={() => setQuoteFor(null)} aria-label="Close">✕</button>
+            <span className="kicker">Get a quote</span>
+            <h3>{quoteFor.trim() ? quoteFor : 'Let’s build something brilliant'}</h3>
+            <p className="muted">Tell us about your project. We’ll reply within one business day.</p>
+            {quoteForm}
+          </div>
+        </div>
+      )}
+
       {/* ---------- footer ---------- */}
       <footer className="foot">
         <div className="foot-in">
@@ -314,6 +338,7 @@ export default function Landing() {
               <h4>Contact</h4>
               <a href="mailto:hello@brightskyit.com">hello@brightskyit.com</a>
               <a href="#contact">Start a project</a>
+              <Link to="/login">Login</Link>
             </div>
           </div>
         </div>

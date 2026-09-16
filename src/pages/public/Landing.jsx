@@ -154,12 +154,12 @@ export default function Landing() {
       {/* ---------- marquee ---------- */}
       <section className="marquee">
         <div className="mq-track">
-          {['UI/UX DESIGN', 'WEB DEVELOPMENT', 'BRANDING', 'DIGITAL STRATEGY', 'CONTENT', 'GROWTH', 'PRODUCT'].map((t) => (
-            <span key={t}>{t}<em>◆</em></span>
-          ))}
-          {['UI/UX DESIGN', 'WEB DEVELOPMENT', 'BRANDING', 'DIGITAL STRATEGY', 'CONTENT', 'GROWTH', 'PRODUCT'].map((t) => (
-            <span key={t + 'b'}>{t}<em>◆</em></span>
-          ))}
+          {/* 4 copies so the track always covers the viewport — the -50% keyframe loops seamlessly */}
+          {Array.from({ length: 4 }, (_, c) =>
+            ['UI/UX DESIGN', 'WEB DEVELOPMENT', 'BRANDING', 'DIGITAL STRATEGY', 'CONTENT', 'GROWTH', 'PRODUCT'].map((t) => (
+              <span key={c + '-' + t}>{t}<em>◆</em></span>
+            ))
+          )}
         </div>
       </section>
 

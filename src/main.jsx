@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import ReactDOM from 'react-dom/client'
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { AuthProvider } from './lib/auth'
 import { ToastProvider } from './components/Toast'
 import './styles/global.css'
@@ -29,11 +29,20 @@ import AdminWork from './pages/portal/admin/AdminWork'
 import AdminInbox from './pages/portal/admin/AdminInbox'
 import Products from './pages/portal/Products'
 
+// Reset scroll to the top on every route change — React Router keeps the
+// viewport position otherwise, so a new page can open scrolled to the middle.
+function ScrollToTop() {
+  const { pathname } = useLocation()
+  useEffect(() => { window.scrollTo(0, 0) }, [pathname])
+  return null
+}
+
 function App() {
   return (
     <AuthProvider>
       <ToastProvider>
         <BrowserRouter>
+          <ScrollToTop />
           <Routes>
             <Route path="/" element={<Landing />} />
             <Route path="/team" element={<Team />} />

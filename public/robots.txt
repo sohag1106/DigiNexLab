@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+
+# Keep auth/portal pages out of the index — they're for employees, not searchers.
+Disallow: /portal
+Disallow: /login
+Disallow: /reset
+Disallow: /forgot-password
+Disallow: /api/
+
+Sitemap: https://brightskyit.com/sitemap.xml

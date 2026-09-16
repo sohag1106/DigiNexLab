@@ -6,6 +6,8 @@ import { ToastProvider } from './components/Toast'
 import './styles/global.css'
 
 import Landing from './pages/public/Landing'
+import Team from './pages/public/Team'
+import TeamMember from './pages/public/TeamMember'
 import Login from './pages/auth/Login'
 import ForgotPassword from './pages/auth/ForgotPassword'
 import ResetPassword from './pages/auth/ResetPassword'
@@ -34,6 +36,8 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Landing />} />
+            <Route path="/team" element={<Team />} />
+            <Route path="/team/:slug" element={<TeamMember />} />
             <Route path="/login" element={<Login />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/reset" element={<ResetPassword />} />

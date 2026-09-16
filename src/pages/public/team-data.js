@@ -1,0 +1,78 @@
+// Team data — single source of truth for the team page, member profile
+// pages, and the Person JSON-LD injected per profile (Google rich results).
+export const TEAM = [
+  {
+    slug: 'mohammad-sohag',
+    name: 'Mohammad Sohag',
+    role: 'Co-Founder & CEO',
+    group: 'founders',
+    photo: '/team/mohammad-sohag.jpg',
+    tagline: 'Founder of BrightSkyIT — leading product, engineering and growth.',
+    bio: "Mohammad Sohag is the Co-Founder and CEO of BrightSkyIT, a creative digital agency crafting websites, web apps and brand systems for clients worldwide. He leads product strategy and engineering, and has personally shipped platforms across facility management, e-commerce, billing and client portals — from Quick Solution Oman's client portal to the BrightSkyIT platform itself. He works hands-on with every project, from the first sketch to launch and beyond.",
+    focus: ['Product strategy', 'Full-stack engineering', 'Team leadership'],
+    links: [],
+  },
+  {
+    slug: 'khyruddin-ahmed',
+    name: 'Khyruddin Ahmed',
+    role: 'Co-Founder',
+    group: 'founders',
+    photo: '/team/khyruddin-ahmed.jpg',
+    tagline: 'Co-Founder of BrightSkyIT — driving operations and client delivery.',
+    bio: 'Khyruddin Ahmed is a Co-Founder of BrightSkyIT. He runs operations and client delivery — scoping projects, keeping milestones transparent and making sure every engagement ships on time. His focus is the client experience: clear communication, honest timelines and long-term support after launch.',
+    focus: ['Operations', 'Client delivery', 'Project management'],
+    links: [],
+  },
+  {
+    slug: 'al-mahmud',
+    name: 'Al-Mahmud',
+    role: 'Co-Founder',
+    group: 'founders',
+    photo: '/team/al-mahmud.jpg',
+    tagline: 'Co-Founder of BrightSkyIT — design direction and brand systems.',
+    bio: "Al-Mahmud is a Co-Founder of BrightSkyIT and leads design. He shapes the agency's visual direction — brand identities, UI systems and the design language behind every BrightSkyIT build. His work pairs clean, accessible interfaces with brand voices that stick.",
+    focus: ['Brand identity', 'UI/UX design', 'Design systems'],
+    links: [],
+  },
+  {
+    slug: 'shuvo',
+    name: 'Shuvo',
+    role: 'Development Lead',
+    group: 'developers',
+    photo: '/team/shuvo.jpg',
+    tagline: 'Founder of BuildNovaTech — leading development at BrightSkyIT.',
+    bio: 'Shuvo leads development at BrightSkyIT and is the founder of BuildNovaTech, an agency building modern web products. He brings that entrepreneurial engineering experience to every BrightSkyIT project — fast, secure, scalable builds across web and mobile.',
+    focus: ['Web development', 'Mobile apps', 'Agency leadership'],
+    links: [],
+  },
+  {
+    slug: 'shaon',
+    name: 'Shaon',
+    role: 'Development Lead',
+    group: 'developers',
+    photo: '/team/shaon.jpg',
+    tagline: 'Founder of SiteSentryLab — leading development at BrightSkyIT.',
+    bio: 'Shaon is a development lead at BrightSkyIT and the founder of SiteSentryLab, a company focused on building and safeguarding web platforms. He specializes in robust web architecture, performance and reliability — engineering sites and apps that stay fast and stay up.',
+    focus: ['Web architecture', 'Performance & security', 'SiteSentryLab founder'],
+    links: [],
+  },
+  {
+    slug: 'reazul-hasan',
+    name: 'Reazul Hasan',
+    role: 'Regional Head — Advisor',
+    group: 'advisors',
+    photo: '/team/reazul-hasan.jpg',
+    tagline: 'Regional Head (Oman) — founder of Quick Solution Oman, a top FMS company in Muscat.',
+    bio: "Reazul Hasan is BrightSkyIT's Regional Head and advisor, based in Oman. He is the owner and founder of Quick Solution Oman (quicksolutionoman.com), a leading facility-management company serving clients across Oman from Muscat. His on-the-ground business expertise across the Gulf shapes BrightSkyIT's strategy for regional clients.",
+    focus: ['Business strategy', 'Facility management', 'GCC market'],
+    links: [{ label: 'Quick Solution Oman', url: 'https://www.quicksolutionoman.com/' }],
+  },
+]
+
+export const GROUPS = [
+  { key: 'founders', label: 'Founders', blurb: 'The people who started BrightSkyIT — and still lead every project hands-on.' },
+  { key: 'developers', label: 'Development', blurb: 'Senior engineers who build and ship everything we deliver.' },
+  { key: 'advisors', label: 'Advisors', blurb: 'Regional leadership and industry expertise guiding our strategy.' },
+]
+
+export const bySlug = (slug) => TEAM.find((m) => m.slug === slug)

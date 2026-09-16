@@ -4,15 +4,115 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#0d0e14" />
+
+    <!-- Primary SEO -->
+    <title>BrightSkyIT — Creative Digital Agency | Web, Apps & Branding</title>
     <meta
       name="description"
-      content="BrightSkyIT — a creative digital agency crafting digital experiences that spark engagement and drive growth."
+      content="Creative digital agency crafting high-converting websites, web & mobile apps, branding and digital strategy. Senior team, on-time delivery. Get a free quote."
     />
-    <title>BrightSkyIT — Creative Digital Agency</title>
+    <link rel="canonical" href="https://brightskyit.com/" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+    <meta name="author" content="BrightSkyIT" />
+    <meta
+      name="keywords"
+      content="digital agency, web design, web development, UI/UX design, branding, digital strategy, SEO, content marketing, app development"
+    />
+
+    <!-- Open Graph (Facebook, LinkedIn, WhatsApp previews) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="BrightSkyIT" />
+    <meta property="og:url" content="https://brightskyit.com/" />
+    <meta property="og:title" content="BrightSkyIT — Creative Digital Agency" />
+    <meta
+      property="og:description"
+      content="We craft digital experiences that spark engagement and drive growth — web design, development, branding and digital strategy."
+    />
+    <meta property="og:image" content="https://brightskyit.com/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="BrightSkyIT — Creative Digital Agency" />
+    <meta property="og:locale" content="en_US" />
+
+    <!-- Twitter/X card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="BrightSkyIT — Creative Digital Agency" />
+    <meta
+      name="twitter:description"
+      content="We craft digital experiences that spark engagement and drive growth — web design, development, branding and digital strategy."
+    />
+    <meta name="twitter:image" content="https://brightskyit.com/og-image.png" />
+    <meta name="twitter:image:alt" content="BrightSkyIT — Creative Digital Agency" />
+
+    <!-- Icons -->
     <link rel="icon" type="image/png" sizes="256x256" href="/favicon.png" />
+    <link rel="apple-touch-icon" href="/favicon.png" />
+
+    <!-- Performance: warm up the hero-critical origin -->
+    <link rel="preconnect" href="https://brightskyit.com" crossorigin />
+
+    <!-- Structured data: Organization + WebSite + Professional Service -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "https://brightskyit.com/#organization",
+          "name": "BrightSkyIT",
+          "url": "https://brightskyit.com/",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://brightskyit.com/logo.png"
+          },
+          "email": "hello@brightskyit.com",
+          "sameAs": []
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://brightskyit.com/#website",
+          "url": "https://brightskyit.com/",
+          "name": "BrightSkyIT",
+          "description": "Creative digital agency — web design, development, branding and digital strategy.",
+          "publisher": { "@id": "https://brightskyit.com/#organization" },
+          "inLanguage": "en"
+        },
+        {
+          "@type": "ProfessionalService",
+          "@id": "https://brightskyit.com/#service",
+          "name": "BrightSkyIT",
+          "url": "https://brightskyit.com/",
+          "image": "https://brightskyit.com/og-image.png",
+          "email": "hello@brightskyit.com",
+          "priceRange": "$$",
+          "areaServed": "Worldwide",
+          "description": "Creative digital agency offering UI/UX design, web development, branding, digital strategy, content and marketing services.",
+          "hasOfferCatalog": {
+            "@type": "OfferCatalog",
+            "name": "Services",
+            "itemListElement": [
+              { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "UI/UX Design" } },
+              { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Web Development" } },
+              { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Branding" } },
+              { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Digital Strategy" } },
+              { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Content & Copy" } },
+              { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Marketing & Growth" } }
+            ]
+          }
+        }
+      ]
+    }
+    </script>
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
+    <noscript>
+      <div style="max-width: 640px; margin: 80px auto; font-family: system-ui; color: #eef0ff; background: #0d0e14; padding: 24px; text-align: center;">
+        <h1>BrightSkyIT — Creative Digital Agency</h1>
+        <p>We craft digital experiences that spark engagement and drive growth: web design, web &amp; mobile development, branding and digital strategy.</p>
+        <p>Contact us at <a href="mailto:hello@brightskyit.com" style="color: #d63aff;">hello@brightskyit.com</a></p>
+      </div>
+    </noscript>
   </body>
 </html>

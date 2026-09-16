@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import logo from '../../assets/logo.png'
 import { api } from '../../lib/api'
+import { setMeta } from '../../lib/meta'
 import { useToast } from '../../components/Toast'
 import './landing.css'
 import heroArt from './hero-art.jsx'
@@ -79,6 +80,23 @@ const WORK = [
 export default function Landing() {
   const toast = useToast()
   const [menu, setMenu] = useState(false)
+  useEffect(() => {
+    setMeta({
+      jsonLd: {
+        '@context': 'https://schema.org',
+        '@type': 'Organization',
+        name: 'BrightSkyIT',
+        url: 'https://brightskyit.com/',
+        logo: 'https://brightskyit.com/logo.png',
+        email: 'hello@brightskyit.com',
+        founder: [
+          { '@type': 'Person', name: 'Mohammad Sohag', jobTitle: 'Co-Founder & CEO', url: 'https://brightskyit.com/team/mohammad-sohag' },
+          { '@type': 'Person', name: 'Khyruddin Ahmed', jobTitle: 'Co-Founder', url: 'https://brightskyit.com/team/khyruddin-ahmed' },
+          { '@type': 'Person', name: 'Al-Mahmud', jobTitle: 'Co-Founder', url: 'https://brightskyit.com/team/al-mahmud' },
+        ],
+      },
+    })
+  }, [])
   const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' })
   const [sending, setSending] = useState(false)
   const [quoteFor, setQuoteFor] = useState(null) // service title shown in the quote popup, or null
@@ -147,6 +165,7 @@ export default function Landing() {
       </header>
 
       {/* ---------- hero ---------- */}
+      <main>
       <section className="hero" id="top">
         <div className="hero-in">
           <div className="hero-copy">
@@ -233,12 +252,14 @@ export default function Landing() {
       <section className="sec about" id="about">
         <div className="about-in">
           <div className="about-visual">
-            <img
-              className="about-photo"
-              src="/about-team.jpg"
-              alt="The BrightSkyIT team"
-              loading="lazy"
-            />
+            <Link to="/team" className="about-photo-link" title="Meet the team">
+              <img
+                className="about-photo"
+                src="/about-team.jpg"
+                alt="The BrightSkyIT team"
+                loading="lazy"
+              />
+            </Link>
             <div className="aurora" aria-hidden="true" />
           </div>
           <div className="about-copy">
@@ -303,6 +324,7 @@ export default function Landing() {
           </form>
         </div>
       </section>
+      </main>
 
       {/* ---------- quote popup ---------- */}
       {quoteFor && (

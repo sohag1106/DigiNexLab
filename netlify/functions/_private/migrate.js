@@ -46,6 +46,16 @@ CREATE TABLE IF NOT EXISTS jobs (
   assigned_to uuid REFERENCES users(id) ON DELETE SET NULL,
   assigned_by uuid REFERENCES users(id) ON DELETE SET NULL,
   status text NOT NULL DEFAULT 'open' CHECK (status IN ('open','in_progress','done')),
+  deadline date,
+  created_at timestamptz NOT NULL DEFAULT now()
+);
+ALTER TABLE jobs ADD COLUMN IF NOT EXISTS deadline date;
+
+CREATE TABLE IF NOT EXISTS job_remarks (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  job_id uuid REFERENCES jobs(id) ON DELETE CASCADE,
+  author_id uuid REFERENCES users(id) ON DELETE SET NULL,
+  body text NOT NULL,
   created_at timestamptz NOT NULL DEFAULT now()
 );
 

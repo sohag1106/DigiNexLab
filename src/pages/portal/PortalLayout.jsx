@@ -44,6 +44,7 @@ export default function PortalLayout() {
       [/^\/portal\/notices/, 'Notices'],
       [/^\/portal\/admin\/people/, 'Team & People'],
       [/^\/portal\/admin\/work/, 'All Work'],
+      [/^\/portal\/admin\/inbox/, 'Website Inbox'],
       [/^\/portal\/admin/, 'Admin Dashboard'],
     ]
     const hit = map.find(([re]) => re.test(loc.pathname))
@@ -96,6 +97,9 @@ export default function PortalLayout() {
           <NavLink to="/portal/forum" className={({ isActive }) => (isActive ? 'active' : '')}>
             <span className="ic">▤</span><span>Forum</span>
           </NavLink>
+          <NavLink to="/portal/jobs" className={({ isActive }) => (isActive ? 'active' : '')}>
+            <span className="ic">✔</span><span>Jobs</span>
+          </NavLink>
           <NavLink to="/portal/projects" className={({ isActive }) => (isActive ? 'active' : '')}>
             <span className="ic">⌘</span><span>Projects</span>
           </NavLink>
@@ -113,6 +117,9 @@ export default function PortalLayout() {
               </NavLink>
               <NavLink to="/portal/admin/work" className={({ isActive }) => (isActive ? 'active' : '')}>
                 <span className="ic">☰</span><span>All Work</span>
+              </NavLink>
+              <NavLink to="/portal/admin/inbox" className={({ isActive }) => (isActive ? 'active' : '')}>
+                <span className="ic">✉</span><span>Website Inbox</span>
               </NavLink>
             </>
           )}

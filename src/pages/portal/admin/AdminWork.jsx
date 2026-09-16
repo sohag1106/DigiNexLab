@@ -85,11 +85,12 @@ export default function AdminWork() {
       {tab === 'jobs' && (
         <div className="card">
           <table className="tbl">
-            <thead><tr><th>Title</th><th>Assignee</th><th>Assigned by</th><th>Status</th><th>Created</th></tr></thead>
+            <thead><tr><th>Title</th><th>Assignee</th><th>Assigned by</th><th>Deadline</th><th>Status</th><th>Created</th></tr></thead>
             <tbody>
               {jobs.map((j) => (
                 <tr key={j.id}>
                   <td>{j.title}</td><td>{j.assignee_name || '—'}</td><td>{j.assigner_name || '—'}</td>
+                  <td className="muted">{j.deadline ? fmtDate(j.deadline) : '—'}</td>
                   <td><StatusBadge status={j.status} /></td><td className="muted">{fmtDate(j.created_at)}</td>
                 </tr>
               ))}

@@ -18,11 +18,13 @@ import Invoices from './pages/portal/Invoices'
 import InvoiceEditor from './pages/portal/InvoiceEditor'
 import Messages from './pages/portal/Messages'
 import Forum from './pages/portal/Forum'
+import Jobs from './pages/portal/Jobs'
 import Projects from './pages/portal/Projects'
 import Notices from './pages/portal/Notices'
 import AdminDashboard from './pages/portal/admin/AdminDashboard'
 import AdminPeople from './pages/portal/admin/AdminPeople'
 import AdminWork from './pages/portal/admin/AdminWork'
+import AdminInbox from './pages/portal/admin/AdminInbox'
 import Products from './pages/portal/Products'
 
 function App() {
@@ -49,11 +51,13 @@ function App() {
               <Route path="messages" element={<Messages />} />
               <Route path="services" element={<Products />} />
               <Route path="forum" element={<Forum />} />
+              <Route path="jobs" element={<Jobs />} />
               <Route path="projects" element={<Projects />} />
               <Route path="notices" element={<Notices />} />
               <Route path="admin" element={<AdminDashboard />} />
               <Route path="admin/people" element={<AdminPeople />} />
               <Route path="admin/work" element={<AdminWork />} />
+              <Route path="admin/inbox" element={<AdminInbox />} />
             </Route>
 
             <Route path="*" element={<Navigate to="/" replace />} />

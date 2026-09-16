@@ -1,7 +1,7 @@
 // Admin dashboard: KPIs, assign a job (emails assignee), member activity.
 import { useEffect, useState } from 'react'
 import { api } from '../../../lib/api'
-import { money } from '../../../lib/format'
+import { money, fmtDate } from '../../../lib/format'
 import { Avatar, Modal, StatusBadge } from '../../../components/ui'
 import { useToast } from '../../../components/Toast'
 
@@ -11,7 +11,7 @@ export default function AdminDashboard() {
   const [people, setPeople] = useState([])
   const [jobs, setJobs] = useState([])
   const [showAssign, setShowAssign] = useState(false)
-  const [jobForm, setJobForm] = useState({ title: '', description: '', assigned_to: '' })
+  const [jobForm, setJobForm] = useState({ title: '', description: '', deadline: '', assigned_to: '' })
   const [saving, setSaving] = useState(false)
 
   async function load() {
@@ -28,7 +28,7 @@ export default function AdminDashboard() {
     try {
       const d = await api('/jobs', { method: 'POST', body: jobForm })
       toast(d.message, 'success')
-      setShowAssign(false); setJobForm({ title: '', description: '', assigned_to: '' }); load()
+      setShowAssign(false); setJobForm({ title: '', description: '', deadline: '', assigned_to: '' }); load()
     } catch (err) { toast(err.message, 'error') }
     setSaving(false)
   }
@@ -78,11 +78,12 @@ export default function AdminDashboard() {
         <h3 className="section-title"><span className="accent" />All jobs</h3>
         {jobs.length === 0 ? <div className="empty">No jobs yet.</div> : (
           <table className="tbl">
-            <thead><tr><th>Title</th><th>Assignee</th><th>Assigned by</th><th>Status</th><th>Action</th></tr></thead>
+            <thead><tr><th>Title</th><th>Assignee</th><th>Assigned by</th><th>Deadline</th><th>Status</th><th>Action</th></tr></thead>
             <tbody>
               {jobs.map((j) => (
                 <tr key={j.id}>
                   <td>{j.title}</td><td>{j.assignee_name || '—'}</td><td>{j.assigner_name || '—'}</td>
+                  <td className="muted">{j.deadline ? fmtDate(j.deadline) : '—'}</td>
                   <td><StatusBadge status={j.status} /></td>
                   <td><select className="btn btn-sm btn-outline" style={{ width: 'auto' }} value={j.status} onChange={(e) => setJobStatus(j, e.target.value)}>
                     <option value="open">Open</option><option value="in_progress">In progress</option><option value="done">Done</option>
@@ -99,6 +100,7 @@ export default function AdminDashboard() {
           <form onSubmit={assign}>
             <div className="field"><label>Job title *</label><input value={jobForm.title} onChange={(e) => setJobForm({ ...jobForm, title: e.target.value })} placeholder="Build the client onboarding flow" /></div>
             <div className="field"><label>Description</label><textarea rows="3" value={jobForm.description} onChange={(e) => setJobForm({ ...jobForm, description: e.target.value })} placeholder="Details of what needs to be done…" /></div>
+            <div className="field"><label>Deadline</label><input type="date" value={jobForm.deadline} onChange={(e) => setJobForm({ ...jobForm, deadline: e.target.value })} /></div>
             <div className="field"><label>Assign to *</label>
               <select value={jobForm.assigned_to} onChange={(e) => setJobForm({ ...jobForm, assigned_to: e.target.value })}>
                 <option value="">Select a member…</option>

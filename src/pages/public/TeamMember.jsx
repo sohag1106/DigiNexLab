@@ -4,6 +4,7 @@ import { useEffect } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { TEAM, bySlug } from './team-data'
 import { setMeta } from '../../lib/meta'
+import SiteNav from './SiteNav'
 import './landing.css'
 
 export default function TeamMember() {
@@ -37,6 +38,7 @@ export default function TeamMember() {
   if (!member) {
     return (
       <div className="site team-site">
+        <SiteNav />
         <section className="sec team-hero">
           <div className="empty">Profile not found.</div>
           <p style={{ textAlign: 'center' }}><Link className="btn btn-outline" to="/team">← Back to the team</Link></p>
@@ -50,6 +52,7 @@ export default function TeamMember() {
 
   return (
     <div className="site team-site" key={member.slug}>
+      <SiteNav />
       <section className="sec profile-hero">
         <div className="profile-card">
           <div className="profile-photo" style={{ '--i': 0 }}>

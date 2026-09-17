@@ -4,6 +4,7 @@ import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { TEAM, GROUPS } from './team-data'
 import { setMeta } from '../../lib/meta'
+import SiteNav from './SiteNav'
 import './landing.css'
 
 export default function Team() {
@@ -18,6 +19,7 @@ export default function Team() {
 
   return (
     <div className="site team-site">
+      <SiteNav />
       <section className="sec team-hero">
         <div className="sec-head">
           <span className="kicker">Our team</span>

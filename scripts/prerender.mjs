@@ -14,13 +14,19 @@ import { dirname } from 'path'
 const DIST = 'dist'
 const BASE = 'https://brightskyit.com'
 
-// team-data.js is a plain ES module with no DOM references — import directly.
+// team-data.js / city-data.js / blog-data.js are plain ES modules with no
+// DOM references — import directly.
 const { TEAM } = await import('../src/pages/public/team-data.js')
+const { CITIES } = await import('../src/pages/public/city-data.js')
+const { POSTS } = await import('../src/pages/public/blog-data.js')
 
 const routes = [
   { path: '/', wait: 500 },
   { path: '/team', wait: 500 },
   ...TEAM.map((m) => ({ path: `/team/${m.slug}`, wait: 500 })),
+  { path: '/blog', wait: 500 },
+  ...POSTS.map((p) => ({ path: `/blog/${p.slug}`, wait: 600 })),
+  ...CITIES.map((c) => ({ path: `/${c.slug}`, wait: 500 })),
 ]
 
 const indexHtml = readFileSync(`${DIST}/index.html`, 'utf8')

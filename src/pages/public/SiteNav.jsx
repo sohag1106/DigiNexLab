@@ -24,7 +24,7 @@ export default function SiteNav() {
           <a href="/#work">Work</a>
           <Link to="/team">Team</Link>
           <a href="/#about">About</a>
-          <a href="/#blog">Blog</a>
+          <Link to="/blog/">Blog</Link>
           <a href="/#contact">Contact</a>
           <a className="btn lnv" href="/#contact">Get a Quote</a>
         </nav>

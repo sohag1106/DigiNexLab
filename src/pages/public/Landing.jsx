@@ -266,16 +266,20 @@ export default function Landing() {
         </div>
         <div className="blog-grid">
           {[
-            ['The anatomy of a high-converting landing page', 'Design'],
-            ['Designing for performance without losing delight', 'Engineering'],
-            ['Why your brand needs a voice, not just a logo', 'Branding'],
-          ].map(([t, tag]) => (
-            <a className="post" key={t} href="#contact">
+            ['Pricing', 'How much does a website cost in Oman?', '/blog/website-cost-oman/'],
+            ['Strategy', 'Why Omani businesses need Arabic + English websites', '/blog/why-omani-businesses-need-bilingual-websites/'],
+          ].map(([tag, t, to]) => (
+            <Link className="post" key={t} to={to}>
               <span className="post-tag">{tag}</span>
               <h3>{t}</h3>
               <span className="post-more">Read article →</span>
-            </a>
+            </Link>
           ))}
+          <Link className="post" to="/web-design-muscat/">
+            <span className="post-tag">🇴🇲 Muscat</span>
+            <h3>Web design in Muscat — websites that win clients</h3>
+            <span className="post-more">See how we work in Oman →</span>
+          </Link>
         </div>
       </section>
 

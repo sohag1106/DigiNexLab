@@ -8,6 +8,8 @@ import './styles/global.css'
 import Landing from './pages/public/Landing'
 import Team from './pages/public/Team'
 import TeamMember from './pages/public/TeamMember'
+import CityPage from './pages/public/CityPage'
+import { BlogIndex, BlogPost } from './pages/public/Blog'
 import Login from './pages/auth/Login'
 import ForgotPassword from './pages/auth/ForgotPassword'
 import ResetPassword from './pages/auth/ResetPassword'
@@ -47,6 +49,12 @@ function App() {
             <Route path="/" element={<Landing />} />
             <Route path="/team" element={<Team />} />
             <Route path="/team/:slug" element={<TeamMember />} />
+            <Route path="/blog" element={<BlogIndex />} />
+            <Route path="/blog/:slug" element={<BlogPost />} />
+            <Route path="/web-design-muscat" element={<CityPage />} />
+            <Route path="/web-design-sohar" element={<CityPage />} />
+            <Route path="/web-design-salalah" element={<CityPage />} />
+            <Route path="/web-design-dubai" element={<CityPage />} />
             <Route path="/login" element={<Login />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/reset" element={<ResetPassword />} />

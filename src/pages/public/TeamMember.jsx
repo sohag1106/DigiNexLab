@@ -16,7 +16,7 @@ export default function TeamMember() {
     setMeta({
       title: `${member.name} — ${member.role}, BrightSkyIT`,
       description: `${member.name} is the ${member.role} at BrightSkyIT. ${member.tagline}`,
-      path: `/team/${member.slug}`,
+      path: `/team/${member.slug}/`,
       image: member.photo,
       jsonLd: {
         '@context': 'https://schema.org',
@@ -25,7 +25,7 @@ export default function TeamMember() {
         jobTitle: member.role,
         description: member.bio,
         image: `https://brightskyit.com${member.photo}`,
-        url: `https://brightskyit.com/team/${member.slug}`,
+        url: `https://brightskyit.com/team/${member.slug}/`,
         worksFor: {
           '@type': 'Organization',
           name: 'BrightSkyIT',

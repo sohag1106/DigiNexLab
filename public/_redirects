@@ -21,6 +21,9 @@
 /web-design-sohar  /web-design-sohar/index.html  200
 /web-design-salalah  /web-design-salalah/index.html  200
 /web-design-dubai  /web-design-dubai/index.html  200
+/web-design-sur  /web-design-sur/index.html  200
+/web-design-nizwa  /web-design-nizwa/index.html  200
+/web-design-ras-al-khaimah  /web-design-ras-al-khaimah/index.html  200
 
 # SPA fallback: serve index.html for every other route so react-router
 # paths (/login, /portal/*, etc.) deep-link correctly.

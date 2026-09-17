@@ -55,6 +55,9 @@ function App() {
             <Route path="/web-design-sohar" element={<CityPage />} />
             <Route path="/web-design-salalah" element={<CityPage />} />
             <Route path="/web-design-dubai" element={<CityPage />} />
+            <Route path="/web-design-sur" element={<CityPage />} />
+            <Route path="/web-design-nizwa" element={<CityPage />} />
+            <Route path="/web-design-ras-al-khaimah" element={<CityPage />} />
             <Route path="/login" element={<Login />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/reset" element={<ResetPassword />} />

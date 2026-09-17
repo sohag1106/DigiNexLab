@@ -229,6 +229,162 @@ export const CITIES = [
     ],
     areas: 'Dubai, Abu Dhabi, Sharjah and the UAE — remote-friendly, Gulf-hours support.',
   },
+  {
+    slug: 'web-design-sur',
+    city: 'Sur',
+    country: 'Oman',
+    flag: '🇴🇲',
+    currency: 'OMR',
+    dial: '+968',
+    keyword: 'web design Sur',
+    title: 'Web Design in Sur, Oman — Tourism, Marine & Trade Websites | BrightSkyIT',
+    description:
+      'Web design for Sur businesses — tour operators, hotels, seafood exporters and traders. Bilingual Arabic/English websites with OMR pricing and a local Oman contact. Free quote.',
+    h1: 'Web Design in Sur, Oman',
+    tagline: 'Websites for Oman\'s city of sailors — found by every visitor before they arrive.',
+    neighborhoods: ['Al Ayjah', 'Dhow Yards', 'Ras Al Jinz', 'Sur Port', 'Wahiba Sands gateway'],
+    market: {
+      heading: 'Built for Sur\'s sea-and-visitors economy',
+      paragraphs: [
+        'Sur lives from the sea and from the people who come to see it. The dhow-building yards, the fishing and seafood trade, and a tourism season that brings the world to Ras Al Jinz\'s turtle beach and the Wahiba Sands camps — every one of those businesses is chosen online, in a search, weeks before the customer ever reaches Ash Sharqiyah. A tour operator or guesthouse whose site loads fast, shows real photos and takes bookings in Arabic or English captures that traveler; the one still relying on Instagram DMs loses them.',
+        'We build for that journey: bilingual websites that rank for "Sur" and "Ras Al Jinz" searches, mobile-first pages that survive the road-trip signal, booking and WhatsApp inquiry flows that turn interest into confirmed reservations, and seafood or trading-company sites with proper product catalogs and export-grade credibility.',
+      ],
+    },
+    proof: {
+      heading: 'Omani service-company experience you can check',
+      body:
+        'Behind our Oman work sits Quick Solution Oman — a top facility-management company serving clients across Oman, whose website, client portal and app we built and maintain. We know how Omani companies win customers online because we do it for our own clients.',
+      caseUrl: 'https://www.quicksolutionoman.com/',
+      caseLabel: 'See the live Quick Solution Oman platform ↗',
+    },
+    localContact: {
+      name: 'Reazul Hasan',
+      role: 'Regional Head — Oman',
+      blurb:
+        'Reazul Hasan, BrightSkyIT\'s Regional Head for Oman, is based in Muscat and serves clients across the country including Sur and Ash Sharqiyah. He\'s the founder of Quick Solution Oman and understands the Omani market end to end.',
+      photo: '/team/reazul-hasan.jpg',
+      profile: '/team/reazul-hasan/',
+    },
+    faqs: [
+      {
+        q: 'Can you build booking websites for tours and camps near Sur?',
+        a: 'Yes — booking-ready sites for tour operators, desert camps and guesthouses are a core service: bilingual pages, photo galleries, reservation or inquiry flows and Google Maps integration. Ras Al Jinz and Wahiba Sands searches are exactly what we design the pages to win.',
+      },
+      {
+        q: 'What does a website cost for a Sur business?',
+        a: 'Most projects run 300–700 OMR for a professional bilingual website, and 800–1,500 OMR for booking systems or portals. Fixed quotes in OMR, agreed before we start.',
+      },
+      {
+        q: 'We are in Sur — how do meetings work?',
+        a: 'Our Oman Regional Head, Reazul Hasan, can meet you in person, and everything else runs smoothly remote — design approvals, progress tracking and support all happen in your client portal. Distance has never slowed a project down.',
+      },
+    ],
+    areas: 'Sur, Al Ayjah, Ras Al Jinz, Tiwi, Bilad Sur, Wahiba Sands and all of Ash Sharqiyah — plus everywhere in Oman.',
+  },
+  {
+    slug: 'web-design-nizwa',
+    city: 'Nizwa',
+    country: 'Oman',
+    flag: '🇴🇲',
+    currency: 'OMR',
+    dial: '+968',
+    keyword: 'web design Nizwa',
+    title: 'Web Design in Nizwa, Oman — Heritage, Trade & Industry Websites | BrightSkyIT',
+    description:
+      'Web design for Nizwa businesses — date farms, crafts, industry and Jebel Akhdar tourism. Bilingual Arabic/English websites, fixed OMR pricing, local Oman contact. Free quote.',
+    h1: 'Web Design in Nizwa, Oman',
+    tagline: 'Websites for Oman\'s inland capital — as solid as its fort.',
+    neighborhoods: ['Nizwa Fort', 'Friday Souq', 'Nizwa Industrial Estate', 'Jebel Akhdar gateway', 'Ad Dakhiliyah'],
+    market: {
+      heading: 'Built for Nizwa\'s trade-and-heritage economy',
+      paragraphs: [
+        'Nizwa is Oman\'s ancient capital and still its inland marketplace: the date trade, the famous Friday souq with its silverwork and khanjars, copper and pottery crafts, the Industrial Estate\'s factories, and the stream of visitors heading for Nizwa Fort and the mountain villages of Jebel Akhdar. Nearly all of that trade now starts with a search — a date exporter with a proper catalog site sells to Gulf buyers a WhatsApp-photo trader never hears from.',
+        'We build Nizwa businesses the same standard of website the big Muscat companies get: bilingual Arabic/English pages designed for both reading directions, product and export catalogs, fast loading on the region\'s mobile networks, and inquiry flows that turn souq browsers and Fort visitors into direct customers.',
+      ],
+    },
+    proof: {
+      heading: 'Omani service-company experience you can check',
+      body:
+        'Behind our Oman work sits Quick Solution Oman — a top facility-management company serving clients across Oman, whose website, client portal and app we built and maintain. We know how Omani companies win customers online because we do it for our own clients.',
+      caseUrl: 'https://www.quicksolutionoman.com/',
+      caseLabel: 'See the live Quick Solution Oman platform ↗',
+    },
+    localContact: {
+      name: 'Reazul Hasan',
+      role: 'Regional Head — Oman',
+      blurb:
+        'Reazul Hasan, BrightSkyIT\'s Regional Head for Oman, is based in Muscat and serves Ad Dakhiliyah and Nizwa clients alongside the rest of the country. He\'s the founder of Quick Solution Oman and understands the Omani market end to end.',
+      photo: '/team/reazul-hasan.jpg',
+      profile: '/team/reazul-hasan/',
+    },
+    faqs: [
+      {
+        q: 'Do you work with companies in Nizwa and Ad Dakhiliyah?',
+        a: 'Yes — we serve the whole interior region: date farms and exporters, souq traders and crafts businesses, factories in the Industrial Estate, and tourism operators around Nizwa Fort and Jebel Akhdar. Meetings can happen in person through our Oman Regional Head.',
+      },
+      {
+        q: 'What does a website cost in Nizwa?',
+        a: 'Most projects run 300–700 OMR for a professional bilingual website, and 800–1,500 OMR for catalogs, portals or booking systems. Fixed quotes in OMR, agreed before we start.',
+      },
+      {
+        q: 'Can you build an export catalog for our dates or crafts?',
+        a: 'Yes — bilingual product catalogs with photos, specifications, certifications and a proper quotation form are one of our specialties. Export buyers judge a supplier by their website before they ever reply to an email.',
+      },
+    ],
+    areas: 'Nizwa, Izki, Adam, Bahla, Jabrin, the whole Ad Dakhiliyah governorate — and all of Oman.',
+  },
+  {
+    slug: 'web-design-ras-al-khaimah',
+    city: 'Ras Al Khaimah',
+    country: 'United Arab Emirates',
+    flag: '🇦🇪',
+    currency: 'AED',
+    dial: '+971',
+    keyword: 'web design Ras Al Khaimah',
+    title: 'Web Design in Ras Al Khaimah, UAE — RAKEZ & SME Websites | BrightSkyIT',
+    description:
+      'Web design for Ras Al Khaimah businesses — RAKEZ companies, industry, hospitality and SMEs. Bilingual Arabic/English sites, fixed AED pricing, senior team. Free quote.',
+    h1: 'Web Design in Ras Al Khaimah, UAE',
+    tagline: 'Big-agency websites for the UAE\'s fastest-growing emirate — without the Dubai invoice.',
+    neighborhoods: ['Al Nakheel', 'Al Hamra', 'Al Marjan Island', 'RAKEZ zones', 'Jebel Jais'],
+    market: {
+      heading: 'Built for RAK\'s boom decade',
+      paragraphs: [
+        'Ras Al Khaimah is in the middle of its biggest run ever. RAKEZ keeps adding thousands of SMEs and freelancers who all need a credible web presence; Wynn Al Marjan Island\'s resort opens in 2027 and hospitality, real estate and services around it are already racing to be findable; and manufacturers like RAK Ceramics and Julphar show what a global digital face does for an industrial company. Most RAK businesses today are choosing between DIY builders and Dubai agencies that bill Dubai prices.',
+        'We give RAK companies the third option: a senior team that builds bilingual Arabic/English sites, e-commerce and booking systems at fixed AED prices, with the speed and polish Dubai competitors pay double for. Every project ships with the Core Web Vitals and local-search groundwork that decide who ranks when a customer searches "your service + Ras Al Khaimah".',
+      ],
+    },
+    proof: {
+      heading: 'Gulf market experience, proven publicly',
+      body:
+        'We built and maintain the full digital platform of Quick Solution Oman — a leading facility-management company serving the entire country: public website, five-role client portal (complaints, approvals, dispatch, billing) and a React Native app. That portal-grade engineering is what we bring to UAE projects.',
+      caseUrl: 'https://www.quicksolutionoman.com/',
+      caseLabel: 'See the live Quick Solution Oman platform ↗',
+    },
+    localContact: {
+      name: 'Mohammad Sohag',
+      role: 'Co-Founder & CEO',
+      blurb:
+        'UAE projects are led directly by BrightSkyIT\'s co-founder and CEO. Senior people do the work — no hand-offs to juniors, no account-manager telephone game. You talk to the person building your product.',
+      photo: '/team/mohammad-sohag.jpg',
+      profile: '/team/mohammad-sohag/',
+    },
+    faqs: [
+      {
+        q: 'How much does web design cost in Ras Al Khaimah?',
+        a: 'Professional company websites typically run 3,000–7,000 AED, and e-commerce or booking platforms run 8,000–20,000 AED depending on scope. We quote fixed prices in AED up front — Dubai-agency quality at RAK-friendly prices.',
+      },
+      {
+        q: 'Do you work with RAKEZ-registered companies?',
+        a: 'Yes — many of our Gulf clients are free-zone businesses. We build the credible bilingual website, service or product pages and contact flows a RAKEZ license holder needs to win clients, and we can align the site with your trade-license activity.',
+      },
+      {
+        q: 'We\'re remote — how do meetings work?',
+        a: 'Scheduled video calls with screen sharing, a shared client portal where you approve designs and track progress, and same-day replies in Gulf working hours. You get senior attention at a sharper price.',
+      },
+    ],
+    areas: 'Ras Al Khaimah, Al Hamra, Al Marjan Island, the RAKEZ zones and the whole UAE — remote-friendly, Gulf-hours support.',
+  },
 ]
 
 export const byCitySlug = (slug) => CITIES.find((c) => c.slug === slug)

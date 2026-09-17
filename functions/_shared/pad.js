@@ -29,7 +29,7 @@ const COMPANY = {
   name: 'BrightSkyIT',
   tagline: 'CREATIVE DIGITAL AGENCY',
   website: 'brightskyit.com',
-  email: 'hello@brightskyit.com',
+  email: 'info@brightskyit.com',
   phone: '+880 1410-217430',
   address: ['Mohanogor Project, Rampura, Dhaka, Bangladesh', 'Oman Branch · Muscat, Sultanate of Oman'],
   hours: 'We reply within one business day',

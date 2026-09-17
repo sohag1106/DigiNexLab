@@ -11,7 +11,7 @@ export const handler = async (event) => {
   if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return fail('A valid email is required.')
 
   const res = await sendEmail({
-    to: process.env.CONTACT_TO || process.env.FROM_EMAIL || 'hello@brightskyit.com',
+    to: process.env.CONTACT_TO || process.env.FROM_EMAIL || 'info@brightskyit.com',
     subject: `New contact: ${subject || 'Website enquiry'} from ${name}`,
     html: `<p><strong>Name:</strong> ${name}</p>
       <p><strong>Email:</strong> ${email}</p>

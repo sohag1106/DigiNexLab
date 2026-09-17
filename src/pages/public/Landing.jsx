@@ -89,7 +89,7 @@ export default function Landing() {
         name: 'BrightSkyIT',
         url: 'https://brightskyit.com/',
         logo: 'https://brightskyit.com/logo.png',
-        email: 'hello@brightskyit.com',
+        email: 'info@brightskyit.com',
         founder: [
           { '@type': 'Person', name: 'Mohammad Sohag', jobTitle: 'Co-Founder & CEO', url: 'https://brightskyit.com/team/mohammad-sohag' },
           { '@type': 'Person', name: 'Khyruddin Ahmed', jobTitle: 'Co-Founder', url: 'https://brightskyit.com/team/khyruddin-ahmed' },
@@ -287,7 +287,7 @@ export default function Landing() {
             <h2>Let’s build something brilliant together</h2>
             <p>Tell us about your project. We’ll reply within one business day.</p>
             <div className="contact-chips">
-              <span>✉ hello@brightskyit.com</span>
+              <span>✉ info@brightskyit.com</span>
               <span>◆ Based worldwide — remote friendly</span>
             </div>
           </div>
@@ -336,7 +336,7 @@ export default function Landing() {
             </div>
             <div>
               <h4>Contact</h4>
-              <a href="mailto:hello@brightskyit.com">hello@brightskyit.com</a>
+              <a href="mailto:info@brightskyit.com">info@brightskyit.com</a>
               <a href="#contact">Start a project</a>
               <Link to="/login">Login</Link>
             </div>

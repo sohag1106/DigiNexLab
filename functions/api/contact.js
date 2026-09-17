@@ -25,7 +25,7 @@ export const onRequestPost = async ({ request, env }) => {
     [name, email, subject || null, message]
   )
 
-  const to = env?.CONTACT_TO || env?.FROM_EMAIL || process.env.FROM_EMAIL || 'hello@brightskyit.com'
+  const to = env?.CONTACT_TO || env?.FROM_EMAIL || process.env.FROM_EMAIL || 'info@brightskyit.com'
   // Never let mail problems fail a stored submission.
   sendEmail(env, {
     to,

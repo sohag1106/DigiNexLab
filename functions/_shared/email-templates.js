@@ -52,7 +52,7 @@ function shell(bodyHtml) {
             <td style="padding:24px 34px 30px 34px;border-top:1px solid #eef0f5;background-color:${BRAND.light};">
               <p style="margin:0 0 8px 0;color:${BRAND.muted};font-size:13px;line-height:1.6;">
                 <strong style="color:#374151;">${BRAND.name}</strong> · ${BRAND.tagline}<br />
-                hello@brightskyit.com · brightskyit.com<br />
+                info@brightskyit.com · brightskyit.com<br />
                 Phone/WhatsApp: +880 1410-217430
               </p>
               <p style="margin:0;color:#9aa0b3;font-size:12px;line-height:1.6;">

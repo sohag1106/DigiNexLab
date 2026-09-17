@@ -100,11 +100,12 @@
 
 /* ---- team ---- */
 .team-site {
-  padding-top: 40px;
   min-height: 100vh;
-  display: flex; flex-direction: column; justify-content: center;
+  display: flex; flex-direction: column;
   background: var(--charcoal);
 }
+/* center the content between nav and page bottom — the nav stays at the top */
+.team-site .sec { margin: auto 0; }
 .team-hero { padding-top: 60px; }
 .team-hero .sec-head h1 { font-size: clamp(30px, 4.5vw, 44px); }
 .team-group { margin-top: 56px; }

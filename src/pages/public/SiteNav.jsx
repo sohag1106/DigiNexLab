@@ -8,10 +8,10 @@ export default function SiteNav() {
   return (
     <header className="lnav">
       <div className="lnav-in">
-        <div className="lnav-brand">
+        <Link to="/" className="lnav-brand" aria-label="BrightSkyIT — home">
           <img src={logo} alt="BrightSkyIT logo" />
           <span>BrightSky<em>IT</em></span>
-        </div>
+        </Link>
         <button className="lnav-burger" onClick={() => setMenu((m) => !m)} aria-label="Menu">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             {menu

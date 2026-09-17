@@ -10,6 +10,12 @@
 # Static assets are always served as-is.
 /assets/*  /assets/:splat  200
 
+# Prerendered pages: serve the real HTML files from dist (no rewrite).
+# The files exist at <path>/index.html, so Pages serves them directly and
+# the SPA fallback below never fires for these.
+/team/*  /team/:splat  200
+/team  /team/index.html  200
+
 # SPA fallback: serve index.html for every other route so react-router
 # paths (/login, /portal/*, etc.) deep-link correctly.
 /*  /index.html  200

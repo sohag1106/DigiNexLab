@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build && node scripts/prerender.mjs",
     "deploy": "wrangler pages deploy dist --project-name brightskyit-app",
     "preview": "vite preview",
     "functions:setup": "node netlify/functions/_private/migrate.js",

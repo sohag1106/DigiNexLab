@@ -13,6 +13,7 @@ export function Block({ b, cities }) {
   const [type, content] = b
   if (type === 'p') return <p className="art-p">{inline(content)}</p>
   if (type === 'h2') return <h2 className="art-h2">{content}</h2>
+  if (type === 'h3') return <h3 className="art-h3">{content}</h3>
   if (type === 'ul')
     return (
       <ul className="art-list">

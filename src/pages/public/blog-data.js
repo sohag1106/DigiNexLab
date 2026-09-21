@@ -1,8 +1,13 @@
 // Blog articles — real, genuinely useful content targeting the questions
 // buyers in our target cities actually search. Each post links to the city
 // page it supports (the hub-and-spoke pattern: spokes feed the hub).
+//
+// Hand-written posts (the original three) — the editorial foundation.
+// The staged city-article factory appends livePosts() so the blog, prerender
+// and sitemap all pick up the generated city articles automatically.
+import { livePosts } from './serial-block.js'
 
-export const POSTS = [
+const handWritten = [
   {
     slug: 'website-cost-oman',
     tag: 'Pricing',
@@ -137,6 +142,11 @@ export const POSTS = [
       ['cta', 'web-design-muscat'],
     ],
   },
+]
+
+export const POSTS = [
+  ...handWritten,
+  ...livePosts(),
 ]
 
 export const byPostSlug = (slug) => POSTS.find((p) => p.slug === slug)

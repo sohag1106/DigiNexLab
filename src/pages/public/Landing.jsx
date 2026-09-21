@@ -6,6 +6,7 @@ import { api } from '../../lib/api'
 import { setMeta } from '../../lib/meta'
 import { useToast } from '../../components/Toast'
 import SiteNav from './SiteNav'
+import { WHATSAPP_URL } from './SiteNav'
 import './landing.css'
 import heroArt from './hero-art.jsx'
 
@@ -293,6 +294,7 @@ export default function Landing() {
             <p>Tell us about your project. We’ll reply within one business day.</p>
             <div className="contact-chips">
               <span>✉ info@brightskyit.com</span>
+              <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">💬 WhatsApp us — BrightSkyIT</a>
               <span>◆ Based worldwide — remote friendly</span>
             </div>
           </div>
@@ -342,6 +344,7 @@ export default function Landing() {
             <div>
               <h4>Contact</h4>
               <a href="mailto:info@brightskyit.com">info@brightskyit.com</a>
+              <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">WhatsApp: BrightSkyIT</a>
               <a href="#contact">Start a project</a>
               <Link to="/login">Login</Link>
             </div>

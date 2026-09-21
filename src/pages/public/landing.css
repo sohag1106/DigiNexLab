@@ -26,6 +26,20 @@
 .lnav nav a:hover { opacity: 1; color: #fff; }
 .lnav nav .lnv { background: linear-gradient(90deg, var(--blue), var(--magenta)); color: #fff; padding: 10px 18px; border-radius: 9px; font-weight: 700; opacity: 1; }
 .lnav nav .lnv:hover { transform: translateY(-1px); box-shadow: 0 8px 22px rgba(214,58,255,.4); }
+.lnav nav .lnav-wa { background: #25d366; color: #08351b; padding: 10px 18px; border-radius: 9px; font-weight: 700; opacity: 1; }
+.lnav nav .lnav-wa:hover { transform: translateY(-1px); box-shadow: 0 8px 22px rgba(37,211,102,.35); }
+
+/* ---- floating WhatsApp button (sitewide, rendered in SiteNav) ---- */
+.wa-float {
+  position: fixed; right: 22px; bottom: 22px; z-index: 60;
+  width: 56px; height: 56px; border-radius: 50%;
+  background: #25d366; color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 6px 20px rgba(0,0,0,.35);
+  transition: transform .15s, box-shadow .15s;
+}
+.wa-float:hover { transform: scale(1.08); box-shadow: 0 8px 26px rgba(37,211,102,.5); }
+.wa-float svg { width: 30px; height: 30px; }
 .lnav nav .btn-magenta-sm { color: var(--magenta); font-weight: 600; }
 .lnav nav .btn-magenta-sm:hover { color: var(--violet); }
 .lnav-burger { display: none; background: none; border: 1px solid rgba(255,255,255,.2); color: #fff; border-radius: 8px; padding: 8px; }
@@ -302,6 +316,8 @@
 .contact-copy h2 { font-size: clamp(26px, 3.6vw, 36px); margin: 0 0 14px; letter-spacing: -.02em; }
 .contact-copy p { color: #aeb6e2; font-size: 16px; line-height: 1.6; margin: 0 0 24px; }
 .contact-chips { display: flex; flex-direction: column; gap: 10px; color: #cdd2f2; font-size: 14.5px; }
+.contact-chips a { color: #4be38a; font-weight: 600; }
+.contact-chips a:hover { text-decoration: underline; }
 .contact-form { background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.08); border-radius: 18px; padding: 26px; }
 .cf-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
 .contact-form .field label { color: #c3c9ec; }
@@ -333,6 +349,7 @@
   .lnav nav.open { display: flex; }
   .lnav-burger { display: inline-flex; }
   .lnav nav .lnv { text-align: center; }
+  .lnav nav .lnav-wa { text-align: center; }
   .cf-row { grid-template-columns: 1fr; }
   .foot-in { grid-template-columns: 1fr; }
   .foot-cols { grid-template-columns: 1fr 1fr; }

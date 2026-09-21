@@ -5,7 +5,7 @@ import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { CITIES, byCitySlug } from './city-data'
 import { setMeta } from '../../lib/meta'
-import SiteNav from './SiteNav'
+import SiteNav, { WHATSAPP_URL } from './SiteNav'
 import './landing.css'
 
 // Render one long-form content block (shared with BlogPost).
@@ -181,7 +181,10 @@ export default function CityPage({ city: cityProp }) {
         <div className="team-cta">
           <h2>Want a website that wins {city.city} customers?</h2>
           <p className="muted">Tell us about your project — we reply within one business day.</p>
-          <Link className="btn btn-magenta" to="/#contact">Get a free quote</Link>
+          <div style={{ display: 'flex', gap: 14, justifyContent: 'center', flexWrap: 'wrap' }}>
+            <Link className="btn btn-magenta" to="/#contact">Get a free quote</Link>
+            <a className="btn" style={{ background: '#25d366', color: '#08351b', fontWeight: 700 }} href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">💬 WhatsApp — BrightSkyIT</a>
+          </div>
         </div>
       </section>
     </div>

@@ -43,7 +43,9 @@ export const onRequestPost = async ({ request, env }) => {
     [name, emailForValidation ? email || '' : '', subject || null, message, whatsapp || null, phone || null, prefer.join(',')]
   )
 
-  const to = env?.CONTACT_TO || env?.FROM_EMAIL || process.env.FROM_EMAIL || 'info@brightskyit.com'
+  // Notify the owner's personal inbox — submissions are stored first (below),
+  // so a mail outage can never lose an enquiry. CONTACT_TO overrides via env.
+  const to = env?.CONTACT_TO || process.env.CONTACT_TO || 'sohagvhi1106@gmail.com'
   const preferLabel = prefer.join(', ')
   // Never let mail problems fail a stored submission.
   sendEmail(env, {

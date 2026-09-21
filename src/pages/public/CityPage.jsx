@@ -41,6 +41,15 @@ export function Block({ b, cities }) {
       </div>
     )
   }
+  if (type === 'wa') {
+    const { url, label } = content
+    return (
+      <div className="art-wa">
+        <a className="btn" style={{ background: '#25d366', color: '#08351b', fontWeight: 700 }} href={url} target="_blank" rel="noopener noreferrer">💬 {label} →</a>
+        <span className="art-wa-note">We reply within one business day with a fixed quote.</span>
+      </div>
+    )
+  }
   if (type === 'cta' && cities) {
     const city = CITIES.find((c) => c.slug === content)
     if (!city) return null

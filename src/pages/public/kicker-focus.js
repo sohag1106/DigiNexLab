@@ -29,6 +29,52 @@ function slugify(s) {
 
 const name = (c) => c.slugCity || c.city
 
+// Per-city WhatsApp prefill: the message the customer sees when they tap any
+// WhatsApp CTA on this city's content. City + a starter question that reads
+// like a real enquiry. This is what turns "found us in search" into a message.
+export function waText(c, context = 'website') {
+  const n = name(c)
+  const vertical = c.vertical.split(',')[0].trim()
+  return encodeURIComponent(
+    `Hi BrightSkyIT! I'm in ${n} and I need a ${context} for our ${vertical} business. Can you send me a fixed quote in ${c.cur}?`
+  )
+}
+export const waLink = (c, context) => `https://wa.me/BrightSkyIT?text=${waText(c, context)}`
+
+// WhatsApp strip block rendered right under the intro: one tappable line that
+// sends a city-specific enquiry. This is what turns "found us in search" into
+// a message that already contains city + vertical + currency.
+export function waBlock(c, context = 'website') {
+  return ['wa', { url: waLink(c, context), label: `Get a ${name(c)} price on WhatsApp` }]
+}
+
+const COUNTRY = {
+  OM: 'Oman', AE: 'UAE', SA: 'Saudi Arabia', BH: 'Bahrain', QA: 'Qatar', KW: 'Kuwait',
+  PK: 'Pakistan', BD: 'Bangladesh', NP: 'Nepal', LK: 'Sri Lanka', IN: 'India',
+  EG: 'Egypt', JO: 'Jordan', LB: 'Lebanon', MA: 'Morocco', TN: 'Tunisia', KE: 'Kenya',
+  GH: 'Ghana', TR: 'Turkey', MV: 'Maldives', GB: 'UK', US: 'USA', CA: 'Canada',
+  AU: 'Australia', NZ: 'New Zealand', SG: 'Singapore', MY: 'Malaysia', VN: 'Vietnam',
+  PH: 'Philippines', ZA: 'South Africa', IE: 'Ireland',
+}
+
+// Deterministic three related cities: same country first, then anywhere.
+function relatedCities(c, all) {
+  let seed = 0
+  for (const ch of c.slug) seed = (seed * 31 + ch.charCodeAt(0)) % 997
+  const same = all.filter((x) => x.cc === c.cc && x.slug !== c.slug)
+  const rest = all.filter((x) => x.cc !== c.cc && x.slug !== c.slug)
+  const out = []
+  let k = 0
+  while (out.length < 3 && k < 80) {
+    const pool = out.length < 3 && same.length ? same : rest
+    if (!pool.length) break
+    const cand = pool[(seed + k * 11) % pool.length]
+    if (!out.includes(cand)) out.push(cand)
+    k++
+  }
+  return out
+}
+
 // Genuinely different intro per city, grows from the hand-written facts.
 // Written like a person who knows the place, not a template.
 function sentence(s) {
@@ -323,12 +369,20 @@ function pick(c) {
 
 // PUBLIC API, used by blog-data.js through serial-block.js for paging.
 export function buildCityArticles(limit = CITIES_100.length) {
-  return CITIES_100.slice(0, limit).map((c, i) => {
+  const slice = CITIES_100.slice(0, limit)
+  return slice.map((c, i) => {
     const fn = PATTERNS[pick(c)]
     const art = fn(c)
     const d = new Date(BASE_DATE)
     d.setUTCDate(d.getUTCDate() + i)
     const pname = pick(c)
+    // voice-assemble the body: human intro, WhatsApp strip, then the pattern
+    const body = [
+      intro(c),
+      waBlock(c), // "Get a Sur price on WhatsApp" — turns a visitor into a message
+      ...art.body.slice(1), // pattern body as-is (intro already used)
+    ]
+    const related = relatedCities(c, slice)
     return {
       slug: `${slugify(c.slug)}-${['cost', 'choose', 'language', 'freelancer', 'ideas', 'roi', 'seo'][pname]}`,
       tag: art.tag,
@@ -337,7 +391,11 @@ export function buildCityArticles(limit = CITIES_100.length) {
       title: art.title,
       description: art.description,
       city: name(c),
-      body: art.body,
+      citySlug: c.slug, // the city page slug this article belongs to
+      cityCountry: COUNTRY[c.cc] || c.cc,
+      related: related.map((r) => r.slug), // city slugs (not article slugs) → hub links
+      vertical: c.vertical,
+      body,
     }
   })
 }

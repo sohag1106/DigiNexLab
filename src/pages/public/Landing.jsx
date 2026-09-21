@@ -10,6 +10,24 @@ import { WHATSAPP_URL } from './SiteNav'
 import './landing.css'
 import heroArt from './hero-art.jsx'
 
+// One-tap contact channels — "choose how you want to talk, then click".
+// WhatsApp and email open pre-filled with the project context; the quote
+// form below stays for people who want to send full details.
+function waQuick(subject) {
+  const msg = `Hi BrightSkyIT! I'd like a quote${subject ? ` for ${subject}` : ''}.`
+  return 'https://wa.me/BrightSkyIT?text=' + encodeURIComponent(msg)
+}
+function mailQuick(subject) {
+  return (
+    'mailto:info@brightskyit.com?subject=' +
+    encodeURIComponent(`Quote request${subject ? `: ${subject}` : ''}`) +
+    '&body=' +
+    encodeURIComponent(
+      'Hi BrightSkyIT,\n\nI would like a quote.\n\nProject details:\nTimeline:\nBudget:\n\nThanks!'
+    )
+  )
+}
+
 const SERVICES = [
   { icon: '◧', title: 'UI/UX Design', copy: 'Interfaces and journeys people love — wireframes to polished, accessible experience design.' },
   { icon: '⚙', title: 'Web Development', copy: 'Fast, secure, scalable web apps and sites engineered for performance and reliability.' },
@@ -153,7 +171,7 @@ export default function Landing() {
 
       {/* How they'd like to be reached — multi-select. */}
       <div className="field prefer-row">
-        <label>How should we reach you? <span className="muted" style={{ fontWeight: 400 }}>Pick any — we only ask for the one(s) you pick.</span></label>
+        <label>How should we reply? <span className="muted" style={{ fontWeight: 400 }}>Pick any — we only ask for the one(s) you pick.</span></label>
         <div className="prefer-chips">
           {[
             ['email', '✉ Email'],
@@ -341,11 +359,19 @@ export default function Landing() {
             <span className="kicker">Get a quote</span>
             <h2>Let’s build something brilliant together</h2>
             <p>Tell us about your project. We’ll reply within one business day.</p>
-            <div className="contact-chips">
-              <span>✉ info@brightskyit.com</span>
-              <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">💬 WhatsApp us — BrightSkyIT</a>
-              <span>◆ Based worldwide — remote friendly</span>
+            <div className="qa-channels" role="group" aria-label="Choose how to get in touch">
+              <a className="qa-card qa-wa" href={waQuick()} target="_blank" rel="noopener noreferrer">
+                <span className="qa-ic">💬</span>
+                <span className="qa-meta"><b>Chat on WhatsApp</b><em>Instant reply — tap to start</em></span>
+                <span className="qa-go">→</span>
+              </a>
+              <a className="qa-card qa-mail" href={mailQuick()}>
+                <span className="qa-ic">✉</span>
+                <span className="qa-meta"><b>Email us</b><em>We reply within one business day</em></span>
+                <span className="qa-go">→</span>
+              </a>
             </div>
+            <div className="qa-or">— or send your project details below —</div>
           </div>
           {quoteForm}
         </div>
@@ -360,6 +386,18 @@ export default function Landing() {
             <span className="kicker">Get a quote</span>
             <h3>{quoteFor.trim() ? quoteFor : 'Let’s build something brilliant'}</h3>
             <p className="muted">Tell us about your project. We’ll reply within one business day.</p>
+            <div className="qa-channels" role="group" aria-label="Choose how to get in touch">
+              <a className="qa-card qa-wa" href={waQuick(quoteFor.trim())} target="_blank" rel="noopener noreferrer">
+                <span className="qa-ic">💬</span>
+                <span className="qa-meta"><b>Chat on WhatsApp</b><em>Instant reply — tap to start</em></span>
+                <span className="qa-go">→</span>
+              </a>
+              <a className="qa-card qa-mail" href={mailQuick(quoteFor.trim())}>
+                <span className="qa-ic">✉</span>
+                <span className="qa-meta"><b>Email us</b><em>We reply within one business day</em></span>
+                <span className="qa-go">→</span>
+              </a>
+            </div>
             {quoteForm}
           </div>
         </div>

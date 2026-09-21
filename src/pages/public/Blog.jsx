@@ -3,10 +3,30 @@
 import { useEffect } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { POSTS, byPostSlug } from './blog-data'
+import { CITIES } from './city-data'
 import { Block } from './CityPage'
 import { setMeta } from '../../lib/meta'
 import SiteNav from './SiteNav'
 import './landing.css'
+
+// Group the (many) city articles by country so the index is scannable and
+// every article is reachable in a few hops from /blog/. Order: countries with
+// the most articles first.
+function byRegion(posts) {
+  const groups = []
+  const ord = {}
+  for (const p of posts) {
+    if (p.cityCountry) {
+      const key = p.cityCountry
+      if (!(key in ord)) { ord[key] = groups.length; groups.push({ name: key, posts: [] }) }
+      groups[ord[key]].posts.push(p)
+    }
+  }
+  // fall back to "guides" for hand-written posts without a country
+  const rest = posts.filter((p) => !p.cityCountry)
+  groups.unshift({ name: 'Guides & strategy', posts: rest })
+  return groups
+}
 
 export function BlogIndex() {
   useEffect(() => {
@@ -26,6 +46,7 @@ export function BlogIndex() {
     })
   }, [])
 
+  const groups = byRegion(POSTS)
   return (
     <div className="site team-site">
       <SiteNav />
@@ -33,19 +54,24 @@ export function BlogIndex() {
         <div className="sec-head">
           <span className="kicker">From the blog</span>
           <h1>Ideas &amp; insight</h1>
-          <p>Practical guides for business owners in Oman and the Gulf — pricing, strategy and what actually works online.</p>
+          <p>Practical guides for business owners in the Gulf and worldwide — pricing, strategy and what actually works online.</p>
         </div>
-        <div className="blog-grid blog-grid-2">
-          {POSTS.map((p) => (
-            <Link to={`/blog/${p.slug}/`} className="post" key={p.slug}>
-              <span className="post-tag">{p.tag}</span>
-              <h2>{p.title}</h2>
-              <p className="post-desc">{p.description}</p>
-              <span className="post-meta">{p.date} · {p.readMins} min read</span>
-              <span className="post-more">Read article →</span>
-            </Link>
-          ))}
-        </div>
+        {groups.map((g) => (
+          <div className="blog-region" key={g.name}>
+            <h2 className="blog-region-title">{g.name} <span className="blog-region-count">{g.posts.length}</span></h2>
+            <div className="blog-grid blog-grid-2">
+              {g.posts.map((p) => (
+                <Link to={`/blog/${p.slug}/`} className="post" key={p.slug}>
+                  <span className="post-tag">{p.tag}</span>
+                  <h2>{p.title}</h2>
+                  <p className="post-desc">{p.description}</p>
+                  <span className="post-meta">{p.date} · {p.readMins} min read{(p.city ? ` · ${p.city}` : '')}</span>
+                  <span className="post-more">Read article →</span>
+                </Link>
+              ))}
+            </div>
+          </div>
+        ))}
       </section>
     </div>
   )
@@ -91,6 +117,21 @@ export function BlogPost() {
     )
   }
 
+  // Related reading: deterministic same-country picks the factory computed
+  // (post.related holds city slugs). Map them to live article links when the
+  // city has one, fill any gaps with other posts in the same country, then any.
+  const relatedSlugs = (post.related || [])
+    .map((cs) => POSTS.find((p) => p.citySlug === cs && p.slug !== post.slug)?.slug)
+    .filter(Boolean)
+  const fillers = POSTS.filter(
+    (p) => p.slug !== post.slug &&
+      !relatedSlugs.includes(p.slug) &&
+      (post.cityCountry ? p.cityCountry === post.cityCountry : true)
+  ).map((p) => p.slug)
+  const related = [...relatedSlugs, ...fillers].slice(0, 3).map((s) => byPostSlug(s))
+  // If this article's city is one of the 7 live hubs, surface its landing page too.
+  const hub = post.city ? CITIES.find((c) => c.city === post.city) : undefined
+
   return (
     <div className="site team-site" key={post.slug}>
       <SiteNav />
@@ -107,18 +148,20 @@ export function BlogPost() {
         <div className="article-next">
           <h2>Keep reading</h2>
           <div className="city-links-row">
-            {POSTS.filter((p) => p.slug !== post.slug).map((p) => (
+            {related.map((p) => (
               <Link key={p.slug} to={`/blog/${p.slug}/`} className="city-link-card">
                 <span className="post-tag">{p.tag}</span>
                 <h3>{p.title}</h3>
                 <span className="post-more">Read article →</span>
               </Link>
             ))}
-            <Link to="/web-design-muscat/" className="city-link-card">
-              <span className="post-tag">🇴🇲 Muscat</span>
-              <h3>Web design in Muscat, Oman</h3>
-              <span className="post-more">See the Muscat page →</span>
-            </Link>
+            {hub && (
+              <Link to={`/${hub.slug}/`} className="city-link-card">
+                <span className="post-tag">{post.cityCountry}</span>
+                <h3>Web design in {post.city}</h3>
+                <span className="post-more">See the {post.city} page →</span>
+              </Link>
+            )}
           </div>
         </div>
       </article>

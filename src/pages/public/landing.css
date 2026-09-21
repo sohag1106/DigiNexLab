@@ -307,6 +307,15 @@
 .post h3 { margin: 0; font-size: 18px; line-height: 1.35; }
 .post-more { color: var(--magenta); font-size: 14px; margin-top: auto; }
 
+/* regional grouping on /blog — country heading above its article cards */
+.blog-region { margin-top: 48px; }
+.blog-region-title {
+  display: flex; align-items: baseline; gap: 10px; font-size: 20px;
+  letter-spacing: .05em; text-transform: uppercase; color: #cdd2f2; margin: 0 0 18px;
+}
+.blog-region-title::before { content: ''; width: 26px; height: 2px; background: var(--magenta); align-self: center; }
+.blog-region-count { color: #7d85ad; font-size: 13px; font-weight: 600; }
+
 /* ---- contact ---- */
 .contact { margin-top: 20px; }
 .contact-in {
@@ -318,6 +327,30 @@
 .contact-chips { display: flex; flex-direction: column; gap: 10px; color: #cdd2f2; font-size: 14.5px; }
 .contact-chips a { color: #4be38a; font-weight: 600; }
 .contact-chips a:hover { text-decoration: underline; }
+/* One-tap communication channels — choose a way to talk, then click. */
+.qa-channels { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 4px 0 2px; }
+.qa-card {
+  display: flex; align-items: center; gap: 12px; text-decoration: none;
+  background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.12);
+  border-radius: 14px; padding: 13px 14px; transition: border-color .16s ease, transform .16s ease, background .16s ease;
+}
+.qa-card:hover { transform: translateY(-2px); }
+.qa-card.qa-wa { border-color: rgba(37,211,102,.4); background: rgba(37,211,102,.08); }
+.qa-card.qa-wa:hover { border-color: #25d366; background: rgba(37,211,102,.16); }
+.qa-card.qa-mail { border-color: rgba(111,211,255,.35); background: rgba(111,211,255,.08); }
+.qa-card.qa-mail:hover { border-color: #6fd3ff; background: rgba(111,211,255,.15); }
+.qa-ic { font-size: 22px; line-height: 1; }
+.qa-meta { display: flex; flex-direction: column; min-width: 0; }
+.qa-meta b { font-size: 14.5px; color: #fff; }
+.qa-meta em { font-style: normal; font-size: 12px; color: #aab1d6; }
+.qa-go { margin-left: auto; color: #7d85ad; font-size: 16px; }
+.qa-card:hover .qa-go { color: #fff; }
+.qa-or { text-align: center; color: #7d85ad; font-size: 12.5px; letter-spacing: .06em; margin: 12px 0 2px; text-transform: uppercase; }
+/* Inside the quote popup the chooser keeps the same feel */
+.quote-pop-card .qa-channels { margin-bottom: 16px; }
+@media (max-width: 560px) {
+  .qa-channels { grid-template-columns: 1fr; }
+}
 .contact-form { background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.08); border-radius: 18px; padding: 26px; }
 .cf-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
 .contact-form .field label { color: #c3c9ec; }
@@ -461,6 +494,13 @@
 }
 .art-cta h3 { margin: 0 0 6px; font-size: 19px; }
 .art-cta p { color: #aab1d6; margin: 0 0 14px; font-size: 14.5px; }
+/* WhatsApp strip — the top-of-article conversion hook */
+.art-wa {
+  display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+  margin: 24px 0 8px; padding: 14px 18px; border-radius: 14px;
+  background: rgba(37, 211, 102, .1); border: 1px solid rgba(37, 211, 102, .35);
+}
+.art-wa-note { color: #aab1d6; font-size: 13px; }
 .article-next { margin-top: 56px; }
 .article-next h2 { font-size: 22px; margin-bottom: 16px; }
 

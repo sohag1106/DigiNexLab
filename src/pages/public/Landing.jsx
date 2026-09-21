@@ -267,6 +267,7 @@ export default function Landing() {
         <div className="blog-grid">
           {[
             ['Pricing', 'How much does a website cost in Oman?', '/blog/website-cost-oman/'],
+            ['Buyer\'s guide', 'How to choose a web design company in Oman', '/blog/how-to-choose-web-design-company-oman/'],
             ['Strategy', 'Why Omani businesses need Arabic + English websites', '/blog/why-omani-businesses-need-bilingual-websites/'],
           ].map(([tag, t, to]) => (
             <Link className="post" key={t} to={to}>

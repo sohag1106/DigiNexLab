@@ -165,9 +165,16 @@ CREATE TABLE IF NOT EXISTS contact_submissions (
   email text NOT NULL,
   subject text,
   message text NOT NULL,
+  whatsapp text,
+  phone text,
+  prefer text NOT NULL DEFAULT 'email',
   status text NOT NULL DEFAULT 'new' CHECK (status IN ('new','read','archived')),
   created_at timestamptz NOT NULL DEFAULT now()
 );
+-- Evolve existing DBs that were created before whatsapp/phone/prefer.
+ALTER TABLE contact_submissions ADD COLUMN IF NOT EXISTS whatsapp text;
+ALTER TABLE contact_submissions ADD COLUMN IF NOT EXISTS phone text;
+ALTER TABLE contact_submissions ADD COLUMN IF NOT EXISTS prefer text NOT NULL DEFAULT 'email';
 
 CREATE TABLE IF NOT EXISTS notices (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),

@@ -13,28 +13,50 @@ export const onRequestPost = async ({ request, env }) => {
   const email = (body.email || '').trim()
   const subject = (body.subject || '').trim()
   const message = (body.message || '').trim()
+  const whatsapp = (body.whatsapp || '').trim()
+  const phone = (body.phone || '').trim()
+  // prefer is an array of channels; normalize to an array of known values.
+  let prefer = body.prefer
+  if (Array.isArray(prefer)) prefer = prefer.map((s) => String(s).trim()).filter(Boolean)
+  else if (typeof prefer === 'string') prefer = [prefer].map((s) => s.trim()).filter(Boolean)
+  else prefer = []
+  const allowed = new Set(['email', 'whatsapp', 'phone'])
+  prefer = prefer.map((s) => s.toLowerCase()).filter((s) => allowed.has(s))
+  if (prefer.length === 0) prefer = ['email']
+  // At least one contact channel must have a value.
+  if (!name || !message) return fail('Name and message are required.')
+  if (prefer.includes('email') && (!email || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email))) return fail('A valid email is required when you choose email.')
+  if (prefer.includes('whatsapp') && !whatsapp) return fail('WhatsApp number is required when you choose WhatsApp.')
+  if (prefer.includes('phone') && !phone) return fail('Phone number is required when you choose direct call.')
+  if (!email && !whatsapp && !phone) return fail('Email, WhatsApp or phone — at least one is required.')
 
-  if (!name || !email || !message) return fail('Name, email and message are required.')
-  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return fail('A valid email is required.')
+  // Backward: if multi-channel chosen but email missing, still allow — use
+  // cheapest identifier as reply email placeholder only when whatsapp/phone present.
+  const emailForValidation = email || (whatsapp ? 'noreply@brightskyit.com' : null)
+  if (email && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return fail('A valid email is required.')
 
   // Store first — the email is a notification, not the record of truth.
   const rows = await query(
     env,
-    `INSERT INTO contact_submissions (name, email, subject, message)
-     VALUES ($1,$2,$3,$4) RETURNING id`,
-    [name, email, subject || null, message]
+    `INSERT INTO contact_submissions (name, email, subject, message, whatsapp, phone, prefer)
+     VALUES ($1,$2,$3,$4,$5,$6,$7) RETURNING id`,
+    [name, emailForValidation ? email || '' : '', subject || null, message, whatsapp || null, phone || null, prefer.join(',')]
   )
 
   const to = env?.CONTACT_TO || env?.FROM_EMAIL || process.env.FROM_EMAIL || 'info@brightskyit.com'
+  const preferLabel = prefer.join(', ')
   // Never let mail problems fail a stored submission.
   sendEmail(env, {
     to,
-    subject: `New contact: ${subject || 'Website enquiry'} from ${name}`,
+    subject: `New contact: ${subject || 'Website enquiry'} from ${name} [${preferLabel}]`,
     html: `<p><strong>Name:</strong> ${name}</p>
-      <p><strong>Email:</strong> ${email}</p>
+      <p><strong>Preferred contact:</strong> ${preferLabel}</p>
+      <p><strong>Email:</strong> ${email || '—'}</p>
+      <p><strong>WhatsApp:</strong> ${whatsapp || '—'}</p>
+      <p><strong>Phone (call):</strong> ${phone || '—'}</p>
       <p><strong>Subject:</strong> ${subject || '—'}</p>
       <p><strong>Message:</strong></p><p>${message}</p>`,
-    reply_to: email,
+    reply_to: email || undefined,
   }).catch((e) => console.warn('[contact] email failed:', e))
 
   return ok({ message: 'Thanks — your message has been sent.', id: rows[0]?.id })

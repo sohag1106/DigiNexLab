@@ -99,21 +99,38 @@ export default function Landing() {
       },
     })
   }, [])
-  const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' })
+  const [form, setForm] = useState({ name: '', email: '', whatsapp: '', phone: '', prefer: ['email'], subject: '', message: '' })
   const [sending, setSending] = useState(false)
   const [quoteFor, setQuoteFor] = useState(null) // service title shown in the quote popup, or null
 
+  function togglePrefer(v) {
+    setForm((f) => {
+      const has = f.prefer.includes(v)
+      const next = has ? f.prefer.filter((x) => x !== v) : [...f.prefer, v]
+      // At least one must remain checked.
+      return { ...f, prefer: next.length ? next : [v] }
+    })
+  }
+
   async function submit(e) {
     e.preventDefault()
-    if (!form.name || !form.email || !form.message) {
-      toast('Please fill in your name, email and message.', 'error')
-      return
+    if (!form.name || !form.message) { toast('Please fill in your name and message.', 'error'); return }
+    if (form.prefer.includes('email') && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(form.email)) {
+      toast('Please provide a valid email.', 'error'); return
     }
+    if (form.prefer.includes('whatsapp') && !form.whatsapp.trim()) {
+      toast('Please enter your WhatsApp number.', 'error'); return
+    }
+    if (form.prefer.includes('phone') && !form.phone.trim()) {
+      toast('Please enter a phone number for a call.', 'error'); return
+    }
+    // Nothing selected — shouldn't happen due to toggle guard, but be safe.
+    if (!form.prefer.length) { toast('Pick at least one way to reach you.', 'error'); return }
     setSending(true)
     try {
       await api('/contact', { method: 'POST', body: form })
       toast('Thanks — your message has been sent.', 'success')
-      setForm({ name: '', email: '', subject: '', message: '' })
+      setForm({ name: '', email: '', whatsapp: '', phone: '', prefer: ['email'], subject: '', message: '' })
       setQuoteFor(null)
     } catch (err) {
       toast(err.message || 'Could not send your message.', 'error')
@@ -130,11 +147,43 @@ export default function Landing() {
   const quoteForm = (
     <form className="contact-form quote-pop-form" onSubmit={submit}>
       <div className="cf-row">
-        <div className="field"><label>Your name</label><input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="Jane Doe" /></div>
-        <div className="field"><label>Email</label><input type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} placeholder="jane@company.com" /></div>
+        <div className="field"><label>Your name *</label><input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="Jane Doe" autoComplete="name" /></div>
+        <div className="field"><label>Subject</label><input value={form.subject} onChange={(e) => setForm({ ...form, subject: e.target.value })} placeholder="Project / Website / Brand" /></div>
       </div>
-      <div className="field"><label>Subject</label><input value={form.subject} onChange={(e) => setForm({ ...form, subject: e.target.value })} placeholder="Project / Website / Brand" /></div>
-      <div className="field"><label>Message</label><textarea rows="4" value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} placeholder="Tell us about your goals…" /></div>
+
+      {/* How they'd like to be reached — multi-select. */}
+      <div className="field prefer-row">
+        <label>How should we reach you? <span className="muted" style={{ fontWeight: 400 }}>Pick any — we only ask for the one(s) you pick.</span></label>
+        <div className="prefer-chips">
+          {[
+            ['email', '✉ Email'],
+            ['whatsapp', '💬 WhatsApp'],
+            ['phone', '📞 Call me'],
+          ].map(([v, label]) => (
+            <label key={v} className={'prefer-chip' + (form.prefer.includes(v) ? ' on' : '')}>
+              <input type="checkbox" checked={form.prefer.includes(v)} onChange={() => togglePrefer(v)} hidden />
+              <span>{label}</span>
+            </label>
+          ))}
+        </div>
+      </div>
+
+      {form.prefer.includes('email') && (
+        <div className="field"><label>Email *</label><input type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} placeholder="jane@company.com" autoComplete="email" /></div>
+      )}
+
+      {(form.prefer.includes('whatsapp') || form.prefer.includes('phone')) && (
+        <div className="cf-row">
+          {form.prefer.includes('whatsapp') && (
+            <div className="field"><label>WhatsApp number{!form.prefer.includes('email') ? ' *' : ' *'}</label><input type="tel" value={form.whatsapp} onChange={(e) => setForm({ ...form, whatsapp: e.target.value })} placeholder="+968 9123 4567" autoComplete="tel" inputMode="tel" /></div>
+          )}
+          {form.prefer.includes('phone') && (
+            <div className="field"><label>{form.prefer.includes('whatsapp') ? 'Phone for calls (if different)' : 'Phone number *'}</label><input type="tel" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} placeholder={form.whatsapp || '+968 9123 4567'} autoComplete="tel" inputMode="tel" /></div>
+          )}
+        </div>
+      )}
+
+      <div className="field"><label>Message *</label><textarea rows="4" value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} placeholder="Tell us about your goals…" /></div>
       <button className="btn btn-magenta btn-block" disabled={sending}>{sending ? 'Sending…' : 'Send message'}</button>
     </form>
   )
@@ -298,15 +347,7 @@ export default function Landing() {
               <span>◆ Based worldwide — remote friendly</span>
             </div>
           </div>
-          <form className="contact-form" onSubmit={submit}>
-            <div className="cf-row">
-              <div className="field"><label>Your name</label><input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="Jane Doe" /></div>
-              <div className="field"><label>Email</label><input type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} placeholder="jane@company.com" /></div>
-            </div>
-            <div className="field"><label>Subject</label><input value={form.subject} onChange={(e) => setForm({ ...form, subject: e.target.value })} placeholder="Project / Website / Brand" /></div>
-            <div className="field"><label>Message</label><textarea rows="4" value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} placeholder="Tell us about your goals…" /></div>
-            <button className="btn btn-magenta btn-block" disabled={sending}>{sending ? 'Sending…' : 'Send message'}</button>
-          </form>
+          {quoteForm}
         </div>
       </section>
       </main>

@@ -6,6 +6,7 @@
 
 import { CITIES_100 } from './focus-data.js'
 import { CITIES } from './city-data.js'
+import { waGo } from '../../lib/wa.js'
 
 const YEAR = '2026'
 const BASE_DATE = '2026-09-17' // first article publish date
@@ -32,20 +33,25 @@ const name = (c) => c.slugCity || c.city
 // Per-city WhatsApp prefill: the message the customer sees when they tap any
 // WhatsApp CTA on this city's content. City + a starter question that reads
 // like a real enquiry. This is what turns "found us in search" into a message.
-export function waText(c, context = 'website') {
+export function waMessage(c, context = 'website') {
   const n = name(c)
   const vertical = c.vertical.split(',')[0].trim()
-  return encodeURIComponent(
-    `Hi BrightSkyIT! I'm in ${n} and I need a ${context} for our ${vertical} business. Can you send me a fixed quote in ${c.cur}?`
-  )
+  return `Hi BrightSkyIT! I'm in ${n} and I need a ${context} for our ${vertical} business. Can you send me a fixed quote in ${c.cur}?`
 }
-export const waLink = (c, context) => `https://wa.me/BrightSkyIT?text=${waText(c, context)}`
+export const waText = (c, context = 'website') => encodeURIComponent(waMessage(c, context))
+
+// Clicks go through the /go/wa tracker (Pages Function) which logs city +
+// page + placement, then 302s to the same wa.me chat with this prefill.
+// `page` is the article's own path, baked in at build time so the prerendered
+// HTML attributes the tap correctly even before React runs.
+export const waLink = (c, context, page) =>
+  waGo({ city: c.slug, page, placement: 'article-strip', text: waMessage(c, context) })
 
 // WhatsApp strip block rendered right under the intro: one tappable line that
 // sends a city-specific enquiry. This is what turns "found us in search" into
 // a message that already contains city + vertical + currency.
-export function waBlock(c, context = 'website') {
-  return ['wa', { url: waLink(c, context), label: `Get a ${name(c)} price on WhatsApp` }]
+export function waBlock(c, context = 'website', page) {
+  return ['wa', { url: waLink(c, context, page), label: `Get a ${name(c)} price on WhatsApp` }]
 }
 
 const COUNTRY = {
@@ -376,15 +382,18 @@ export function buildCityArticles(limit = CITIES_100.length) {
     const d = new Date(BASE_DATE)
     d.setUTCDate(d.getUTCDate() + i)
     const pname = pick(c)
+    // Hoisted so the WhatsApp strip can carry this article's own path — the
+    // /go/wa tracker then reports exactly which article produced the tap.
+    const slug = `${slugify(c.slug)}-${['cost', 'choose', 'language', 'freelancer', 'ideas', 'roi', 'seo'][pname]}`
     // voice-assemble the body: human intro, WhatsApp strip, then the pattern
     const body = [
       intro(c),
-      waBlock(c), // "Get a Sur price on WhatsApp" — turns a visitor into a message
+      waBlock(c, 'website', `/blog/${slug}/`), // "Get a Sur price on WhatsApp" — turns a visitor into a message
       ...art.body.slice(1), // pattern body as-is (intro already used)
     ]
     const related = relatedCities(c, slice)
     return {
-      slug: `${slugify(c.slug)}-${['cost', 'choose', 'language', 'freelancer', 'ideas', 'roi', 'seo'][pname]}`,
+      slug,
       tag: art.tag,
       date: d.toISOString().slice(0, 10),
       readMins: 7,

@@ -29,6 +29,7 @@ import AdminDashboard from './pages/portal/admin/AdminDashboard'
 import AdminPeople from './pages/portal/admin/AdminPeople'
 import AdminWork from './pages/portal/admin/AdminWork'
 import AdminInbox from './pages/portal/admin/AdminInbox'
+import AdminWhatsApp from './pages/portal/admin/AdminWhatsApp'
 import Products from './pages/portal/Products'
 
 // Reset scroll to the top on every route change — React Router keeps the
@@ -82,6 +83,7 @@ function App() {
               <Route path="admin/people" element={<AdminPeople />} />
               <Route path="admin/work" element={<AdminWork />} />
               <Route path="admin/inbox" element={<AdminInbox />} />
+              <Route path="admin/whatsapp" element={<AdminWhatsApp />} />
             </Route>
 
             <Route path="*" element={<Navigate to="/" replace />} />

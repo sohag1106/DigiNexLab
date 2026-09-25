@@ -4,18 +4,18 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import logo from '../../assets/logo.png'
+import { waGo } from '../../lib/wa'
 
 // Click-to-chat: wa.me supports username links, prefilled so the
-// conversation starts itself.
-export const WHATSAPP_URL =
-  'https://wa.me/BrightSkyIT?text=' +
-  encodeURIComponent('Hi BrightSkyIT! I found you on your website — I\'d like a quote.')
+// conversation starts itself. Routed through the /go/wa tracker so every
+// tap records which page and button produced it (see src/lib/wa.js).
+export const whatsappHref = (placement) => waGo({ placement })
 
 export function WhatsAppButton() {
   return (
     <a
       className="wa-float"
-      href={WHATSAPP_URL}
+      href={whatsappHref('floating-button')}
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Chat with BrightSkyIT on WhatsApp"
@@ -53,7 +53,7 @@ export default function SiteNav() {
           <Link to="/blog/">Blog</Link>
           <a href="/#contact">Contact</a>
           <a className="btn lnv" href="/#contact">Get a Quote</a>
-          <a className="btn lnav-wa" href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">WhatsApp us</a>
+          <a className="btn lnav-wa" href={whatsappHref('nav')} target="_blank" rel="noopener noreferrer">WhatsApp us</a>
         </nav>
       </div>
     </header>

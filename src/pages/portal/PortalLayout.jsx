@@ -45,6 +45,7 @@ export default function PortalLayout() {
       [/^\/portal\/admin\/people/, 'Team & People'],
       [/^\/portal\/admin\/work/, 'All Work'],
       [/^\/portal\/admin\/inbox/, 'Website Inbox'],
+      [/^\/portal\/admin\/whatsapp/, 'WhatsApp Clicks'],
       [/^\/portal\/admin/, 'Admin Dashboard'],
     ]
     const hit = map.find(([re]) => re.test(loc.pathname))
@@ -120,6 +121,9 @@ export default function PortalLayout() {
               </NavLink>
               <NavLink to="/portal/admin/inbox" className={({ isActive }) => (isActive ? 'active' : '')}>
                 <span className="ic">✉</span><span>Website Inbox</span>
+              </NavLink>
+              <NavLink to="/portal/admin/whatsapp" className={({ isActive }) => (isActive ? 'active' : '')}>
+                <span className="ic">💬</span><span>WhatsApp Clicks</span>
               </NavLink>
             </>
           )}

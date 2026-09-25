@@ -5,17 +5,17 @@ import logo from '../../assets/logo.png'
 import { api } from '../../lib/api'
 import { setMeta } from '../../lib/meta'
 import { useToast } from '../../components/Toast'
-import SiteNav from './SiteNav'
-import { WHATSAPP_URL } from './SiteNav'
+import SiteNav, { whatsappHref } from './SiteNav'
+import { waGo } from '../../lib/wa'
 import './landing.css'
 import heroArt from './hero-art.jsx'
 
 // One-tap contact channels — "choose how you want to talk, then click".
 // WhatsApp and email open pre-filled with the project context; the quote
 // form below stays for people who want to send full details.
-function waQuick(subject) {
+function waQuick(subject, placement) {
   const msg = `Hi BrightSkyIT! I'd like a quote${subject ? ` for ${subject}` : ''}.`
-  return 'https://wa.me/BrightSkyIT?text=' + encodeURIComponent(msg)
+  return waGo({ placement, text: msg })
 }
 function mailQuick(subject) {
   return (
@@ -372,7 +372,7 @@ export default function Landing() {
             <h2>Let’s build something brilliant together</h2>
             <p>Tell us about your project. We’ll reply within one business day.</p>
             <div className="qa-channels" role="group" aria-label="Choose how to get in touch">
-              <a className="qa-card qa-wa" href={waQuick()} target="_blank" rel="noopener noreferrer">
+              <a className="qa-card qa-wa" href={waQuick('', 'contact-section')} target="_blank" rel="noopener noreferrer">
                 <span className="qa-ic">💬</span>
                 <span className="qa-meta"><b>Chat on WhatsApp</b><em>Instant reply — tap to start</em></span>
                 <span className="qa-go">→</span>
@@ -399,7 +399,7 @@ export default function Landing() {
             <h3>{quoteFor.trim() ? quoteFor : 'Let’s build something brilliant'}</h3>
             <p className="muted">Tell us about your project. We’ll reply within one business day.</p>
             <div className="qa-channels" role="group" aria-label="Choose how to get in touch">
-              <a className="qa-card qa-wa" href={waQuick(quoteFor.trim())} target="_blank" rel="noopener noreferrer">
+              <a className="qa-card qa-wa" href={waQuick(quoteFor.trim(), 'quote-popup')} target="_blank" rel="noopener noreferrer">
                 <span className="qa-ic">💬</span>
                 <span className="qa-meta"><b>Chat on WhatsApp</b><em>Instant reply — tap to start</em></span>
                 <span className="qa-go">→</span>
@@ -435,7 +435,7 @@ export default function Landing() {
             <div>
               <h4>Contact</h4>
               <a href="mailto:info@brightskyit.com">info@brightskyit.com</a>
-              <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">WhatsApp: BrightSkyIT</a>
+              <a href={whatsappHref('footer')} target="_blank" rel="noopener noreferrer">WhatsApp: BrightSkyIT</a>
               <a href="#contact">Start a project</a>
               <Link to="/login">Login</Link>
             </div>

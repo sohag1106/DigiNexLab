@@ -51,7 +51,7 @@ const push = (loc, lastmod, priority, images = []) =>
   allUrls.push({ loc, lastmod, priority, images })
 
 push('https://brightskyit.com/', '2026-09-17', '1.0')
-for (const t of ['team', 'blog']) push(`${BASE}/${t}`, '2026-09-17', t === 'blog' ? '0.8' : '0.9')
+for (const t of ['team', 'blog']) push(`${BASE}/${t}/`, '2026-09-17', t === 'blog' ? '0.8' : '0.9')
 for (const m of TEAM) {
   push(`${BASE}/team/${m.slug}/`, '2026-09-17', '0.8', [
     {

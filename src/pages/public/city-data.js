@@ -206,7 +206,7 @@ export const CITIES = [
       role: 'Co-Founder & CEO',
       blurb:
         'Dubai projects are led directly by BrightSkyIT\'s co-founder and CEO. Senior people do the work, no hand-offs to juniors, no account-manager telephone game. You talk to the person building your product.',
-      photo: '/team/mohammad-sohag.jpg',
+      photo: '/team/mohammad-sohag-ceo-founder.jpg',
       profile: '/team/mohammad-sohag/',
     },
     faqs: [
@@ -366,7 +366,7 @@ export const CITIES = [
       role: 'Co-Founder & CEO',
       blurb:
         'UAE projects are led directly by BrightSkyIT\'s co-founder and CEO. Senior people do the work, no hand-offs to juniors, no account-manager telephone game. You talk to the person building your product.',
-      photo: '/team/mohammad-sohag.jpg',
+      photo: '/team/mohammad-sohag-ceo-founder.jpg',
       profile: '/team/mohammad-sohag/',
     },
     faqs: [

@@ -18,13 +18,22 @@ export default function TeamMember() {
       description: `${member.name} is the ${member.role} at BrightSkyIT. ${member.tagline}`,
       path: `/team/${member.slug}/`,
       image: member.photo,
+      imageAlt: member.photoAlt,
+      imageWidth: 900,
+      imageHeight: 900,
       jsonLd: {
         '@context': 'https://schema.org',
         '@type': 'Person',
         name: member.name,
         jobTitle: member.role,
         description: member.bio,
-        image: `https://brightskyit.com${member.photo}`,
+        image: {
+          '@type': 'ImageObject',
+          url: `https://brightskyit.com${member.photo}`,
+          width: 900,
+          height: 900,
+          caption: member.photoCaption || `${member.name}, ${member.role} at BrightSkyIT`,
+        },
         url: `https://brightskyit.com/team/${member.slug}/`,
         worksFor: {
           '@type': 'Organization',
@@ -56,7 +65,13 @@ export default function TeamMember() {
       <section className="sec profile-hero">
         <div className="profile-card">
           <div className="profile-photo" style={{ '--i': 0 }}>
-            <img src={member.photo} alt={`${member.name} — ${member.role} at BrightSkyIT`} />
+            <img
+              src={member.photo}
+              alt={member.photoAlt || `${member.name}, ${member.role} at BrightSkyIT`}
+              width="900"
+              height="900"
+              fetchPriority="high"
+            />
           </div>
           <div className="profile-copy" style={{ '--i': 1 }}>
             <span className="kicker">

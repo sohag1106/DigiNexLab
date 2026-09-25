@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://brightskyit.com/</loc>
     <lastmod>2026-09-17</lastmod>
@@ -23,36 +23,66 @@
     <lastmod>2026-09-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://brightskyit.com/team/mohammad-sohag-ceo-founder.jpg</image:loc>
+      <image:title>Mohammad Sohag, Co-Founder and CEO of BrightSkyIT</image:title>
+      <image:caption>Mohammad Sohag, Co-Founder and CEO of BrightSkyIT</image:caption>
+    </image:image>
   </url>
   <url>
     <loc>https://brightskyit.com/team/khyruddin-ahmed/</loc>
     <lastmod>2026-09-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://brightskyit.com/team/khyruddin-ahmed.jpg</image:loc>
+      <image:title>Khyruddin Ahmed, Co-Founder of BrightSkyIT</image:title>
+      <image:caption>Khyruddin Ahmed, Co-Founder of BrightSkyIT</image:caption>
+    </image:image>
   </url>
   <url>
     <loc>https://brightskyit.com/team/al-mahmud/</loc>
     <lastmod>2026-09-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://brightskyit.com/team/al-mahmud.jpg</image:loc>
+      <image:title>Al-Mahmud, Co-Founder of BrightSkyIT</image:title>
+      <image:caption>Al-Mahmud, Co-Founder of BrightSkyIT</image:caption>
+    </image:image>
   </url>
   <url>
     <loc>https://brightskyit.com/team/shuvo/</loc>
     <lastmod>2026-09-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://brightskyit.com/team/shuvo.jpg</image:loc>
+      <image:title>Shuvo, Development Lead at BrightSkyIT</image:title>
+      <image:caption>Shuvo, Development Lead at BrightSkyIT</image:caption>
+    </image:image>
   </url>
   <url>
     <loc>https://brightskyit.com/team/shaon/</loc>
     <lastmod>2026-09-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://brightskyit.com/team/shaon.jpg</image:loc>
+      <image:title>Shaon, Development Lead at BrightSkyIT</image:title>
+      <image:caption>Shaon, Development Lead at BrightSkyIT</image:caption>
+    </image:image>
   </url>
   <url>
     <loc>https://brightskyit.com/team/reazul-hasan/</loc>
     <lastmod>2026-09-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://brightskyit.com/team/reazul-hasan.jpg</image:loc>
+      <image:title>Reazul Hasan, Regional Head and Advisor at BrightSkyIT</image:title>
+      <image:caption>Reazul Hasan, Regional Head and Advisor at BrightSkyIT</image:caption>
+    </image:image>
   </url>
   <url>
     <loc>https://brightskyit.com/blog/website-cost-oman/</loc>

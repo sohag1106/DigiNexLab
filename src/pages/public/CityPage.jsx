@@ -146,7 +146,7 @@ export default function CityPage({ city: cityProp }) {
 
         {/* the local face of the company */}
         <div className="city-contact">
-          <img src={city.localContact.photo} alt={`${city.localContact.name} — ${city.localContact.role}`} loading="lazy" />
+          <img src={city.localContact.photo} alt={`${city.localContact.name}, ${city.localContact.role} at BrightSkyIT`} loading="lazy" width="900" height="900" />
           <div>
             <span className="kicker">Your local contact</span>
             <h2>{city.localContact.name}</h2>

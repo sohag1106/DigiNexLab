@@ -22,3 +22,6 @@ dist/
 
 # Claude session tooling (worktrees)
 .claude/
+
+# Raw source assets kept on disk, not in the repo
+Mohammad Sohag Ceo and founder.png

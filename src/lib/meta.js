@@ -26,7 +26,7 @@ function upsertLink(rel, href) {
   el.setAttribute('href', href)
 }
 
-export function setMeta({ title, description, path = '', image, jsonLd }) {
+export function setMeta({ title, description, path = '', image, imageAlt, imageWidth, imageHeight, jsonLd }) {
   if (title) document.title = title
   if (description) {
     upsertMeta('name', 'description', description)
@@ -44,6 +44,17 @@ export function setMeta({ title, description, path = '', image, jsonLd }) {
     const img = image.startsWith('http') ? image : `${BASE}${image}`
     upsertMeta('property', 'og:image', img)
     upsertMeta('name', 'twitter:image', img)
+    // Alt text for the preview image — read by Google Images and by screen
+    // readers on shared links. Dimensions are upserted too so route images
+    // (e.g. the 900x900 founder headshot) override the static head defaults.
+    if (imageAlt) {
+      upsertMeta('property', 'og:image:alt', imageAlt)
+      upsertMeta('name', 'twitter:image:alt', imageAlt)
+    }
+    if (imageWidth && imageHeight) {
+      upsertMeta('property', 'og:image:width', String(imageWidth))
+      upsertMeta('property', 'og:image:height', String(imageHeight))
+    }
   }
   // Route-scoped structured data (Person, Article, …). The head's static
   // @graph in index.html stays untouched — this replaces only this element.

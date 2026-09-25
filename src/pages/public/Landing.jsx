@@ -110,7 +110,19 @@ export default function Landing() {
         logo: 'https://brightskyit.com/logo.png',
         email: 'info@brightskyit.com',
         founder: [
-          { '@type': 'Person', name: 'Mohammad Sohag', jobTitle: 'Co-Founder & CEO', url: 'https://brightskyit.com/team/mohammad-sohag' },
+          {
+            '@type': 'Person',
+            name: 'Mohammad Sohag',
+            jobTitle: 'Co-Founder & CEO',
+            url: 'https://brightskyit.com/team/mohammad-sohag',
+            image: {
+              '@type': 'ImageObject',
+              url: 'https://brightskyit.com/team/mohammad-sohag-ceo-founder.jpg',
+              width: 900,
+              height: 900,
+              caption: 'Mohammad Sohag, Co-Founder and CEO of BrightSkyIT',
+            },
+          },
           { '@type': 'Person', name: 'Khyruddin Ahmed', jobTitle: 'Co-Founder', url: 'https://brightskyit.com/team/khyruddin-ahmed' },
           { '@type': 'Person', name: 'Al-Mahmud', jobTitle: 'Co-Founder', url: 'https://brightskyit.com/team/al-mahmud' },
         ],

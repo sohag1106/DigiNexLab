@@ -46,7 +46,7 @@ export default function Team() {
                     style={{ '--i': i }}
                   >
                     <div className="team-avatar">
-                      <img src={m.photo} alt={`${m.name} — ${m.role} at BrightSkyIT`} loading="lazy" />
+                      <img src={m.photo} alt={m.photoAlt || `${m.name}, ${m.role} at BrightSkyIT`} loading="lazy" width="900" height="900" />
                     </div>
                     <h3>{m.name}</h3>
                     <span className="team-role">{m.role}</span>

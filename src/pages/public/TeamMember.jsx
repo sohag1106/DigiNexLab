@@ -19,8 +19,8 @@ export default function TeamMember() {
       path: `/team/${member.slug}/`,
       image: member.photo,
       imageAlt: member.photoAlt,
-      imageWidth: 900,
-      imageHeight: 900,
+      imageWidth: member.photoWidth,
+      imageHeight: member.photoHeight,
       jsonLd: {
         '@context': 'https://schema.org',
         '@type': 'Person',
@@ -30,8 +30,8 @@ export default function TeamMember() {
         image: {
           '@type': 'ImageObject',
           url: `https://brightskyit.com${member.photo}`,
-          width: 900,
-          height: 900,
+          width: member.photoWidth,
+          height: member.photoHeight,
           caption: member.photoCaption || `${member.name}, ${member.role} at BrightSkyIT`,
         },
         url: `https://brightskyit.com/team/${member.slug}/`,
@@ -68,8 +68,8 @@ export default function TeamMember() {
             <img
               src={member.photo}
               alt={member.photoAlt || `${member.name}, ${member.role} at BrightSkyIT`}
-              width="900"
-              height="900"
+              width={member.photoWidth}
+              height={member.photoHeight}
               fetchPriority="high"
             />
           </div>

@@ -1,10 +1,11 @@
 // Portal login. If the account has must_change_password (invited with a
 // one-time password), route into a forced change-password step before entry.
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import logo from '../../assets/logo.png'
 import { useAuth } from '../../lib/auth'
 import { api } from '../../lib/api'
+import { setNoIndex } from '../../lib/meta'
 import PasswordField from '../../components/PasswordField'
 import { useToast } from '../../components/Toast'
 
@@ -12,6 +13,7 @@ export default function Login() {
   const { login } = useAuth()
   const nav = useNavigate()
   const toast = useToast()
+  useEffect(() => setNoIndex(), [])
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')

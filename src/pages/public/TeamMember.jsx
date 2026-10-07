@@ -50,7 +50,7 @@ export default function TeamMember() {
         <SiteNav />
         <section className="sec team-hero">
           <div className="empty">Profile not found.</div>
-          <p style={{ textAlign: 'center' }}><Link className="btn btn-outline" to="/team">← Back to the team</Link></p>
+          <p style={{ textAlign: 'center' }}><Link className="btn btn-outline" to="/team/">← Back to the team</Link></p>
         </section>
       </div>
     )
@@ -101,12 +101,12 @@ export default function TeamMember() {
 
             <div className="profile-actions">
               <Link className="btn btn-primary" to="/#contact">Work with {member.name.split(' ')[0]}</Link>
-              <Link className="btn btn-ghost" to="/team">← All team</Link>
+              <Link className="btn btn-ghost" to="/team/">← All team</Link>
             </div>
           </div>
         </div>
 
-        <Link to={`/team/${next.slug}`} className="profile-next">
+        <Link to={`/team/${next.slug}/`} className="profile-next">
           <span className="muted">Next</span>
           <span>{next.name} — {next.role} →</span>
         </Link>

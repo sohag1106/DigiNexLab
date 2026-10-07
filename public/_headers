@@ -1,0 +1,27 @@
+# Cloudflare Pages response headers.
+#
+# Private routes carry X-Robots-Tag: noindex so they can never be indexed even
+# when a crawler reaches them despite the robots.txt Disallow — a shared link,
+# a fetch, or an agent that renders the SPA. robots.txt alone cannot express
+# this: Disallow blocks crawling, but a blocked URL can still be indexed
+# (without content) if something links to it, and a crawler that is blocked
+# never sees the page's own noindex. A response header reaches every crawler
+# and needs no JavaScript.
+#
+# These paths are served the shared index.html, whose static <meta name="robots">
+# says "index, follow" — that default is for the public pages, and it cannot be
+# varied per route in a file the SPA reuses. Where the header and the meta
+# disagree, Google takes the more restrictive directive, so the noindex here
+# wins. The client-side SPA also sets noindex on mount (src/lib/meta.js
+# setNoIndex), so the two agree once the JS has run.
+
+/login
+  X-Robots-Tag: noindex, nofollow
+/forgot-password
+  X-Robots-Tag: noindex, nofollow
+/reset*
+  X-Robots-Tag: noindex, nofollow
+/portal
+  X-Robots-Tag: noindex, nofollow
+/portal/*
+  X-Robots-Tag: noindex, nofollow

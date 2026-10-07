@@ -40,7 +40,7 @@ export default function Team() {
               <div className="team-grid">
                 {members.map((m, i) => (
                   <Link
-                    to={`/team/${m.slug}`}
+                    to={`/team/${m.slug}/`}
                     className="team-card"
                     key={m.slug}
                     style={{ '--i': i }}

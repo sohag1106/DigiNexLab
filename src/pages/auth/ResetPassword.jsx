@@ -1,12 +1,14 @@
 // Reset password — consumes ?token= from the emailed reset link.
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import logo from '../../assets/logo.png'
 import { api } from '../../lib/api'
+import { setNoIndex } from '../../lib/meta'
 import PasswordField from '../../components/PasswordField'
 import { useToast } from '../../components/Toast'
 
 export default function ResetPassword() {
+  useEffect(() => setNoIndex(), [])
   const [params] = useSearchParams()
   const token = params.get('token')
   const nav = useNavigate()

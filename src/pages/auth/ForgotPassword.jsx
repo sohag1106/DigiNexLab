@@ -1,10 +1,12 @@
 // Forgot password — requests a reset link by email.
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import logo from '../../assets/logo.png'
 import { api } from '../../lib/api'
+import { setNoIndex } from '../../lib/meta'
 
 export default function ForgotPassword() {
+  useEffect(() => setNoIndex(), [])
   const [email, setEmail] = useState('')
   const [msg, setMsg] = useState('')
   const [err, setErr] = useState('')

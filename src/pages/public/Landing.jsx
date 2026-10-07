@@ -1,9 +1,8 @@
 // Public BrightSkyIT agency landing page — dark charcoal + neon blue/magenta.
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import logo from '../../assets/logo.png'
 import { api } from '../../lib/api'
-import { setMeta } from '../../lib/meta'
 import { useToast } from '../../components/Toast'
 import SiteNav, { whatsappHref } from './SiteNav'
 import { waGo } from '../../lib/wa'
@@ -100,35 +99,6 @@ const WORK = [
 export default function Landing() {
   const toast = useToast()
   const [menu, setMenu] = useState(false)
-  useEffect(() => {
-    setMeta({
-      jsonLd: {
-        '@context': 'https://schema.org',
-        '@type': 'Organization',
-        name: 'BrightSkyIT',
-        url: 'https://brightskyit.com/',
-        logo: 'https://brightskyit.com/logo.png',
-        email: 'info@brightskyit.com',
-        founder: [
-          {
-            '@type': 'Person',
-            name: 'Mohammad Sohag',
-            jobTitle: 'Co-Founder & CEO',
-            url: 'https://brightskyit.com/team/mohammad-sohag/',
-            image: {
-              '@type': 'ImageObject',
-              url: 'https://brightskyit.com/team/mohammad-sohag-ceo-founder.jpg',
-              width: 900,
-              height: 900,
-              caption: 'Mohammad Sohag, Co-Founder and CEO of BrightSkyIT',
-            },
-          },
-          { '@type': 'Person', name: 'Khyruddin Ahmed', jobTitle: 'Co-Founder', url: 'https://brightskyit.com/team/khyruddin-ahmed/' },
-          { '@type': 'Person', name: 'Al-Mahmud', jobTitle: 'Co-Founder', url: 'https://brightskyit.com/team/al-mahmud/' },
-        ],
-      },
-    })
-  }, [])
   const [form, setForm] = useState({ name: '', email: '', whatsapp: '', phone: '', prefer: ['email'], subject: '', message: '' })
   const [sending, setSending] = useState(false)
   const [quoteFor, setQuoteFor] = useState(null) // service title shown in the quote popup, or null
@@ -310,7 +280,7 @@ export default function Landing() {
       <section className="sec about" id="about">
         <div className="about-in">
           <div className="about-visual">
-            <Link to="/team" className="about-photo-link" title="Meet the team">
+            <Link to="/team/" className="about-photo-link" title="Meet the team">
               <img
                 className="about-photo"
                 src="/about-team.jpg"

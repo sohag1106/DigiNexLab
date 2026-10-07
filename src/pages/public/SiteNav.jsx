@@ -48,7 +48,9 @@ export default function SiteNav() {
         <nav className={menu ? 'open' : ''}>
           <a href="/#services">Services</a>
           <a href="/#work">Work</a>
-          <Link to="/team">Team</Link>
+          {/* Trailing slash: Pages 308s /team → /team/, so link the URL we
+              actually serve and skip a redirect hop on every page. */}
+          <Link to="/team/">Team</Link>
           <a href="/#about">About</a>
           <Link to="/blog/">Blog</Link>
           <a href="/#contact">Contact</a>

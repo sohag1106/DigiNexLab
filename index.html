@@ -26,6 +26,10 @@
       name="keywords"
       content="digital agency, web design, web development, UI/UX design, branding, digital strategy, SEO, content marketing, app development"
     />
+    <!-- Who runs the business. This is the signal Google reads to answer
+         "founder of BrightSkyIT" from our own site instead of guessing at
+         similarly-named companies abroad. -->
+    <meta name="founder" content="Mohammad Sohag" />
 
     <!-- Open Graph (Facebook, LinkedIn, WhatsApp previews) -->
     <meta property="og:type" content="website" />
@@ -59,7 +63,9 @@
     <!-- Performance: warm up the hero-critical origin -->
     <link rel="preconnect" href="https://brightskyit.com" crossorigin />
 
-    <!-- Structured data: Organization + WebSite + Professional Service -->
+    <!-- Structured data: one entity graph per page — the site's identity.
+         Prerendered routes replace only their own Person/Article JSON-LD, so
+         no route ever ships a second contradicting Organization. -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -74,7 +80,19 @@
             "url": "https://brightskyit.com/logo.png"
           },
           "email": "info@brightskyit.com",
-          "sameAs": []
+          "founder": {
+            "@type": "Person",
+            "name": "Mohammad Sohag",
+            "jobTitle": "Co-Founder & CEO",
+            "url": "https://brightskyit.com/team/mohammad-sohag/",
+            "image": {
+              "@type": "ImageObject",
+              "url": "https://brightskyit.com/team/mohammad-sohag-ceo-founder.jpg",
+              "width": 900,
+              "height": 900,
+              "caption": "Mohammad Sohag, Co-Founder and CEO of BrightSkyIT"
+            }
+          }
         },
         {
           "@type": "WebSite",
